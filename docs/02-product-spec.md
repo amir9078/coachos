@@ -58,6 +58,50 @@ The daily-use core, and the first thing we build.
 
 Revenue, pipeline conversion, retention curves; AI flags at-risk clients (missed sessions, stalled goals, sentiment drop in notes) and suggests an intervention. **Guardrail:** insights go to the coach only — never scoring of employees for corporate buyers (EU AI Act line, see doc 01 §5).
 
+## Cross-cutting — Gmail (and email account) integration · *Phase 2*
+
+**The gap this closes:** by default, coach emails go out via Resend, a transactional sender — meaning a client's reply doesn't land in the coach's real inbox and there's no visible thread history. Coaches will expect email to look and behave like *their* email.
+
+| Capability | How it works |
+|---|---|
+| Connect account | Coach connects their Gmail (Google OAuth) from Settings; Outlook/Microsoft 365 is a v2 candidate, same pattern |
+| Sending | Approved summaries, follow-ups, and nurture emails send **from the coach's own Gmail address** (`gmail.send` scope) — replies land in their real inbox, not a CoachOS address |
+| Reply visibility (v2) | Reading replies back into the client timeline needs a broader scope (`gmail.readonly`/`modify`) — treat as a later, opt-in upgrade, not Phase 2 |
+| Fallback | Resend stays the **default, zero-setup path**; Gmail connect is an optional upgrade so Phase 1–2 never blocks on it |
+
+**Real scheduling risk, not just a technical build item:** Google requires an app-verification review for the `gmail.send` scope once past a low usage threshold — a privacy policy, a demo video, and (for broader scopes) a paid third-party security assessment (CASA), which can take **several weeks** and isn't fully in our control. Start this application in parallel with Phase 2 development, not after it — see doc 04 for the cost/timeline line item.
+
+**Security:** OAuth tokens are encrypted at rest, scoped per-coach (RLS), and revocable from Settings in one click.
+
+## Module 8 — Automations · *Phase 3*
+
+**Job:** stop the coach re-typing the same follow-up for the fortieth time — without breaking the platform's core trust rule (nothing sends without a human having approved the actual words).
+
+| Capability | How it works |
+|---|---|
+| Automation recipes | A short list of pre-built triggers → actions the coach turns on and lightly customizes (delay, one variable) — **not** a general-purpose workflow builder |
+| Example recipes | "Lead silent 6 days → send this exact follow-up template" · "Session marked complete → schedule the next prep brief" · "Invoice 3 days overdue → send this reminder" |
+| Engine | Built on **n8n** (already in the stack as our internal glue, doc 03) — we curate the recipes; the coach never sees n8n's own UI |
+| AI's role | Suggests a recipe from the coach's own repeated behavior ("You've sent this same message 4 times — automate it?") — AI proposes, never auto-generates the send-time content |
+
+**The rule that keeps this safe:** an automation only ever sends a **template the coach has already approved once**, not freshly AI-generated text created at trigger time. This preserves the platform's approval-first principle (doc 02 cross-cutting requirements, doc 01 §5) — the coach saw and approved the words; the automation just handles *when*, not *what*.
+
+## Module 9 — Coach & Mentor Directory (Marketplace) · *Phase 3, gated on coach supply*
+
+**Job:** turn CoachOS from a tool coaches buy into a channel that also finds them clients — the differentiator no incumbent in the $20–60/mo tier offers (see doc 01 §6).
+
+| Capability | How it works |
+|---|---|
+| Public coach profile | Opt-in, publishable page: photo, bio, niche pack/specialty, credentials, price range, languages, format (video/in-person) |
+| Testimonials | Pulled from the coach's own approved Client Delivery summaries (Module 6), with **explicit per-testimonial client consent** — reuses data we already have instead of a separate review system |
+| Search & discovery | Filter by niche, price band, language, format; built on Supabase's own full-text search for v1 — no new search engine until relevance genuinely demands one (see doc 03) |
+| Enquiry routing | A visitor's enquiry drops straight into that coach's own Leads pipeline (Module 1–2) — the directory becomes a top-of-funnel input into a tool the coach already uses daily |
+| Monetization | **Listing model, not commission** (doc 01 §6): included at the Practice+ tier, or a small standalone listing fee — never a cut of the coach's session fees |
+
+**Cold-start discipline:** an empty directory has negative value — it signals nobody's here. **Gate the public launch on real coach supply** (roughly the existing Phase 3 gate of ~100 paying coaches), not on the feature being code-complete. Build it, but don't open it to public search traffic until there's enough real supply to not look empty.
+
+**New AI use case to flag:** if a future "AI recommends your best-matched coach" feature is added, that's a recommender/matching system — minimal-risk under the EU AI Act (not an Annex III employment-evaluation use), but it's a new AI surface not covered by the original doc 01 §5 assessment and should get its own quick review before shipping.
+
 ---
 
 ## The human-service layer (our second revenue line)

@@ -83,7 +83,7 @@ Tell Claude Code to create these tables via Supabase migrations:
 | `summaries` | id, session_id, client_facing text, coach_facing text, action_items jsonb, status (draft/approved/sent), sent_at | **status is the approval-first gate** |
 | `audit_log` | id, coach_id, action, entity, at | Who sent what when — trust feature |
 
-Phase 2 adds: `contracts`, `invoices`. Phase 3 adds: `leads`, `pipeline_stages`, `content_drafts`, `email_sequences`.
+Phase 2 adds: `contracts`, `invoices`, `coach_email_accounts` (encrypted OAuth tokens, RLS-scoped, one per coach). Phase 3 adds: `leads`, `pipeline_stages`, `content_drafts`, `email_sequences`, `automation_recipes`, `automation_runs` (audit trail — every automated send logged like any other), `coach_profiles` (public directory fields — the one table where a coach explicitly opts a subset of data into public visibility), `directory_enquiries` (routes into `leads`).
 
 ### 4.2 Security rules (give these to Claude Code verbatim)
 
@@ -105,6 +105,16 @@ Saves result to `summaries` with `status='draft'`. **The model never emails anyo
 **`POST /api/ai/prep-brief`** — input: `client_id`. Loads last 3 summaries + goals; returns a 120-word brief: commitments made, blockers, stalled goals. Displayed 30 min before session (and on demand).
 
 Cost guard: log tokens per call into `audit_log`; alert at $20/mo (it should never get there — verified math in doc 04).
+
+### 4.4 Gmail, Automations & Directory endpoints (Phase 2–3)
+
+**`GET/POST /api/integrations/gmail/oauth`** — Google OAuth2 flow; stores encrypted tokens in `coach_email_accounts`. All summary/follow-up sends check for a connected account first and fall back to Resend if none exists.
+
+**`POST /api/automations/[recipe_id]/toggle`** — enables/disables a pre-built recipe for a coach; stores their one or two customizable variables (delay days, template choice). The trigger check itself runs as a scheduled n8n workflow that calls back into `/api/automations/run` — which only ever sends a template the coach already approved when enabling the recipe, never freshly-generated text.
+
+**`GET /api/directory/search`** and **`POST /api/directory/[slug]/enquire`** — public, unauthenticated routes; search uses Supabase full-text search over `coach_profiles`; an enquiry writes to `directory_enquiries` and immediately creates a row in that coach's own `leads` table.
+
+**Security note — the one deliberate exception to "private by default":** `coach_profiles` is the single table designed to be publicly readable, and only for fields the coach explicitly opts to publish. Build the opt-in toggle and field-level publish controls before this table is reachable by any public route — see §4.2's RLS rule, which still applies to every *other* table without exception.
 
 ## 5. Frontend guide
 
@@ -150,7 +160,7 @@ Build in this exact order. Each has a **done-when** — do not move on until it 
 | F9 | Polish + landing | "Marketing landing page reusing the prototype hero + demo look; app-wide empty/loading/error states." | A stranger understands the product in 30 seconds |
 | — | **Security gate** | Independent review (budgeted in doc 04) + Claude Code self-audit: "Audit auth, RLS, portal tokens, API routes for the §4.2 rules." | Findings fixed **before any real client data** |
 
-Then pilots (doc 04 §4). **Phase 2 (F10–F13):** contracts via Documenso, Stripe billing, invoice chasing, security re-review. **Phase 3 (F14–F17):** leads pipeline + AI scoring, follow-up drafts into the approval queue, marketing composer with voice profile, landing-page builder.
+Then pilots (doc 04 §4). **Phase 2 (F10–F14):** contracts via Documenso, Stripe billing, invoice chasing, **Gmail OAuth connect (F13 — start Google's verification review the same week, not after building)**, security re-review. **Phase 3 (F15–F19):** leads pipeline + AI scoring, follow-up drafts into the approval queue, marketing composer with voice profile, landing-page builder, **Automations v1 (F17 — 3–5 recipes, n8n-backed, toggle-only UI)**, **Coach & Mentor Directory (F18 — profile + search + enquiry routing, built but not opened to public traffic until the coach-supply gate in doc 04 clears)**.
 
 ## 7. CLAUDE.md / .cursorrules template (paste into the app repo)
 

@@ -184,6 +184,9 @@
       <p>Assistive AI sits in the EU AI Act's <b>limited-risk tier</b> — disclose "this is AI," largely compliant. Lines never crossed: no employee-evaluation features, no emotion/sentiment scoring. GDPR: coach is data controller, we are processor — standard DPA before first EU customer. Independent security review is non-negotiable before real client data (a vibe-coded competitor product was publicly breached post-launch).</p>
 
       <div class="reject"><b>Rejected claims (do not use):</b> "$62B AI coaching market by 2026" (contradicts verified industry size 10×, uncited); "$5.48B AI Career Coach market, $14.82B by 2030" (no disclosed methodology); "$3.64B life coaching market" (inconsistent with primary data); "25% of YC W25 was 95% AI-generated code" (failed verification).</div>
+
+      <h4 style="margin:1.3rem 0 .5rem">Coach directory models — two different businesses</h4>
+      <p><a href="https://www.noomii.com/" target="_blank" rel="noopener">Noomii</a> runs a pure listing model: free basic profile, ~$449/yr premium, <b>no commission</b> — the coaching deal happens off-platform. BetterUp runs a managed marketplace: coaches are vetted and AI-matched, and the platform <b>takes ~30–40% of session fees</b> (general marketplace commissions run 15–40%). <b>CoachOS follows Noomii's model</b> — a commission marketplace would make us the merchant of record and effectively the coach's agency, contradicting the whole plan's thesis that we're infrastructure, not competition. Full reasoning: doc 01 §6.</p>
     </section>
 
     <section id="product">
@@ -197,7 +200,10 @@
         <div class="card"><h4>5. Contracts &amp; Payments</h4><p>Coaching agreement templates, e-sign, invoicing, subscriptions.</p></div>
         <div class="card"><span class="tag wedge">AI · The wedge</span><h4>6. Client Delivery</h4><p>Notes → AI summary + action items, progress timeline, prep briefs. Built first.</p></div>
         <div class="card"><span class="tag">AI</span><h4>7. Practice Intelligence</h4><p>Revenue, retention, at-risk clients flagged by AI — insights to the coach only.</p></div>
+        <div class="card"><h4>8. Automations</h4><p>Pre-built recipes the coach toggles on — n8n-backed, never a workflow builder.</p></div>
+        <div class="card"><span class="tag wedge">New channel</span><h4>9. Coach &amp; Mentor Directory</h4><p>Public opt-in profile; enquiries route straight into the coach's own Leads pipeline. Listing-based, never a commission.</p></div>
       </div>
+      <p style="margin-top:.9rem"><b>Plus one cross-cutting capability:</b> Gmail integration (Phase 2) — approved sends go out from the coach's own address so replies land in their real inbox, not a CoachOS address.</p>
 
       <h4 style="margin:1.4rem 0 .5rem">Niche packs — how it gets industry-specific</h4>
       <p>One platform, specialty-tuned. Each pack bundles the templates, sequences and AI presets a coach in that specialty actually needs.</p>
@@ -261,13 +267,14 @@
       <p class="lede">Each phase has an explicit gate. The next phase does not start until the gate is passed — the discipline that separates this plan from the all-in-one graveyard.</p>
       <div class="phases">
         <div class="phase"><div class="node">1</div><div class="pcard"><h4>The wedge</h4><p>Client Delivery + scheduling embed + portal. Months 1–3.</p><span class="gate">Gate: 5 pilots weekly, 3 paid</span></div></div>
-        <div class="phase"><div class="node">2</div><div class="pcard"><h4>Money loop</h4><p>Bookings, Contracts, Stripe billing, security re-review. Months 4–8.</p><span class="gate">Gate: 25 paying, churn &lt;5%</span></div></div>
-        <div class="phase"><div class="node">3</div><div class="pcard"><h4>Growth loop</h4><p>Leads CRM, marketing composer, done-for-you launch. Months 9–14.</p><span class="gate">Gate: 100 paying, service profitable</span></div></div>
+        <div class="phase"><div class="node">2</div><div class="pcard"><h4>Money loop</h4><p>Bookings, Contracts, Stripe billing, Gmail integration, security re-review. Months 4–8.</p><span class="gate">Gate: 25 paying, churn &lt;5%</span></div></div>
+        <div class="phase"><div class="node">3</div><div class="pcard"><h4>Growth loop</h4><p>Leads CRM, marketing composer, Automations v1, Directory (built, unlaunched), done-for-you launch. Months 9–14.</p><span class="gate">Gate: 100 paying, service profitable</span></div></div>
         <div class="phase"><div class="node">4</div><div class="pcard"><h4>Intelligence</h4><p>Practice dashboard, at-risk AI, referrals. Year 2.</p><span class="gate">Gate: earned, not assumed</span></div></div>
       </div>
 
       <h4 style="margin:1.5rem 0 .5rem">Costs (verified unit economics)</h4>
       <p>Build to first paying customer: <b>~$1,000–2,500</b> (hosting, security review, legal templates). Runtime AI cost on Claude Haiku 4.5: <b>~$0.03/coach/month</b> — 300 coaches ≈ $8.40/mo. At $59/mo revenue per coach, gross margin exceeds 95%. <b>AI cost never drives architecture decisions here — the founder's selling time is the scarce resource, not compute.</b></p>
+      <p>Gmail, Automations (n8n-backed) and Directory search (Supabase full-text) add close to $0 in new infrastructure cost — the real new-line-item risk is Google's app-verification review for Gmail sending, which can take several weeks and should start in Phase 2, month 4, in parallel with the build.</p>
 
       <h4 style="margin:1.3rem 0 .5rem">Go-to-market</h4>
       <p>Sales-led, zero ad spend to start: recruit 5 pilots from ICF chapters and coach communities → convert + ask for 2 introductions each (coaches refer coaches) → ICF workshops + certification-program partnerships → done-for-you service doubles as a retention and referral channel.</p>
@@ -291,6 +298,7 @@
         <li><b>F8 — Niche packs v1.</b><p>Pack picker swaps tone/templates.</p></li>
         <li><b>F9 — Polish + security gate.</b><p>Landing page, empty/loading states, then independent security review before real client data.</p></li>
       </ol>
+      <p style="margin-top:1rem"><b>Phase 2 continues (F10–F14):</b> contracts, Stripe billing, and Gmail OAuth connect — start Google's verification review the same week, not after building. <b>Phase 3 continues (F15–F19):</b> leads pipeline, marketing composer, Automations v1 (3–5 n8n-backed recipes), and the Coach &amp; Mentor Directory — built, but held unlaunched until coach supply clears the 100-paying-coach gate. Full detail: <a href="https://github.com/amir9078/coachos/blob/main/docs/05-build-guide.md" target="_blank" rel="noopener">docs/05-build-guide.md</a>.</p>
 
       <h4 style="margin:1.4rem 0 .4rem">Example brief for F2</h4>
       <div class="brief">"Build the summarize endpoint + client-detail notes flow: paste notes → Summarize

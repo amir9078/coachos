@@ -54,7 +54,25 @@ Coaches currently stitch a scheduler + CRM + e-sign + email tool + invoicing + n
 - **GDPR:** the coach is data controller, we are processor → standard DPA before first paying EU customer; client data never used for model training without explicit consent; session notes encrypted at rest.
 - **Security is existential in this category:** a vibe-coded product (EnrichLead, built with Cursor) was publicly breached post-launch. A breach of coaching notes would be brand-ending. Independent security review is a non-negotiable line item before real client data flows.
 
-## 6. Figures we REJECTED (do not use)
+## 6. Coach & Mentor Directory — competitive landscape (added, single-pass research — not adversarially re-verified like §1–2)
+
+Two structurally different models exist for coach discovery platforms. Which one CoachOS follows is a real business-model decision, not a detail.
+
+| Model | Example | How it works | Economics |
+|---|---|---|---|
+| **Directory / listing** | [Noomii](https://www.noomii.com/) | Coaches list a profile; prospects request a consultation directly; the coaching relationship and payment happen off the directory | Free basic listing; **~$449/year for a premium listing**; no commission on sessions |
+| **Managed marketplace** | BetterUp | Coaches apply, get vetted, are AI-matched to clients; BetterUp is the merchant of record | Coaches keep ~60–70% of the session fee; **BetterUp takes ~30–40%**; general marketplace commissions run **15–40%** of coaching fees |
+
+**Recommendation: follow the Noomii (listing) model, not the BetterUp (commission marketplace) model.** Reasoning:
+- A commission marketplace makes CoachOS the merchant of record and effectively the coach's employer/agency for that engagement — a much heavier legal, tax, and liability surface (payment splitting via Stripe Connect, dispute handling, quality-control obligations) that contradicts the plan's core thesis in §1: *we are the coach's infrastructure, not their employer or competitor.*
+- A listing model monetizes through the subscription tiers already in doc 04, keeps Stripe usage as-is (the coach still bills their own client directly), and turns the directory into a **pure acquisition channel** rather than a new business line with its own risk profile.
+- Full spec: [docs/02 — Module 9](02-product-spec.md#module-9--coach--mentor-directory-marketplace--phase-3).
+
+**Caveat:** this is one search pass, not the adversarial fact-check applied to §1–2. Before setting final pricing for a premium listing tier, re-verify Noomii's current price and re-check for newer entrants.
+
+Sources: [Noomii](https://www.noomii.com/) · [Paperbell — Best Coaching Marketplaces 2026](https://paperbell.com/blog/coaching-marketplace/)
+
+## 7. Figures we REJECTED (do not use)
 
 | Claim | Why rejected |
 |---|---|

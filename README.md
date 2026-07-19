@@ -13,7 +13,7 @@
 
 122,974 professional coaches worldwide generate $5.34B a year, yet only 19% invested in any new technology last year while 54% say better platforms are a priority — the largest documented demand-adoption gap in the industry ([ICF/PwC 2025 Global Coaching Study](https://coachingfederation.org/blog/global-coaching-industry-surpasses-5-34-billion-as-emerging-markets-drive-growth/)). Today a coach stitches together 5–8 disconnected tools (CRM, scheduler, e-sign, email, invoicing, notes). CoachOS replaces the stitching: **one desk, every room of the business**, with AI built into each workflow rather than bolted on — at solo-coach pricing ($29–59/mo), a tier where no incumbent has built AI-first.
 
-## 2. What it does — the seven modules
+## 2. What it does — the nine modules
 
 | # | Module | What the coach gets | AI or Human? |
 |---|--------|--------------------|--------------|
@@ -24,11 +24,15 @@
 | 5 | **Contracts & Payments** | Coaching-agreement templates, e-signature, invoicing, package/subscription billing | Platform |
 | 6 | **Client Delivery** | Session notes → AI summary + action items, client progress timeline, AI session-prep briefs | Platform (AI) — *the wedge, see §4* |
 | 7 | **Practice Intelligence** | Dashboard: revenue, pipeline health, client retention, at-risk clients flagged by AI | Platform (AI) |
+| 8 | **Automations** | Pre-built recipes (silent-lead follow-up, prep-brief scheduling, overdue-invoice reminders) — toggle on, no workflow builder | Platform (n8n-backed) |
+| 9 | **Coach & Mentor Directory** | Public opt-in profile, search, and enquiry routing straight into the coach's own Leads pipeline — our own acquisition channel, not just a feature | Platform |
 
 **The human-service layer** (sold by us, alongside the software — this is deliberate, not a gap):
 - **Onboarding & implementation** — we migrate the coach's clients, templates and calendar in a done-with-you session (paid setup fee; also our retention weapon).
 - **Done-for-you marketing** — monthly content package produced by our team using the platform's AI + human editing (recurring service revenue at 3–5× software price).
 - **Community & referrals** — curated coach community; coaches refer coaches. This profession sells by word of mouth.
+
+**Plus one cross-cutting capability, not a numbered module:** Gmail integration — coach-approved sends go out from the coach's own Gmail address so client replies land in their real inbox, not a CoachOS address (Phase 2; Google's app-verification review is a real multi-week timeline risk, tracked in doc 04).
 
 Full module-by-module specification: [`docs/02-product-spec.md`](docs/02-product-spec.md)
 
@@ -43,11 +47,11 @@ Full module-by-module specification: [`docs/02-product-spec.md`](docs/02-product
 **Phase 1 (Months 1–3) — the wedge: Client Delivery.**
 Session notes → AI summary, prep briefs, progress timeline, scheduling. This is the single most-requested AI capability in the coaching-tools research, buildable by a solo founder with Claude Code, and it creates daily usage + data lock-in from day one. *Ship, pilot with 5 coaches, convert to paid.*
 
-**Phase 2 (Months 4–8) — the money loop: Bookings + Contracts + Payments.**
-Now the coach's revenue flows through us. Integrate, don't build: scheduling and e-sign have mature open-source engines (see §5).
+**Phase 2 (Months 4–8) — the money loop: Bookings + Contracts + Payments + Gmail.**
+Now the coach's revenue flows through us. Integrate, don't build: scheduling and e-sign have mature open-source engines (see §5). Start the Gmail app-verification review this phase — it runs in parallel, on Google's clock, not ours.
 
-**Phase 3 (Months 9–14) — the growth loop: Leads + Marketing.**
-Pipeline CRM, AI follow-ups, content composer, landing pages. Launch the done-for-you marketing service here — service revenue funds the build.
+**Phase 3 (Months 9–14) — the growth loop: Leads + Marketing + Automations + Directory.**
+Pipeline CRM, AI follow-ups, content composer, landing pages, automation recipes. Launch the done-for-you marketing service here — service revenue funds the build. The Coach & Mentor Directory gets built this phase too, but stays unlaunched to public search until coach supply clears the same paying-coach gate as everything else — an empty directory is worse than no directory.
 
 **Phase 4 (Year 2) — intelligence & scale:** practice dashboard, at-risk-client AI, referral network, and (only now, from leverage) evaluate corporate/L&D partnerships.
 

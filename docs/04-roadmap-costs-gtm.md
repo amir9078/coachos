@@ -7,8 +7,8 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 | Phase | Months | Ships | Gate to proceed |
 |---|---|---|---|
 | **1 — Wedge** | 1–3 | Client Delivery (notes→summary, prep briefs, timeline), basic scheduling embed, client portal | 5 pilot coaches using it weekly; ≥3 convert to paid |
-| **2 — Money loop** | 4–8 | Bookings (Cal.com), Contracts (Documenso), Stripe billing; security re-review | ≥25 paying coaches; churn <5%/mo; coaches running real revenue through us |
-| **3 — Growth loop** | 9–14 | Leads CRM (Twenty), AI follow-ups, marketing composer, landing pages; done-for-you service launch | ≥100 paying coaches; service line profitable |
+| **2 — Money loop** | 4–8 | Bookings (Cal.com), Contracts (Documenso), Stripe billing; **Gmail integration** (start Google's verification review in parallel, month 4 — see risk below); security re-review | ≥25 paying coaches; churn <5%/mo; coaches running real revenue through us |
+| **3 — Growth loop** | 9–14 | Leads CRM (Twenty), AI follow-ups, marketing composer, landing pages, **Automations v1** (Module 8); done-for-you service launch; **Coach & Mentor Directory** built but held unlaunched | ≥100 paying coaches; service line profitable; Directory opens to public search only once coach supply clears the same ≥100 gate |
 | **4 — Intelligence** | 15+ | Practice dashboard, at-risk AI, referral network | Decided from data, not ambition |
 
 ## 2. Costs (planning figures, not quotes)
@@ -30,6 +30,16 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 - Self-hosting open models: **rejected for now** — break-even at 15–40M tokens/mo; we project <7M at 300 coaches. Revisit only for enterprise data-residency deals.
 - **Conclusion: AI cost is a rounding error against revenue. Never let it drive architecture decisions.**
 
+### New line items (Gmail, Automations, Directory)
+| Item | Cost | Note |
+|---|---|---|
+| Gmail API usage | $0 | Free within Google's standard quotas at this scale |
+| Google app-verification review | $0–~$5,000 (only if a CASA security assessment is required) | **Timeline risk, not just cost:** can take several weeks; start the application in Phase 2, month 4, not after the module is built |
+| n8n (Automations engine) | $0 | Already self-hosted for internal glue; new templates only |
+| Directory search (Supabase full-text) | $0 | No new infra for v1; Meilisearch only if relevance demands it later |
+
+**Business-model note:** the Directory is priced as a listing perk inside existing subscription tiers, **not** a commission on coaching fees (doc 01 §6) — it does not change the unit-economics table above.
+
 ## 3. Pricing
 
 | Tier | Price | Contains |
@@ -49,6 +59,7 @@ Rationale: $29–59 matches the incumbent tier coaches already accept (Delenta $
 2. **Months 3–6:** convert pilots; ask each for 2 introductions (coaches refer coaches — this profession runs on referral); publish 2 case studies ("Sana saves 4 hrs/week on admin").
 3. **Months 6–12:** ICF chapter workshops ("AI for your practice" — teach first, sell second); partnership with 1–2 coach-certification programs (their graduates need a practice stack on day one).
 4. **Ongoing:** the done-for-you service doubles as a GTM channel — every service client is a retained software customer and a referral source.
+5. **Months 12+:** once the Coach & Mentor Directory clears its coach-supply gate (§1 above), it becomes a genuine organic acquisition channel in its own right — SEO-driven searches ("executive coach in Dubai") bring prospects in, and every enquiry both serves a coach's pipeline *and* demonstrates the platform's value to that coach's peers.
 
 **Positioning line:** *"You coach. CoachOS runs everything else."*
 

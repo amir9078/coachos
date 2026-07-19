@@ -17,6 +17,9 @@ The request behind this doc: *"pull free GitHub repos, merge them, make it a ful
 | 6 | **Supabase** | github.com/supabase/supabase | Apache 2.0 | Our own app's database, auth, storage, row-level security | 1 | Hosted (free tier → paid) |
 | 7 | **Next.js / React** | github.com/vercel/next.js | MIT | Our own app's frontend | 1 | Direct dependency (MIT = no copyleft concerns) |
 | 8 | **Stripe SDKs** | github.com/stripe | MIT | Billing (not open-source service, but free SDKs) | 2 | API |
+| 9 | **Gmail API** | Google (not open-source) | Google API ToS | Coach's own-address sending, doc 02 cross-cutting | 2 | Direct OAuth2 integration — requires Google app-verification review, see doc 04 |
+| 10 | **n8n** (reused) | *(already row 5)* | Fair-code | Execution engine behind Module 8 Automation recipes | 3 | Same self-hosted instance, new curated workflow templates — no new service |
+| 11 | **Meilisearch** (deferred) | github.com/meilisearch/meilisearch | MIT | Directory search (Module 9), only if Supabase full-text search proves insufficient | 3+ | Not adopted yet — v1 uses Supabase's built-in full-text search; add only if relevance genuinely demands it |
 
 ## What we build ourselves (the differentiation)
 
