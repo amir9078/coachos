@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoachOS — Master Plan</title>
+<style>
+  :root{
+    --bone:#F0EBDD; --bone-2:#E7E0CC; --card:#F5F1E6; --well:#E2DAC4;
+    --ink:#1E2B24; --ink-soft:#54604F; --line:rgba(30,43,36,.16);
+    --brass:#8A6A1F; --brass-soft:rgba(138,106,31,.13);
+    --green:#2E6B4F; --green-soft:rgba(46,107,79,.14);
+    --rust:#9A4A2C; --rust-soft:rgba(154,74,44,.13);
+    --shadow-s:0 1px 2px rgba(20,28,22,.07),0 6px 18px rgba(20,28,22,.07);
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;
+    --sans:Seravek,'Gill Sans Nova','Segoe UI',Calibri,'Trebuchet MS',sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,h4{font-family:var(--serif);font-weight:600;margin:0;text-wrap:balance}
+  p{margin:0 0 1em;max-width:70ch}
+  a{color:var(--brass)}
+  code{font-family:var(--mono);background:var(--well);padding:.1em .35em;border-radius:2px;font-size:.88em}
+  .kicker{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--ink-soft);display:block;margin-bottom:.6rem}
+
+  /* header */
+  .masthead{padding:3.4rem 1.75rem 2.2rem;max-width:1280px;margin:0 auto;border-bottom:1px solid var(--line)}
+  .masthead h1{font-size:clamp(2rem,5vw,3.1rem);line-height:1.06;letter-spacing:-.01em;max-width:18ch;margin-bottom:1rem}
+  .masthead h1 em{font-style:italic;color:var(--brass)}
+  .masthead .sub{font-size:1.08rem;color:var(--ink-soft);max-width:56ch;margin-bottom:1.4rem}
+  .hero-ctas{display:flex;gap:.8rem;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:.4rem;text-decoration:none;border-radius:2px;padding:.7rem 1.3rem;font-size:.92rem;transition:transform .16s,box-shadow .16s}
+  .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-s)}
+  .btn.primary{background:var(--green);color:var(--bone)}
+  .btn.ghost{border:1px solid var(--line);background:var(--card);color:var(--ink)}
+  .note{margin-top:1.4rem;font-size:.82rem;color:var(--ink-soft);border-left:3px solid var(--brass);background:var(--brass-soft);padding:.7rem 1rem;border-radius:0 3px 3px 0;max-width:62ch}
+
+  /* layout */
+  .page{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:220px 1fr;align-items:start}
+  nav.rail{position:sticky;top:0;align-self:start;padding:2rem 1rem 2rem 1.75rem;max-height:100vh;overflow-y:auto}
+  nav.rail ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--line)}
+  nav.rail a{display:block;text-decoration:none;color:var(--ink-soft);font-size:.82rem;padding:.4rem .85rem;border-left:2px solid transparent;margin-left:-1px}
+  nav.rail a:hover{color:var(--ink)}
+  nav.rail a.active{color:var(--brass);border-left-color:var(--brass);font-weight:600}
+  main{padding:2rem 1.75rem 3rem 1.4rem;min-width:0}
+  section{padding:2.6rem 0;border-bottom:1px solid var(--line)}
+  section:last-of-type{border-bottom:none}
+  .eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;font-size:.7rem;color:var(--brass);display:block;margin-bottom:.6rem}
+  section h2{font-size:clamp(1.4rem,3vw,1.9rem);margin-bottom:.9rem;max-width:28ch}
+  .lede{color:var(--ink-soft);font-size:1rem;max-width:64ch;margin-bottom:1.5rem}
+
+  .table-wrap{overflow-x:auto;margin:1.2rem 0;border:1px solid var(--line);border-radius:4px}
+  table{border-collapse:collapse;width:100%;min-width:520px;font-size:.87rem}
+  th,td{text-align:left;padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:var(--well);font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft)}
+  tbody tr:last-child td{border-bottom:none}
+
+  .stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin:1.2rem 0}
+  @media(max-width:760px){.stat-strip{grid-template-columns:1fr 1fr}}
+  .stat{background:var(--bone);padding:1rem .9rem}
+  .stat .n{font-family:var(--mono);font-size:1.5rem;color:var(--brass);display:block}
+  .stat .l{font-size:.76rem;color:var(--ink-soft);display:block;margin-top:.2rem}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.9rem;margin:1rem 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:1rem 1.1rem;position:relative}
+  .card h4{font-size:.95rem;margin-bottom:.3rem}
+  .card p{font-size:.83rem;color:var(--ink-soft);margin:0}
+  .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:.13rem .4rem;border-radius:2px;background:var(--green-soft);color:var(--green);position:absolute;top:.8rem;right:.8rem}
+  .tag.svc{background:var(--rust-soft);color:var(--rust)}
+  .tag.wedge{background:var(--brass-soft);color:var(--brass)}
+
+  .callout{border-left:3px solid var(--brass);background:var(--brass-soft);padding:.85rem 1.1rem;border-radius:0 3px 3px 0;margin:1.2rem 0}
+  .callout p{margin:0;max-width:none}
+  .reject{border-left:3px solid var(--rust);background:var(--rust-soft);padding:.85rem 1.1rem;border-radius:0 3px 3px 0;margin:1.2rem 0;font-size:.88rem}
+
+  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:1rem}
+  @media(max-width:860px){.phases{grid-template-columns:1fr 1fr}}
+  .phase .node{width:1.9rem;height:1.9rem;border-radius:50%;background:var(--bone);border:2px solid var(--brass);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.78rem;color:var(--brass);margin-bottom:.6rem}
+  .phase .pcard{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:.85rem .95rem;min-height:8rem}
+  .phase h4{font-size:.9rem;margin-bottom:.3rem}
+  .phase p{font-size:.78rem;color:var(--ink-soft);margin:0 0 .4rem}
+  .gate{font-family:var(--mono);font-size:.63rem;color:var(--green);background:var(--green-soft);padding:.15rem .4rem;border-radius:2px}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:700px){.split{grid-template-columns:1fr}}
+  .half{border:1px solid var(--line);border-radius:4px;padding:1.1rem 1.2rem;background:var(--card)}
+  .half.ai{border-top:3px solid var(--green)} .half.hu{border-top:3px solid var(--rust)}
+  .half h4{font-size:1rem;margin-bottom:.6rem}
+  .half ul{margin:0;padding:0;list-style:none;display:grid;gap:.4rem}
+  .half li{font-size:.85rem;color:var(--ink-soft);display:grid;grid-template-columns:1.1rem 1fr;gap:.4rem}
+  .half.ai li::before{content:"✦";color:var(--green)}
+  .half.hu li::before{content:"◆";color:var(--rust)}
+
+  .steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:.8rem}
+  .steps li{counter-increment:s;display:grid;grid-template-columns:1.9rem 1fr;gap:.8rem}
+  .steps li::before{content:counter(s);font-family:var(--mono);font-size:.78rem;color:var(--brass);border:1px solid var(--line);border-radius:50%;width:1.9rem;height:1.9rem;display:flex;align-items:center;justify-content:center;flex:none}
+  .steps li b{display:block;margin-bottom:.1rem;font-size:.9rem}
+  .steps li p{margin:0;font-size:.85rem;color:var(--ink-soft)}
+
+  .brief{background:var(--well);border:1px solid var(--line);border-radius:3px;padding:.7rem .9rem;font-family:var(--mono);font-size:.78rem;margin-top:.4rem;white-space:pre-wrap}
+
+  .cta-block{background:var(--ink);color:var(--bone);border-radius:6px;padding:2rem 2.2rem;margin:1.5rem 0;display:flex;flex-wrap:wrap;gap:1.4rem;align-items:center;justify-content:space-between}
+  .cta-block h3{color:var(--bone);font-size:1.3rem;margin-bottom:.4rem}
+  .cta-block p{color:rgba(240,235,221,.75);margin:0;font-size:.9rem}
+  .cta-block .btn.primary{background:var(--brass)}
+
+  footer{max-width:1280px;margin:0 auto;padding:2rem 1.75rem 3.5rem;color:var(--ink-soft);font-size:.82rem}
+
+  @media(max-width:880px){
+    .page{grid-template-columns:1fr}
+    nav.rail{position:static;max-height:none;padding:1rem 1.75rem;overflow-x:auto}
+    nav.rail ol{display:flex;gap:.15rem;border-left:none;border-bottom:1px solid var(--line);padding-bottom:.5rem;white-space:nowrap}
+    nav.rail a{border-left:none;border-bottom:2px solid transparent}
+    nav.rail a.active{border-left-color:transparent;border-bottom-color:var(--brass)}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <span class="kicker">CoachOS · Master plan, research &amp; prototype · July 2026</span>
+  <h1>Coach<em>OS</em> — the complete plan</h1>
+  <p class="sub">One page, every part of the plan: research, product spec, tech stack, roadmap, and the Claude Code + Cursor build guide — plus a direct link into the live clickable prototype.</p>
+  <div class="hero-ctas">
+    <a class="btn primary" href="./prototype/">▶ Open the live prototype</a>
+    <a class="btn ghost" href="https://github.com/amir9078/coachos" target="_blank" rel="noopener">View source on GitHub</a>
+  </div>
+  <div class="note">This is CoachOS's working business plan. Code and content in this repository remain under the proprietary license in <code>LICENSE</code> — public visibility is for team and reviewer access, not an open-source release.</div>
+</header>
+
+<div class="page">
+  <nav class="rail">
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#market">Market research</a></li>
+      <li><a href="#product">Product &amp; niche packs</a></li>
+      <li><a href="#stack">Open-source stack</a></li>
+      <li><a href="#roadmap">Roadmap &amp; costs</a></li>
+      <li><a href="#build">Build guide</a></li>
+      <li><a href="#repo">Repository</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+    <section id="overview">
+      <span class="eyebrow">01 — The pitch</span>
+      <h2>Everything a coach's business needs, in one desk</h2>
+      <p class="lede">122,974 professional coaches generate $5.34B a year, yet only 19% invested in any new technology last year while 54% call better platforms a priority. Today a coach stitches together 5–8 disconnected tools. CoachOS replaces the stitching — one desk, every room of the business, AI built into each workflow, at solo-coach pricing where no incumbent has built AI-first.</p>
+      <div class="stat-strip">
+        <div class="stat"><span class="n">$5.34B</span><span class="l">Global coaching industry, +17% YoY</span></div>
+        <div class="stat"><span class="n">122,974</span><span class="l">Coaches worldwide</span></div>
+        <div class="stat"><span class="n">54%</span><span class="l">Want better tech — only 19% bought any</span></div>
+        <div class="stat"><span class="n">$29–59</span><span class="l">/mo target price, matching category norm</span></div>
+      </div>
+      <p><b>Positioning:</b> <i>"You coach. CoachOS runs everything else."</i> We are the coach's infrastructure, not their replacement — which keeps the 122,974 coaches as allies, not disruptees, and keeps us in the EU AI Act's lighter <i>limited-risk</i> tier.</p>
+    </section>
+
+    <section id="market">
+      <span class="eyebrow">02 — Research (verified)</span>
+      <h2>Market research, fact-checked</h2>
+      <p class="lede">Every figure below survived adversarial verification against primary sources. Numbers that failed verification are listed separately — never used in decks.</p>
+
+      <h4 style="margin-bottom:.5rem">Competitive landscape</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Product</th><th>Category</th><th>Signal</th></tr></thead>
+          <tbody>
+            <tr><td>Valence "Nadia"</td><td>AI-only enterprise coaching (we don't compete here)</td><td>$50M round, Sept 2025</td></tr>
+            <tr><td>CoachHub + AIMY</td><td>3,500+ human coaches + AI module</td><td>$42.3M debt financing Dec 2024</td></tr>
+            <tr><td>BetterUp</td><td>Human+AI hybrid, enterprise</td><td>~$3,000–5,000/user/year (reported)</td></tr>
+            <tr><td>Rocky.ai</td><td>AI-first leadership coaching</td><td>~$10–13/user/month (reported)</td></tr>
+            <tr><td>Delenta / Paperbell / Simply.Coach / CoachAccountable</td><td>Solo-coach practice management (our real competitors)</td><td>$20–57/mo, generic AI bolt-ons</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><b>The gap:</b> nobody in the $20–60/mo tier is AI-first around the coach's actual daily workflow. Enterprise players won't come down-market; solo-tier incumbents haven't rebuilt around AI.</p>
+
+      <div class="callout"><p><b>Defensibility:</b> model-capability advantages last ~6 months (Jasper fell from ~$120M to $35–55M revenue when its wrapper edge evaporated). Our moats, in order: (1) accumulated client history + contracts + pipeline inside the platform, (2) coach-community distribution, (3) the human-service layer.</p></div>
+
+      <h4 style="margin:1.3rem 0 .5rem">Regulation</h4>
+      <p>Assistive AI sits in the EU AI Act's <b>limited-risk tier</b> — disclose "this is AI," largely compliant. Lines never crossed: no employee-evaluation features, no emotion/sentiment scoring. GDPR: coach is data controller, we are processor — standard DPA before first EU customer. Independent security review is non-negotiable before real client data (a vibe-coded competitor product was publicly breached post-launch).</p>
+
+      <div class="reject"><b>Rejected claims (do not use):</b> "$62B AI coaching market by 2026" (contradicts verified industry size 10×, uncited); "$5.48B AI Career Coach market, $14.82B by 2030" (no disclosed methodology); "$3.64B life coaching market" (inconsistent with primary data); "25% of YC W25 was 95% AI-generated code" (failed verification).</div>
+    </section>
+
+    <section id="product">
+      <span class="eyebrow">03 — Product spec</span>
+      <h2>Seven modules, one platform</h2>
+      <p class="lede">Module-by-module: what the coach gets, what's AI, and what stays human.</p>
+      <div class="cards">
+        <div class="card"><span class="tag">AI</span><h4>1–2. Leads</h4><p>Landing pages, lead scoring, pipeline board, AI follow-up nudges. AI drafts — coach always sends.</p></div>
+        <div class="card"><span class="tag svc">AI + Human</span><h4>3. Marketing</h4><p>Weekly posts + newsletter drafted in the coach's voice; optional done-for-you service.</p></div>
+        <div class="card"><h4>4. Bookings</h4><p>Scheduling, calendar sync, reminders, no-show recovery — via Cal.com, not hand-built.</p></div>
+        <div class="card"><h4>5. Contracts &amp; Payments</h4><p>Coaching agreement templates, e-sign, invoicing, subscriptions.</p></div>
+        <div class="card"><span class="tag wedge">AI · The wedge</span><h4>6. Client Delivery</h4><p>Notes → AI summary + action items, progress timeline, prep briefs. Built first.</p></div>
+        <div class="card"><span class="tag">AI</span><h4>7. Practice Intelligence</h4><p>Revenue, retention, at-risk clients flagged by AI — insights to the coach only.</p></div>
+      </div>
+
+      <h4 style="margin:1.4rem 0 .5rem">Niche packs — how it gets industry-specific</h4>
+      <p>One platform, specialty-tuned. Each pack bundles the templates, sequences and AI presets a coach in that specialty actually needs.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Pack</th><th>Contracts</th><th>Nurture</th><th>Lead magnet</th><th>AI voice</th></tr></thead>
+          <tbody>
+            <tr><td><b>Executive</b> (launches first)</td><td>12-session, retainer, team offsite</td><td>C-suite, board-season</td><td>"First 90 days" scorecard</td><td>Board-savvy, concise</td></tr>
+            <tr><td>Career</td><td>Per-package, outplacement</td><td>Job-search sprint</td><td>CV/LinkedIn teardown</td><td>Practical, encouraging</td></tr>
+            <tr><td>Life &amp; wellness</td><td>Session bundles</td><td>Habit-loop nurture</td><td>Wheel-of-life self-assessment</td><td>Warm, non-clinical</td></tr>
+            <tr><td>Mentoring programs (B2B)</td><td>Mentor–mentee MOU</td><td>Cohort onboarding</td><td>Program one-pager</td><td>Coordinator tone</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h4 style="margin:1.4rem 0 .7rem">AI vs. human — the line we never cross</h4>
+      <div class="split">
+        <div class="half ai"><h4>The platform does</h4><ul>
+          <li>Notes → client-ready summaries</li>
+          <li>Prep briefs before every session</li>
+          <li>Lead scoring &amp; follow-up drafts</li>
+          <li>Content drafts in the coach's voice</li>
+          <li>Invoice chasing, no-show recovery</li>
+          <li>At-risk client flags</li>
+        </ul></div>
+        <div class="half hu"><h4>Humans still do</h4><ul>
+          <li>The coaching itself, every session</li>
+          <li>Approve every message before it sends</li>
+          <li>Onboarding &amp; migration, done-with-you</li>
+          <li>Done-for-you marketing editing</li>
+          <li>The referral community</li>
+          <li>Judgment. Always.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section id="stack">
+      <span class="eyebrow">04 — Engineering</span>
+      <h2>Build vs. integrate — the open-source map</h2>
+      <p class="lede">We do not hand-build commodity modules. Proven open-source engines exist for scheduling, e-sign, CRM and email — we integrate them as separate services (not code-merged, mostly for AGPL licensing reasons) and concentrate our own code on the AI workflows that differentiate us.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Need</th><th>Engine</th><th>License</th><th>Phase</th></tr></thead>
+          <tbody>
+            <tr><td>Scheduling</td><td>Cal.com</td><td>AGPLv3 (+commercial)</td><td>2</td></tr>
+            <tr><td>E-signatures</td><td>Documenso</td><td>AGPLv3</td><td>2</td></tr>
+            <tr><td>CRM core</td><td>Twenty</td><td>AGPLv3</td><td>3</td></tr>
+            <tr><td>Email/newsletters</td><td>Listmonk</td><td>AGPLv3</td><td>3</td></tr>
+            <tr><td>Automation glue</td><td>n8n</td><td>Fair-code</td><td>2–3</td></tr>
+            <tr><td>Backend/auth/DB</td><td>Supabase</td><td>Apache 2.0</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><b>What we build ourselves</b> — the actual moat: the AI workflow layer (notes→summary, prep briefs, voice-profile content, lead scoring), the unified dashboard, the client portal, and the approval-first AI UX.</p>
+      <p><b>Phase-1 reality check:</b> the wedge needs only Next.js + Supabase + Claude API + a Cal.com embed. Everything else arrives later — standing up five services on day one is an operational liability before revenue justifies it.</p>
+    </section>
+
+    <section id="roadmap">
+      <span class="eyebrow">05 — Execution</span>
+      <h2>Phased roadmap, hard gates</h2>
+      <p class="lede">Each phase has an explicit gate. The next phase does not start until the gate is passed — the discipline that separates this plan from the all-in-one graveyard.</p>
+      <div class="phases">
+        <div class="phase"><div class="node">1</div><div class="pcard"><h4>The wedge</h4><p>Client Delivery + scheduling embed + portal. Months 1–3.</p><span class="gate">Gate: 5 pilots weekly, 3 paid</span></div></div>
+        <div class="phase"><div class="node">2</div><div class="pcard"><h4>Money loop</h4><p>Bookings, Contracts, Stripe billing, security re-review. Months 4–8.</p><span class="gate">Gate: 25 paying, churn &lt;5%</span></div></div>
+        <div class="phase"><div class="node">3</div><div class="pcard"><h4>Growth loop</h4><p>Leads CRM, marketing composer, done-for-you launch. Months 9–14.</p><span class="gate">Gate: 100 paying, service profitable</span></div></div>
+        <div class="phase"><div class="node">4</div><div class="pcard"><h4>Intelligence</h4><p>Practice dashboard, at-risk AI, referrals. Year 2.</p><span class="gate">Gate: earned, not assumed</span></div></div>
+      </div>
+
+      <h4 style="margin:1.5rem 0 .5rem">Costs (verified unit economics)</h4>
+      <p>Build to first paying customer: <b>~$1,000–2,500</b> (hosting, security review, legal templates). Runtime AI cost on Claude Haiku 4.5: <b>~$0.03/coach/month</b> — 300 coaches ≈ $8.40/mo. At $59/mo revenue per coach, gross margin exceeds 95%. <b>AI cost never drives architecture decisions here — the founder's selling time is the scarce resource, not compute.</b></p>
+
+      <h4 style="margin:1.3rem 0 .5rem">Go-to-market</h4>
+      <p>Sales-led, zero ad spend to start: recruit 5 pilots from ICF chapters and coach communities → convert + ask for 2 introductions each (coaches refer coaches) → ICF workshops + certification-program partnerships → done-for-you service doubles as a retention and referral channel.</p>
+    </section>
+
+    <section id="build">
+      <span class="eyebrow">06 — For the builder</span>
+      <h2>Building it with Claude Code + Cursor</h2>
+      <p class="lede">Claude Code builds features end-to-end from plain-English briefs; Cursor is the review-and-touch-up surface. Stack: Next.js + TypeScript + Tailwind + Supabase (auth + Postgres + row-level security) + Claude API (server-side, Haiku 4.5 default) + Cal.com + Vercel.</p>
+
+      <h4 style="margin-bottom:.6rem">Functionality build order (Phase 1)</h4>
+      <ol class="steps">
+        <li><b>F0 — Scaffold.</b><p>Next.js + Supabase auth + folder structure + design tokens.</p></li>
+        <li><b>F1 — Clients CRUD.</b><p>Add/edit clients, engagements, goals — RLS isolation tested with two accounts.</p></li>
+        <li><b>F2 — Notes → AI summary.</b><p>Paste notes → editable draft (client-facing, coach-facing, action items). Nothing sent yet.</p></li>
+        <li><b>F3 — Approval queue + send.</b><p>Dashboard queue; Approve emails the client and logs to audit_log.</p></li>
+        <li><b>F4 — Progress timeline.</b><p>Goals + session-by-session arc, fed by approved summaries.</p></li>
+        <li><b>F5 — Prep brief.</b><p>30-minutes-before brief on commitments, blockers, stalled goals.</p></li>
+        <li><b>F6 — Bookings.</b><p>Cal.com embed, webhook sync to sessions table.</p></li>
+        <li><b>F7 — Client portal.</b><p>Read-only, signed-token link — no login friction.</p></li>
+        <li><b>F8 — Niche packs v1.</b><p>Pack picker swaps tone/templates.</p></li>
+        <li><b>F9 — Polish + security gate.</b><p>Landing page, empty/loading states, then independent security review before real client data.</p></li>
+      </ol>
+
+      <h4 style="margin:1.4rem 0 .4rem">Example brief for F2</h4>
+      <div class="brief">"Build the summarize endpoint + client-detail notes flow: paste notes → Summarize
+→ editable draft (client-facing summary, coach-facing note, action items),
+using the prompt template in docs/05 §4.3. RLS on. Nothing sends until approved."</div>
+
+      <div class="callout" style="margin-top:1.3rem"><p><b>Hard rules baked into CLAUDE.md/.cursorrules:</b> RLS on every table; all Claude API calls server-side only; outbound artifacts require <code>status='approved'</code> + audit log; AI content labeled "AI-drafted, coach-approved"; no emotion-scoring or employee-evaluation features, ever.</p></div>
+
+      <div class="cta-block">
+        <div><h3>Full build guide, F0–F9 briefs and schema</h3><p>Complete data model, security rules, screen-by-screen frontend spec, and every brief — in the repo.</p></div>
+        <a class="btn primary" href="https://github.com/amir9078/coachos/blob/main/docs/05-build-guide.md" target="_blank" rel="noopener">Open docs/05-build-guide.md →</a>
+      </div>
+    </section>
+
+    <section id="repo">
+      <span class="eyebrow">07 — Repository</span>
+      <h2>What's in the repo</h2>
+      <ul style="padding-left:1.1rem;color:var(--ink-soft);font-size:.92rem">
+        <li><code>README.md</code> — master plan (same content as this page, in Markdown)</li>
+        <li><code>LICENSE</code> — proprietary, all rights reserved — public visibility does not grant reuse rights</li>
+        <li><code>docs/01</code>–<code>05</code> — market research, product spec, open-source stack, roadmap/costs, build guide</li>
+        <li><code>prototype/</code> — the animated clickable demo, also linked at the top of this page</li>
+      </ul>
+      <p>No secrets or credentials are ever committed here — API keys and tokens live only in local <code>.env</code> files and each hosting provider's secret manager, per <code>docs/05-build-guide.md</code> §4.2.</p>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Coach<b style="color:var(--brass)">OS</b> — compiled from <a href="https://github.com/amir9078/coachos" target="_blank" rel="noopener">github.com/amir9078/coachos</a>.
+</footer>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.rail a'));
+  var sections = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+  if(!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var id = '#' + e.target.id;
+        links.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === id); });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  sections.forEach(function(s){ io.observe(s); });
+})();
+</script>
+</body>
+</html>

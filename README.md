@@ -5,6 +5,7 @@
 **Status:** Plan + clickable prototype. Not yet in build.
 **Owner:** Amir Hussain
 **Last updated:** July 2026
+**Live site:** [amir9078.github.io/coachos](https://amir9078.github.io/coachos/) — the whole plan as one navigable page, linking straight into the prototype
 
 ---
 
