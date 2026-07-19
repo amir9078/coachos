@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoachOS — You coach. It runs everything else.</title>
+<style>
+  :root{
+    --bone:#F0EBDD; --bone-2:#E7E0CC; --card:#F5F1E6; --well:#E2DAC4;
+    --ink:#1E2B24; --ink-soft:#54604F; --line:rgba(30,43,36,.16);
+    --brass:#8A6A1F; --brass-soft:rgba(138,106,31,.13);
+    --green:#2E6B4F; --green-soft:rgba(46,107,79,.14);
+    --rust:#9A4A2C; --rust-soft:rgba(154,74,44,.13);
+    --shadow-s:0 1px 2px rgba(20,28,22,.07),0 6px 18px rgba(20,28,22,.07);
+    --shadow-l:0 2px 4px rgba(20,28,22,.08),0 24px 60px rgba(20,28,22,.14);
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;
+    --sans:Seravek,'Gill Sans Nova','Segoe UI',Calibri,'Trebuchet MS',sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bone);color:var(--ink);font-family:var(--sans);
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  }
+  h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;text-wrap:balance}
+  p{margin:0 0 1em}
+  a{color:var(--brass)}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 1.5rem;position:relative;z-index:2}
+  .kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+
+  /* ---------- Nav ---------- */
+  nav.top{
+    position:sticky;top:0;z-index:50;background:rgba(240,235,221,.88);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav.top .wrap{display:flex;align-items:center;gap:1.6rem;padding:.85rem 1.5rem}
+  .wordmark{font-family:var(--serif);font-size:1.25rem;font-weight:700;letter-spacing:.01em;text-decoration:none;color:var(--ink)}
+  .wordmark em{font-style:normal;color:var(--brass)}
+  nav.top .links{margin-left:auto;display:flex;gap:1.4rem;align-items:center}
+  nav.top .links a{
+    text-decoration:none;color:var(--ink-soft);font-size:.9rem;position:relative;padding-bottom:2px;
+  }
+  nav.top .links a::after{
+    content:"";position:absolute;left:0;bottom:0;height:1.5px;width:0;background:var(--brass);transition:width .25s;
+  }
+  nav.top .links a:hover::after{width:100%}
+  nav.top .links a:hover{color:var(--ink)}
+  .chip-cta{
+    background:var(--ink);color:var(--bone)!important;padding:.5rem 1rem;border-radius:2px;
+    font-size:.85rem;text-decoration:none;transition:transform .18s, box-shadow .18s;
+  }
+  .chip-cta:hover{transform:translateY(-1px);box-shadow:var(--shadow-s)}
+  .chip-cta::after{display:none}
+
+  /* ---------- Hero ---------- */
+  header.hero{position:relative;padding:5.5rem 0 4rem;overflow:hidden}
+  .hero-glow{
+    position:absolute;inset:-20% -10% auto;height:130%;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(46% 60% at 78% 18%, rgba(138,106,31,.16), transparent 65%),
+      radial-gradient(40% 55% at 12% 80%, rgba(46,107,79,.13), transparent 60%);
+    animation:drift 16s ease-in-out infinite alternate;
+  }
+  @keyframes drift{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(0,-2.5%,0) scale(1.04)}}
+  .hero h1{
+    font-size:clamp(2.5rem,6.4vw,4.4rem);line-height:1.04;letter-spacing:-.015em;max-width:15ch;
+  }
+  .hero h1 .w{display:inline-block;opacity:0;transform:translateY(.5em);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+  .hero h1 .accent{color:var(--brass);font-style:italic}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .hero .sub{
+    font-size:1.15rem;color:var(--ink-soft);max-width:52ch;margin:1.4rem 0 2rem;
+    opacity:0;animation:rise .7s .55s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .hero .ctas{display:flex;gap:.9rem;flex-wrap:wrap;opacity:0;animation:rise .7s .7s cubic-bezier(.2,.7,.2,1) forwards}
+  .btn{
+    display:inline-block;text-decoration:none;border-radius:2px;padding:.75rem 1.4rem;font-size:.95rem;
+    transition:transform .18s, box-shadow .18s;
+  }
+  .btn.primary{background:var(--green);color:var(--bone)}
+  .btn.ghost{border:1px solid var(--line);color:var(--ink);background:var(--card)}
+  .btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-s)}
+  .stat-band{
+    margin-top:3.6rem;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);
+    border:1px solid var(--line);opacity:0;animation:rise .7s .9s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .stat-band .cell{background:var(--card);padding:1.4rem 1.3rem}
+  .stat-band .num{font-family:var(--mono);font-size:clamp(1.5rem,3vw,2.1rem);color:var(--brass);font-variant-numeric:tabular-nums}
+  .stat-band .lbl{font-size:.85rem;color:var(--ink-soft);display:block;margin-top:.3rem}
+  .stat-band .src{font-size:.68rem;color:var(--ink-soft);opacity:.7;display:block;margin-top:.45rem}
+  @media(max-width:720px){.stat-band{grid-template-columns:1fr}}
+
+  /* ---------- Sections ---------- */
+  section{padding:4.5rem 0}
+  .sec-head{margin-bottom:2.2rem;max-width:60ch}
+  .sec-head h2{font-size:clamp(1.7rem,3.4vw,2.5rem);margin:.5rem 0 .8rem}
+  .sec-head p{color:var(--ink-soft);font-size:1.05rem}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- Rooms ---------- */
+  .rooms{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+  .room{
+    background:var(--card);border:1px solid var(--line);border-radius:3px;padding:1.3rem 1.2rem;
+    transition:transform .22s, box-shadow .22s;position:relative;overflow:hidden;
+  }
+  .room:hover{transform:translateY(-4px);box-shadow:var(--shadow-s)}
+  .room::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--brass);transform:scaleX(0);transform-origin:left;transition:transform .3s}
+  .room:hover::before{transform:scaleX(1)}
+  .room .glyph{font-family:var(--serif);font-size:1.5rem;color:var(--green);display:block;margin-bottom:.5rem}
+  .room h3{font-size:1.05rem;margin-bottom:.35rem}
+  .room p{font-size:.87rem;color:var(--ink-soft);margin:0}
+  .room .tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;padding:.15rem .45rem;border-radius:2px;background:var(--green-soft);color:var(--green);position:absolute;top:.9rem;right:.9rem}
+  .room .tag.svc{background:var(--rust-soft);color:var(--rust)}
+
+  /* ---------- App demo ---------- */
+  .app-frame{
+    background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow-l);
+    overflow:hidden;
+  }
+  .app-chrome{display:flex;align-items:center;gap:.5rem;background:var(--well);padding:.6rem 1rem;border-bottom:1px solid var(--line)}
+  .dot{width:10px;height:10px;border-radius:50%;background:rgba(30,43,36,.22)}
+  .app-chrome .addr{margin-left:.8rem;font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);background:var(--card);border-radius:3px;padding:.25rem .7rem;border:1px solid var(--line)}
+  .app-body{display:grid;grid-template-columns:200px 1fr;min-height:560px}
+  @media(max-width:860px){.app-body{grid-template-columns:1fr}.app-side{display:flex;overflow-x:auto;border-right:none!important;border-bottom:1px solid var(--line)}}
+  .app-side{background:var(--bone-2);border-right:1px solid var(--line);padding:1rem .7rem;display:flex;flex-direction:column;gap:.2rem}
+  .side-btn{
+    display:flex;align-items:center;gap:.6rem;width:100%;text-align:left;background:none;border:none;cursor:pointer;
+    font-family:var(--sans);font-size:.9rem;color:var(--ink-soft);padding:.55rem .8rem;border-radius:4px;
+    transition:background .18s,color .18s;white-space:nowrap;
+  }
+  .side-btn:hover{background:rgba(30,43,36,.06);color:var(--ink)}
+  .side-btn.active{background:var(--ink);color:var(--bone)}
+  .side-btn .ico{font-family:var(--serif);width:1.1em;display:inline-block;text-align:center}
+  .app-main{padding:1.6rem;position:relative;min-width:0}
+  .pane{display:none}
+  .pane.active{display:block;animation:paneIn .4s cubic-bezier(.2,.7,.2,1)}
+  @keyframes paneIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .pane h3.pane-title{font-size:1.3rem;margin-bottom:.2rem}
+  .pane .pane-sub{font-size:.85rem;color:var(--ink-soft);margin-bottom:1.2rem}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin-bottom:1.4rem}
+  .kpi{background:var(--bone);border:1px solid var(--line);border-radius:4px;padding:.9rem 1rem}
+  .kpi .v{font-family:var(--mono);font-size:1.35rem;font-variant-numeric:tabular-nums}
+  .kpi .l{font-size:.75rem;color:var(--ink-soft)}
+  .kpi .d{font-size:.7rem;font-family:var(--mono)}
+  .up{color:var(--green)} .warn{color:var(--rust)}
+
+  .queue{border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .queue-head{background:var(--well);padding:.6rem 1rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .q-item{display:flex;align-items:center;gap:.9rem;padding:.85rem 1rem;border-top:1px solid var(--line);background:var(--card);transition:opacity .4s, transform .4s}
+  .q-item.done{opacity:0;transform:translateX(30px);pointer-events:none}
+  .q-item .badge{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;padding:.2rem .5rem;border-radius:2px;flex:none}
+  .b-mail{background:var(--green-soft);color:var(--green)} .b-sum{background:var(--brass-soft);color:var(--brass)} .b-post{background:var(--rust-soft);color:var(--rust)}
+  .q-item .txt{font-size:.88rem;min-width:0}
+  .q-item .txt small{display:block;color:var(--ink-soft);font-size:.75rem}
+  .approve{
+    margin-left:auto;flex:none;background:var(--green);color:var(--bone);border:none;border-radius:2px;
+    font-family:var(--sans);font-size:.78rem;padding:.4rem .8rem;cursor:pointer;transition:transform .15s;
+  }
+  .approve:hover{transform:translateY(-1px)}
+
+  .client-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:1.2rem}
+  @media(max-width:860px){.client-grid{grid-template-columns:1fr}}
+  .tl{list-style:none;margin:.6rem 0 0;padding:0;border-left:2px solid var(--line)}
+  .tl li{padding:.45rem 0 .45rem 1rem;position:relative;font-size:.84rem;color:var(--ink-soft)}
+  .tl li::before{content:"";position:absolute;left:-5px;top:.95em;width:8px;height:8px;border-radius:50%;background:var(--brass)}
+  .tl li b{color:var(--ink)}
+  .notes-box{width:100%;min-height:110px;background:var(--bone);border:1px solid var(--line);border-radius:4px;padding:.8rem;font-family:var(--sans);font-size:.86rem;color:var(--ink);resize:vertical}
+  .ai-btn{
+    margin-top:.7rem;background:var(--brass);color:var(--bone);border:none;border-radius:2px;
+    font-family:var(--sans);font-size:.88rem;padding:.6rem 1.1rem;cursor:pointer;transition:transform .15s, box-shadow .15s;
+  }
+  .ai-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-s)}
+  .ai-btn:disabled{opacity:.5;cursor:default;transform:none}
+  .ai-out{
+    margin-top:1rem;background:var(--bone);border:1px solid var(--brass);border-left-width:3px;border-radius:0 4px 4px 0;
+    padding: .9rem 1rem;font-size:.86rem;min-height:2em;display:none;white-space:pre-wrap;
+  }
+  .ai-out.show{display:block}
+  .caret{display:inline-block;width:.55em;height:1em;background:var(--brass);vertical-align:text-bottom;animation:blink .8s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+
+  .kan{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem}
+  @media(max-width:860px){.kan{grid-template-columns:repeat(2,1fr)}}
+  .kol{background:var(--bone);border:1px solid var(--line);border-radius:4px;padding:.7rem}
+  .kol h4{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 .6rem;font-weight:600}
+  .kard{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:.6rem .7rem;font-size:.8rem;margin-bottom:.55rem;transition:transform .18s, box-shadow .18s;cursor:default}
+  .kard:hover{transform:translateY(-2px);box-shadow:var(--shadow-s)}
+  .kard small{display:block;color:var(--ink-soft);font-size:.7rem}
+  .score{font-family:var(--mono);font-size:.62rem;background:var(--green-soft);color:var(--green);border-radius:2px;padding:.1rem .35rem}
+  .nudge{
+    display:flex;gap:.7rem;align-items:center;background:var(--brass-soft);border:1px solid rgba(138,106,31,.3);
+    border-radius:4px;padding:.7rem .9rem;font-size:.84rem;margin-bottom:1rem;
+  }
+  .nudge b{color:var(--brass)}
+
+  .slots{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem;margin-bottom:1.2rem}
+  @media(max-width:640px){.slots{grid-template-columns:repeat(4,1fr)}}
+  .slot{background:var(--bone);border:1px solid var(--line);border-radius:3px;text-align:center;padding:.5rem .2rem;font-size:.72rem;color:var(--ink-soft)}
+  .slot b{display:block;font-family:var(--mono);font-size:.9rem;color:var(--ink)}
+  .slot.busy{background:var(--green-soft);border-color:rgba(46,107,79,.35);color:var(--green)}
+  .slot.busy b{color:var(--green)}
+  .sess{display:flex;align-items:center;gap:.8rem;padding:.7rem .9rem;border:1px solid var(--line);border-radius:4px;background:var(--card);margin-bottom:.5rem;font-size:.86rem}
+  .sess .when{font-family:var(--mono);font-size:.75rem;color:var(--brass);flex:none;width:7.2em}
+  .pill{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;padding:.18rem .5rem;border-radius:2px;margin-left:auto;flex:none}
+  .p-ok{background:var(--green-soft);color:var(--green)} .p-wait{background:var(--brass-soft);color:var(--brass)} .p-draft{background:rgba(30,43,36,.08);color:var(--ink-soft)}
+
+  /* ---------- Split ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+  @media(max-width:760px){.split{grid-template-columns:1fr}}
+  .half{border:1px solid var(--line);border-radius:4px;padding:1.6rem;background:var(--card)}
+  .half.ai{border-top:3px solid var(--green)} .half.hu{border-top:3px solid var(--rust)}
+  .half h3{font-size:1.15rem;margin-bottom:.9rem}
+  .half ul{margin:0;padding:0;list-style:none;display:grid;gap:.55rem}
+  .half li{font-size:.9rem;color:var(--ink-soft);display:grid;grid-template-columns:1.2rem 1fr;gap:.5rem}
+  .half.ai li::before{content:"✦";color:var(--green)}
+  .half.hu li::before{content:"◆";color:var(--rust)}
+
+  /* ---------- Roadmap ---------- */
+  .phases{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+  @media(max-width:860px){.phases{grid-template-columns:1fr 1fr}}
+  .phases::before{
+    content:"";position:absolute;top:1.15rem;left:2%;right:2%;height:2px;background:var(--line);z-index:0;
+  }
+  .phase{position:relative;z-index:1}
+  .phase .node{
+    width:2.3rem;height:2.3rem;border-radius:50%;background:var(--bone);border:2px solid var(--brass);
+    display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.85rem;color:var(--brass);margin-bottom:.8rem;
+  }
+  .phase .card{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:1rem 1.1rem;min-height:9.5rem}
+  .phase h3{font-size:.98rem;margin-bottom:.35rem}
+  .phase p{font-size:.8rem;color:var(--ink-soft);margin:0 0 .5rem}
+  .phase .gate{font-family:var(--mono);font-size:.66rem;color:var(--green);background:var(--green-soft);padding:.2rem .45rem;border-radius:2px}
+
+  footer{border-top:1px solid var(--line);padding:2.5rem 0 4rem;color:var(--ink-soft);font-size:.85rem}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:1.5rem;justify-content:space-between}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .hero h1 .w,.hero .sub,.hero .ctas,.stat-band{opacity:1;transform:none}
+    .reveal{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="wordmark" href="#top">Coach<em>OS</em></a>
+    <div class="links">
+      <a href="#rooms">Product</a>
+      <a href="#demo">Live demo</a>
+      <a href="#split">AI + Human</a>
+      <a href="#roadmap">Roadmap</a>
+      <a class="chip-cta" href="../README.md">Read the plan →</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-glow"></div>
+  <div class="wrap">
+    <span class="kicker">Working prototype · not a live product · demo data only</span>
+    <h1 style="margin-top:1rem">
+      <span class="w" style="animation-delay:.05s">You</span>
+      <span class="w" style="animation-delay:.13s">coach.</span><br>
+      <span class="w accent" style="animation-delay:.28s">It</span>
+      <span class="w accent" style="animation-delay:.36s">runs</span>
+      <span class="w accent" style="animation-delay:.44s">everything</span>
+      <span class="w accent" style="animation-delay:.52s">else.</span>
+    </h1>
+    <p class="sub">Leads, marketing, bookings, contracts, session notes, payments — one desk for the whole coaching practice, with AI drafting the busywork and you approving every word that leaves the building.</p>
+    <div class="ctas">
+      <a class="btn primary" href="#demo">Explore the live demo ↓</a>
+      <a class="btn ghost" href="#roadmap">See the build plan</a>
+    </div>
+    <div class="stat-band">
+      <div class="cell"><span class="num" data-count="5.34" data-prefix="$" data-suffix="B" data-dec="2">$0.00B</span><span class="lbl">Global coaching industry, +17% vs 2023</span><span class="src">ICF / PwC 2025 Global Coaching Study</span></div>
+      <div class="cell"><span class="num" data-count="122974" data-dec="0">0</span><span class="lbl">Professional coaches worldwide</span><span class="src">Same study — verified primary source</span></div>
+      <div class="cell"><span class="num" data-count="54" data-suffix="%" data-dec="0">0%</span><span class="lbl">call better tech a priority — yet only 19% bought any</span><span class="src">The gap CoachOS exists to close</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="rooms">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">One desk · seven rooms</span>
+      <h2>Everything a practice needs, under one roof</h2>
+      <p>Coaches currently stitch together five to eight tools. Each room below replaces one of them — and they share one brain.</p>
+    </div>
+    <div class="rooms">
+      <div class="room reveal"><span class="tag">AI</span><span class="glyph">☉</span><h3>Attract</h3><p>Landing pages &amp; lead magnets, copy drafted in your voice.</p></div>
+      <div class="room reveal"><span class="tag">AI</span><span class="glyph">⚘</span><h3>Leads</h3><p>Pipeline board with AI scoring and follow-up nudges.</p></div>
+      <div class="room reveal"><span class="tag svc">AI + Human</span><span class="glyph">✎</span><h3>Marketing</h3><p>Posts &amp; newsletters drafted weekly; optional done-for-you service.</p></div>
+      <div class="room reveal"><span class="glyph">◷</span><h3>Bookings</h3><p>Scheduling links, reminders, no-show recovery.</p></div>
+      <div class="room reveal"><span class="glyph">§</span><h3>Contracts</h3><p>Coaching agreements, e-sign, invoices, subscriptions.</p></div>
+      <div class="room reveal"><span class="tag">AI · The wedge</span><span class="glyph">❧</span><h3>Client delivery</h3><p>Notes → summaries, prep briefs, progress timelines.</p></div>
+      <div class="room reveal"><span class="tag">AI</span><span class="glyph">◈</span><h3>Intelligence</h3><p>Revenue, retention, and at-risk clients flagged early.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="demo" style="padding-top:2rem">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Clickable demo · sample data</span>
+      <h2>A morning inside CoachOS</h2>
+      <p>Click through the sidebar. Try “Summarize with AI” under <b>Clients</b>, and approve the drafts waiting in <b>Today</b>.</p>
+    </div>
+    <div class="app-frame reveal">
+      <div class="app-chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="addr">app.coachos.demo — Amara Coaching</span></div>
+      <div class="app-body">
+        <div class="app-side">
+          <button class="side-btn active" data-pane="today"><span class="ico">☀</span>Today</button>
+          <button class="side-btn" data-pane="clients"><span class="ico">❧</span>Clients</button>
+          <button class="side-btn" data-pane="leads"><span class="ico">⚘</span>Leads</button>
+          <button class="side-btn" data-pane="marketing"><span class="ico">✎</span>Marketing</button>
+          <button class="side-btn" data-pane="bookings"><span class="ico">◷</span>Bookings</button>
+          <button class="side-btn" data-pane="contracts"><span class="ico">§</span>Contracts</button>
+        </div>
+        <div class="app-main">
+
+          <div class="pane active" id="pane-today">
+            <h3 class="pane-title">Good morning, Amara</h3>
+            <p class="pane-sub">Tuesday · 3 sessions today · 3 drafts waiting for your approval</p>
+            <div class="kpis">
+              <div class="kpi"><div class="v">$4,720</div><div class="l">MRR</div><div class="d up">▲ 12% vs last month</div></div>
+              <div class="kpi"><div class="v">11</div><div class="l">Sessions this week</div><div class="d up">▲ 2</div></div>
+              <div class="kpi"><div class="v">$9,400</div><div class="l">Pipeline value</div><div class="d up">▲ 3 new leads</div></div>
+              <div class="kpi"><div class="v">1</div><div class="l">Client at risk</div><div class="d warn">Maya — stalled 3 wks</div></div>
+            </div>
+            <div class="queue">
+              <div class="queue-head">AI drafts — nothing sends without you</div>
+              <div class="q-item"><span class="badge b-mail">Follow-up</span><div class="txt">Re-engage email for <b>Sarah K.</b><small>Quiet 6 days after discovery call — warm, no pressure</small></div><button class="approve">Approve &amp; send</button></div>
+              <div class="q-item"><span class="badge b-sum">Summary</span><div class="txt">Session summary for <b>Maya R.</b><small>Yesterday, 60 min — 3 action items extracted</small></div><button class="approve">Approve &amp; send</button></div>
+              <div class="q-item"><span class="badge b-post">Post</span><div class="txt">LinkedIn draft: <b>“The question I ask every stuck founder”</b><small>In your voice profile · scheduled Thu 9:00</small></div><button class="approve">Approve &amp; schedule</button></div>
+            </div>
+          </div>
+
+          <div class="pane" id="pane-clients">
+            <h3 class="pane-title">Maya R. — Founder, Series A</h3>
+            <p class="pane-sub">Engagement: Executive package · session 7 of 12</p>
+            <div class="client-grid">
+              <div>
+                <span class="kicker">Progress timeline</span>
+                <ul class="tl">
+                  <li><b>Goal 1 · Delegation</b> — strong progress, ownership map done</li>
+                  <li><b>Goal 2 · Board comms</b> — narrative reframed, confidence up</li>
+                  <li><b>Goal 3 · Co-founder tension</b> — <b style="color:var(--rust)">stalled 3 weeks</b></li>
+                  <li>Session 6 — committed to a direct conversation by Friday</li>
+                </ul>
+              </div>
+              <div>
+                <span class="kicker">Session 7 notes → summary</span>
+                <textarea class="notes-box" id="notes">maya opened w/ the co-founder convo - it happened! went better than feared. agreed to split product/gtm ownership. still anxious about board meeting on 28th. we role-played the hard question re: runway. homework: draft the board narrative + one delegation handoff to eng lead.</textarea>
+                <button class="ai-btn" id="summarize">✦ Summarize with AI</button>
+                <div class="ai-out" id="ai-out"></div>
+                <button class="ai-btn" id="send-summary" style="display:none;background:var(--green)">Approve &amp; send to Maya</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pane" id="pane-leads">
+            <h3 class="pane-title">Pipeline</h3>
+            <p class="pane-sub">$9,400 open · AI keeps every thread warm — you approve every send</p>
+            <div class="nudge"><span>⚑</span><div><b>Sarah K. has gone quiet</b> — 6 days since her discovery call. A follow-up draft is waiting in Today → AI drafts.</div></div>
+            <div class="kan">
+              <div class="kol"><h4>Enquiry · 4</h4>
+                <div class="kard">Daniel O. <span class="score">AI fit 82</span><small>Ex-VP wanting exec transition</small></div>
+                <div class="kard">Priya S. <span class="score">AI fit 74</span><small>Referred by Maya R.</small></div>
+                <div class="kard">Tomás E.<small>Webinar signup</small></div>
+                <div class="kard">Lena W.<small>Landing page form</small></div>
+              </div>
+              <div class="kol"><h4>Discovery · 2</h4>
+                <div class="kard">Sarah K. <span class="score" style="background:var(--brass-soft);color:var(--brass)">follow up</span><small>Call done · quiet 6 days</small></div>
+                <div class="kard">Ibrahim N.<small>Call Thursday 14:00</small></div>
+              </div>
+              <div class="kol"><h4>Proposal · 2</h4>
+                <div class="kard">Jonas F.<small>6-mo package · $4,800</small></div>
+                <div class="kard">Aisha M.<small>Team offsite · $4,600</small></div>
+              </div>
+              <div class="kol"><h4>Won · 1</h4>
+                <div class="kard">Maya R.<small>Executive package · active</small></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pane" id="pane-marketing">
+            <h3 class="pane-title">Content composer</h3>
+            <p class="pane-sub">Voice profile: <b>“Direct, warm, story-first — no hustle-speak”</b> · built from your own writing</p>
+            <div class="queue" style="margin-bottom:1rem">
+              <div class="queue-head">This week's drafts — from your real session themes, anonymized</div>
+              <div class="q-item"><span class="badge b-post">Thu</span><div class="txt"><b>“The question I ask every stuck founder”</b><small>LinkedIn · 214 words · drafted from Tuesday's theme</small></div><button class="approve">Review</button></div>
+              <div class="q-item"><span class="badge b-post">Fri</span><div class="txt"><b>Newsletter #31 — Delegation isn't abdication</b><small>Email · 480 words · 62% avg open rate</small></div><button class="approve">Review</button></div>
+            </div>
+            <span class="kicker">Live draft preview</span>
+            <div class="ai-out show" id="mkt-out" style="margin-top:.5rem"></div>
+          </div>
+
+          <div class="pane" id="pane-bookings">
+            <h3 class="pane-title">This week</h3>
+            <p class="pane-sub">Booking link: coachos.demo/amara · reminders on · no-show recovery on</p>
+            <div class="slots">
+              <div class="slot"><b>Mon</b>2 held</div>
+              <div class="slot busy"><b>Tue</b>3 booked</div>
+              <div class="slot busy"><b>Wed</b>2 booked</div>
+              <div class="slot"><b>Thu</b>1 held</div>
+              <div class="slot busy"><b>Fri</b>2 booked</div>
+              <div class="slot"><b>Sat</b>—</div>
+              <div class="slot"><b>Sun</b>—</div>
+            </div>
+            <div class="sess"><span class="when">Today 10:00</span>Maya R. — Session 7<span class="pill p-ok">Confirmed</span></div>
+            <div class="sess"><span class="when">Today 14:00</span>Jonas F. — Chemistry call<span class="pill p-ok">Confirmed</span></div>
+            <div class="sess"><span class="when">Today 16:30</span>Aisha M. — Scoping<span class="pill p-wait">Reminder sent</span></div>
+            <div class="sess"><span class="when">Thu 14:00</span>Ibrahim N. — Discovery<span class="pill p-wait">Awaiting confirm</span></div>
+          </div>
+
+          <div class="pane" id="pane-contracts">
+            <h3 class="pane-title">Contracts &amp; billing</h3>
+            <p class="pane-sub">Templates lawyer-reviewed · e-sign legally binding · Stripe billing</p>
+            <div class="sess"><span class="when">Maya R.</span>Executive package — 12 sessions<span class="pill p-ok">Signed</span></div>
+            <div class="sess"><span class="when">Jonas F.</span>6-month engagement — $4,800<span class="pill p-wait">Awaiting signature</span></div>
+            <div class="sess"><span class="when">Aisha M.</span>Team offsite agreement<span class="pill p-draft">Draft</span></div>
+            <div class="kpis" style="margin-top:1.2rem">
+              <div class="kpi"><div class="v">$4,720</div><div class="l">Collected this month</div><div class="d up">All invoices paid</div></div>
+              <div class="kpi"><div class="v">$1,600</div><div class="l">Next renewal — Maya R.</div><div class="d">Auto-invoice on the 1st</div></div>
+              <div class="kpi"><div class="v">0</div><div class="l">Overdue</div><div class="d up">Chasing handled by CoachOS</div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="split">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">The line we never cross</span>
+      <h2>AI runs the desk. Humans do the humaning.</h2>
+      <p>CoachOS never coaches your clients and never sends a word without your approval. That's a product principle and our EU AI Act posture in one.</p>
+    </div>
+    <div class="split">
+      <div class="half ai reveal">
+        <h3>The platform does</h3>
+        <ul>
+          <li>Turn rough session notes into client-ready summaries</li>
+          <li>Brief you before every session on commitments &amp; blockers</li>
+          <li>Score leads, spot silence, and draft the follow-up</li>
+          <li>Draft posts &amp; newsletters in your voice</li>
+          <li>Chase invoices, send reminders, recover no-shows</li>
+          <li>Flag at-risk clients before they churn</li>
+        </ul>
+      </div>
+      <div class="half hu reveal">
+        <h3>Humans still do</h3>
+        <ul>
+          <li>The coaching itself — every session, every relationship</li>
+          <li>Approve every message before it leaves the building</li>
+          <li>Onboarding &amp; migration — done with you, by our team</li>
+          <li>Done-for-you marketing — human editors, AI-assisted</li>
+          <li>The community — coaches referring coaches</li>
+          <li>Judgment. Always.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="kicker">Build order · gated phases</span>
+      <h2>Wedge first. Empire later, if earned.</h2>
+      <p>Each phase ships only when the previous one passes a hard gate — the discipline that separates this plan from the all-in-one graveyard.</p>
+    </div>
+    <div class="phases">
+      <div class="phase reveal"><div class="node">1</div><div class="card"><h3>The wedge — Client delivery</h3><p>Notes→summaries, prep briefs, timeline, scheduling embed. Months 1–3.</p><span class="gate">Gate: 5 pilots weekly · 3 paid</span></div></div>
+      <div class="phase reveal"><div class="node">2</div><div class="card"><h3>The money loop</h3><p>Bookings, contracts, e-sign, Stripe billing. Months 4–8.</p><span class="gate">Gate: 25 paying · churn &lt;5%</span></div></div>
+      <div class="phase reveal"><div class="node">3</div><div class="card"><h3>The growth loop</h3><p>Leads CRM, AI follow-ups, marketing composer + done-for-you service. Months 9–14.</p><span class="gate">Gate: 100 paying · service profitable</span></div></div>
+      <div class="phase reveal"><div class="node">4</div><div class="card"><h3>Intelligence</h3><p>Practice dashboard, at-risk AI, referral network. Year 2 — decided from data.</p><span class="gate">Gate: earned, not assumed</span></div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>Coach<em style="font-style:normal;color:var(--brass)">OS</em> — working prototype · all data on this page is fictional demo data</div>
+    <div>Plan &amp; research: see <b>README.md</b> and <b>docs/</b> in this repository</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Scroll reveals */
+  var revs = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduced){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e,i){ if(e.isIntersecting){ e.target.style.transitionDelay = (e.target.dataset.d||0)+'ms'; e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:.12});
+    revs.forEach(function(el,i){ el.dataset.d = (i%4)*90; io.observe(el); });
+  } else { revs.forEach(function(el){el.classList.add('in');}); }
+
+  /* Animated counters */
+  function animateNum(el){
+    var target = parseFloat(el.dataset.count), dec = parseInt(el.dataset.dec||'0',10);
+    var pre = el.dataset.prefix||'', suf = el.dataset.suffix||'';
+    if(reduced){ el.textContent = pre + target.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec}) + suf; return; }
+    var t0 = null, dur = 1600;
+    function frame(t){
+      if(!t0) t0=t;
+      var p = Math.min((t-t0)/dur,1); p = 1-Math.pow(1-p,3);
+      var v = target*p;
+      el.textContent = pre + v.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec}) + suf;
+      if(p<1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  var nums = document.querySelectorAll('.num[data-count]');
+  if('IntersectionObserver' in window){
+    var nio = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ animateNum(e.target); nio.unobserve(e.target);} }); },{threshold:.4});
+    nums.forEach(function(n){ nio.observe(n); });
+  } else { nums.forEach(animateNum); }
+
+  /* Sidebar tabs */
+  var btns = document.querySelectorAll('.side-btn'), panes = document.querySelectorAll('.pane');
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(x){x.classList.remove('active')}); b.classList.add('active');
+      panes.forEach(function(p){p.classList.remove('active')});
+      document.getElementById('pane-'+b.dataset.pane).classList.add('active');
+      if(b.dataset.pane==='marketing') typeMkt();
+    });
+  });
+
+  /* Approve buttons dismiss */
+  document.querySelectorAll('.approve').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var item = btn.closest('.q-item');
+      if(item){ item.classList.add('done'); setTimeout(function(){ item.style.display='none'; },420); }
+    });
+  });
+
+  /* Typing helper */
+  function typeInto(el, text, speed, done){
+    el.classList.add('show'); el.textContent='';
+    if(reduced){ el.textContent = text; if(done) done(); return; }
+    var caret = document.createElement('span'); caret.className='caret';
+    el.appendChild(caret);
+    var i=0;
+    (function tick(){
+      if(i<text.length){
+        caret.insertAdjacentText('beforebegin', text.charAt(i++));
+        setTimeout(tick, text.charAt(i-1)==='\n' ? speed*6 : speed);
+      } else { caret.remove(); if(done) done(); }
+    })();
+  }
+
+  /* Summarize demo */
+  var sumBtn = document.getElementById('summarize');
+  var out = document.getElementById('ai-out');
+  var sendBtn = document.getElementById('send-summary');
+  var summary = "TO MAYA (for your approval):\n\nLovely momentum this week. You had the co-founder conversation you'd been carrying for a month — and it landed: product and GTM ownership are now clearly split. We rehearsed the board's hardest runway question, and your answer is sharper for it.\n\nYour commitments for next session:\n  1. Draft the board narrative (one page, by Monday)\n  2. Hand off one delegation item to your eng lead\n  3. Note how the new ownership split feels in week one\n\nCOACH-ONLY NOTES: anxiety centered on the 28th board meeting, not the co-founder anymore — goal 3 can likely be marked unblocked. Consider a short check-in on the 27th.";
+  if(sumBtn){
+    sumBtn.addEventListener('click',function(){
+      sumBtn.disabled = true; sumBtn.textContent = '✦ Reading notes…';
+      setTimeout(function(){
+        sumBtn.textContent='✦ Summarize with AI';
+        typeInto(out, summary, 9, function(){ sendBtn.style.display='inline-block'; sumBtn.disabled=false; });
+      }, reduced?0:700);
+    });
+  }
+  if(sendBtn){
+    sendBtn.addEventListener('click',function(){
+      sendBtn.textContent='✓ Sent to Maya'; sendBtn.disabled=true;
+    });
+  }
+
+  /* Marketing draft typing */
+  var mktDone = false;
+  function typeMkt(){
+    if(mktDone) return; mktDone = true;
+    var mo = document.getElementById('mkt-out');
+    typeInto(mo, "The question I ask every stuck founder:\n\n“What are you pretending not to know?”\n\nA client this week (shared with permission, details changed) sat with it for a full minute. Then she named the conversation she'd been avoiding for a month — and had it two days later.\n\nMost of coaching isn't teaching. It's giving someone a quiet room and a question that won't let them hide.\n\n— drafted by CoachOS in Amara's voice · she edits, then it ships", 8);
+  }
+})();
+</script>
+</body>
+</html>
