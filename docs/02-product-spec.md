@@ -70,6 +70,19 @@ Revenue, pipeline conversion, retention curves; AI flags at-risk clients (missed
 
 Services fund the build between phases, deepen retention, and give us weekly voice-of-customer contact no competitor's product team has.
 
+## Niche packs — how CoachOS gets industry-specific
+
+One platform, specialty-tuned. Each niche pack bundles the assets a coach in that specialty actually needs, so day one feels built-for-them rather than generic:
+
+| Pack | Contract templates | Email/nurture sequences | Lead magnet templates | AI voice/prompt presets | Onboarding questionnaire |
+|---|---|---|---|---|---|
+| **Executive coaching** | 12-session, monthly retainer, team offsite | C-suite nurture, board-season check-in | "First 90 days" scorecard | Board-savvy, concise | 360-context intake |
+| **Career coaching** | Per-package, outplacement | Job-search sprint, salary-negotiation | CV/LinkedIn teardown offer | Practical, encouraging | Career-history intake |
+| **Life & wellness** | Session bundles, cancellation-sensitive | Habit-loop nurture | Wellness self-assessment | Warm, non-clinical | Wheel-of-life intake |
+| **Mentoring programs** (org-run) | Mentor–mentee agreements, program MOU | Cohort onboarding, milestone nudges | Program one-pager | Program-coordinator tone | Matching questionnaire |
+
+Rules: packs are content + presets, not separate codebases — one platform, swappable packs. Launch order: **Executive first** (highest willingness-to-pay, founder's network), then career, then life/wellness, then mentoring programs. The mentoring-program pack is also our future door into B2B (universities, corporates running mentor schemes) — *without* crossing the employee-evaluation line in doc 01 §5.
+
 ## Cross-cutting requirements
 
 - **Trust & privacy:** encryption at rest; per-coach data isolation; DPA template; no training on client data; AI disclosure labels on every AI output (EU AI Act limited-risk compliance).

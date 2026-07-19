@@ -84,16 +84,29 @@ Every market figure in this plan survived an adversarial fact-check against prim
 ```
 coachos/
 ├── README.md                      ← this file (master plan)
+├── LICENSE                        ← proprietary — all rights reserved
 ├── docs/
 │   ├── 01-market-research.md      ← verified market data, competitors, regulation
-│   ├── 02-product-spec.md         ← module-by-module spec, AI vs human split
+│   ├── 02-product-spec.md         ← module-by-module spec, niche packs, AI vs human split
 │   ├── 03-open-source-stack.md    ← build-vs-integrate map, licenses, architecture
-│   └── 04-roadmap-costs-gtm.md    ← phases, costs, pricing, go-to-market, risks
+│   ├── 04-roadmap-costs-gtm.md    ← phases, costs, pricing, go-to-market, risks
+│   └── 05-build-guide.md          ← how to build it with Claude Code + Cursor (frontend, backend, functionality-by-functionality)
 └── prototype/
     └── index.html                 ← animated clickable prototype (open in any browser)
 ```
 
 **To view the prototype:** open `prototype/index.html` in a browser — no install needed.
+
+## 8b. Confidentiality & repo-privacy plan
+
+This plan is a competitive asset. Standing rules:
+
+1. **Repository stays private.** On GitHub: Settings → General → Danger Zone → *Change visibility* → Private (if it was created public). Verify the repo page shows the "Private" badge.
+2. **Access by invitation only.** Settings → Collaborators → add team members individually with the least role they need (Read for reviewers, Write for contributors). No org-wide or public links.
+3. **Proprietary license in-repo** (see `LICENSE`) so every collaborator sees the terms — a private repo controls access; the license states the rights.
+4. **No secrets in the repo, ever.** API keys, tokens and credentials live in `.env` files (git-ignored) and the host's secret manager — never committed, even to a private repo.
+5. **Shared artifacts stay private** until deliberately shared from their share menus; share with named people, not public links.
+6. **Before any public launch page**, split marketing content into a separate public repo — this planning repo never goes public.
 
 ## 9. What this plan is not
 
