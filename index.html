@@ -75,8 +75,9 @@
   .callout p{margin:0;max-width:none}
   .reject{border-left:3px solid var(--rust);background:var(--rust-soft);padding:.85rem 1.1rem;border-radius:0 3px 3px 0;margin:1.2rem 0;font-size:.88rem}
 
-  .phases{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:1rem}
-  @media(max-width:860px){.phases{grid-template-columns:1fr 1fr}}
+  .phases{display:grid;grid-template-columns:repeat(5,1fr);gap:.8rem;margin-top:1rem}
+  @media(max-width:1020px){.phases{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:640px){.phases{grid-template-columns:1fr 1fr}}
   .phase .node{width:1.9rem;height:1.9rem;border-radius:50%;background:var(--bone);border:2px solid var(--brass);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.78rem;color:var(--brass);margin-bottom:.6rem}
   .phase .pcard{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:.85rem .95rem;min-height:8rem}
   .phase h4{font-size:.9rem;margin-bottom:.3rem}
@@ -205,6 +206,7 @@
         <div class="card"><h4>8. Automations</h4><p>Pre-built recipes the coach toggles on — n8n-backed, never a workflow builder.</p></div>
         <div class="card"><span class="tag wedge">New channel</span><h4>9. Coach &amp; Mentor Directory</h4><p>Public opt-in profile; enquiries route straight into the coach's own Leads pipeline. Listing-based, never a commission.</p></div>
         <div class="card"><h4>10. Daily Briefing</h4><p>News by niche category, a world catchup, and a 5-minute learn — one shared digest per category, not per coach. Public on the website too.</p></div>
+        <div class="card"><h4>11. Coach Community</h4><p>LinkedIn-style peer network: connect, post, like, comment, share. v1 only — messaging and real-time chat are a deliberately separate later phase.</p></div>
       </div>
       <p style="margin-top:.9rem"><b>Plus one cross-cutting capability:</b> Gmail integration (Phase 2) — approved sends go out from the coach's own address so replies land in their real inbox, not a CoachOS address.</p>
 
@@ -272,7 +274,8 @@
         <div class="phase"><div class="node">1</div><div class="pcard"><h4>The wedge</h4><p>Client Delivery + scheduling embed + portal. Months 1–3.</p><span class="gate">Gate: 5 pilots weekly, 3 paid</span></div></div>
         <div class="phase"><div class="node">2</div><div class="pcard"><h4>Money loop</h4><p>Bookings, Contracts, Stripe billing, Gmail integration, security re-review. Months 4–8.</p><span class="gate">Gate: 25 paying, churn &lt;5%</span></div></div>
         <div class="phase"><div class="node">3</div><div class="pcard"><h4>Growth loop</h4><p>Leads CRM, marketing composer, Automations v1, Directory (built, unlaunched), Daily Briefing, done-for-you launch. Months 9–14.</p><span class="gate">Gate: 100 paying, service profitable</span></div></div>
-        <div class="phase"><div class="node">4</div><div class="pcard"><h4>Intelligence</h4><p>Practice dashboard, at-risk AI, referrals. Year 2.</p><span class="gate">Gate: earned, not assumed</span></div></div>
+        <div class="phase"><div class="node">4</div><div class="pcard"><h4>Intelligence + Community v1</h4><p>Practice dashboard, at-risk AI, and the Coach Community feed: connect, post, like, comment, share. Months 15–20.</p><span class="gate">Gate: earned, not assumed</span></div></div>
+        <div class="phase"><div class="node">5</div><div class="pcard"><h4>Community v2 + scale</h4><p>Direct messaging and real-time chat — a deliberately separate build from the feed. Then corporate/L&amp;D partnerships, from leverage. Months 21+.</p><span class="gate">Gate: v1 shows real engagement first</span></div></div>
       </div>
 
       <h4 style="margin:1.5rem 0 .5rem">Costs (verified unit economics)</h4>
@@ -301,7 +304,7 @@
         <li><b>F8 — Niche packs v1.</b><p>Pack picker swaps tone/templates.</p></li>
         <li><b>F9 — Polish + security gate.</b><p>Landing page, empty/loading states, then independent security review before real client data.</p></li>
       </ol>
-      <p style="margin-top:1rem"><b>Phase 2 continues (F10–F14):</b> contracts, Stripe billing, and Gmail OAuth connect — start Google's verification review the same week, not after building. <b>Phase 3 continues (F15–F20):</b> leads pipeline, marketing composer, Automations v1 (3–5 n8n-backed recipes), the Coach &amp; Mentor Directory — built, but held unlaunched until coach supply clears the 100-paying-coach gate — Daily Briefing, a per-category news/world-catchup/5-minute-learn digest generated once a day and shared across all coaches in that niche, and an admin MCP server (F20) that lets the team push, pull, and update briefing content — news, images, corrections — directly from a Claude conversation, running locally with its own service-role credential, never handed to coaches. Full detail: <a href="https://github.com/amir9078/coachos/blob/main/docs/05-build-guide.md" target="_blank" rel="noopener">docs/05-build-guide.md</a>.</p>
+      <p style="margin-top:1rem"><b>Phase 2 continues (F10–F14):</b> contracts, Stripe billing, and Gmail OAuth connect — start Google's verification review the same week, not after building. <b>Phase 3 continues (F15–F20):</b> leads pipeline, marketing composer, Automations v1 (3–5 n8n-backed recipes), the Coach &amp; Mentor Directory — built, but held unlaunched until coach supply clears the 100-paying-coach gate — Daily Briefing, a per-category news/world-catchup/5-minute-learn digest generated once a day and shared across all coaches in that niche, and an admin MCP server (F20) that lets anyone with <code>team_members.is_content_admin</code> ticked push, pull, and update briefing content directly from a Claude conversation — access controlled by that one database flag, revocable instantly, never handed to coaches. <b>Phase 4 (F21–F24):</b> practice dashboard, at-risk AI, and Coach Community v1 — connections, posts, likes, comments, shares, with report/block tooling built alongside, not after. <b>Phase 5 (F25+):</b> direct messaging and real-time chat on Supabase Realtime — a deliberately separate build from the v1 feed. Full detail: <a href="https://github.com/amir9078/coachos/blob/main/docs/05-build-guide.md" target="_blank" rel="noopener">docs/05-build-guide.md</a>.</p>
 
       <h4 style="margin:1.4rem 0 .4rem">Example brief for F2</h4>
       <div class="brief">"Build the summarize endpoint + client-detail notes flow: paste notes → Summarize

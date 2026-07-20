@@ -118,6 +118,30 @@ Revenue, pipeline conversion, retention curves; AI flags at-risk clients (missed
 
 **Sourcing rule, not just a nice-to-have:** every headline and every "5-minute learn" links back to its real source. AI's job here is to summarize and select, never to generate a fact from scratch — the same discipline the plan already applies to its own market research (doc 01 §6's "rejected claims" table exists because of exactly this kind of mistake).
 
+## Module 11 — Coach Community · *Phase 4, gated on real supply*
+
+**Job:** coaches and mentors connect with each other, share what they're learning, and build the reputation that makes "coaches refer coaches" (README §2, the human-service layer) an actual product feature instead of something we do by hand.
+
+**Scope assumption, stated explicitly:** this is a **peer network — coach to coach, mentor to mentor** — not a client-facing feature. It's the built version of the "Community & referrals" line already in the plan. If the intent was clients connecting with each other too, that's a different (and much bigger, trust-and-safety-heavier) build — flag it and this spec changes.
+
+| Capability | v1 or v2 | How it works |
+|---|---|---|
+| Connect | v1 | LinkedIn-style: send a connection request, the other coach accepts — mutual, not a one-way follow |
+| Post | v1 | Text + optional image, visible to your connections (or public, coach's choice per post) |
+| Like | v1 | One tap, on any post or comment |
+| Comment | v1 | Threaded under a post |
+| Share | v1 | Reposts a connection's post to your own network with credit to the original author |
+| Message | v2 | Direct, async 1:1 messages — like email, no expectation of an instant reply |
+| Chat | v2 | Real-time: typing indicators, online presence, instant delivery — genuinely different infrastructure from Message, see doc 03 |
+
+**Why v1/v2, not one build:** a social feed (posts/likes/comments/shares) is standard database work — read, write, display. Real-time chat is a different engineering problem entirely — presence, live delivery, connection state — and deserves its own scoped build rather than being smuggled in as "basically the same as messaging." Build the feed first, prove coaches actually use it, then build chat.
+
+**The line this module doesn't cross:** no AI posts on a coach's behalf, ever — same approval-first principle as every other module. An AI-assisted post-drafting option (reusing the Marketing composer's voice profile, doc 02 Module 3) is a reasonable v2 add-on, not a v1 requirement.
+
+**Trust & safety — not optional for user-generated content:** report and block tools, a content policy coaches agree to, and spam/abuse rate-limiting are v1 requirements, not later polish. Any platform that lets users post, comment, and message each other carries real moderation and liability exposure (relevant to GDPR and, for EU users, the Digital Services Act) — this needs the same kind of deliberate design as the AI-disclosure and data-processor obligations already in doc 01 §5, not an afterthought.
+
+**Relationship to the Directory (Module 9):** the Directory is client-facing discovery — a prospect finding a coach. The Community is peer-facing — coaches finding each other. A coach's public Directory profile can surface their Community activity (posts, connections) as social proof, but the two audiences and the two trust models are different; don't conflate them in the build.
+
 ---
 
 ## The human-service layer (our second revenue line)

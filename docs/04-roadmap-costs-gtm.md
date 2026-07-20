@@ -8,8 +8,9 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 |---|---|---|---|
 | **1 — Wedge** | 1–3 | Client Delivery (notes→summary, prep briefs, timeline), basic scheduling embed, client portal | 5 pilot coaches using it weekly; ≥3 convert to paid |
 | **2 — Money loop** | 4–8 | Bookings (Cal.com), Contracts (Documenso), Stripe billing; **Gmail integration** (start Google's verification review in parallel, month 4 — see risk below); security re-review | ≥25 paying coaches; churn <5%/mo; coaches running real revenue through us |
-| **3 — Growth loop** | 9–14 | Leads CRM (Twenty), AI follow-ups, marketing composer, landing pages, **Automations v1** (Module 8); done-for-you service launch; **Coach & Mentor Directory** built but held unlaunched; **Daily Briefing** (Module 10) — in-app and public `/briefing` page | ≥100 paying coaches; service line profitable; Directory opens to public search only once coach supply clears the same ≥100 gate |
-| **4 — Intelligence** | 15+ | Practice dashboard, at-risk AI, referral network | Decided from data, not ambition |
+| **3 — Growth loop** | 9–14 | Leads CRM (Twenty), AI follow-ups, marketing composer, landing pages, **Automations v1** (Module 8); done-for-you service launch; **Coach & Mentor Directory** built but held unlaunched; **Daily Briefing** (Module 10) — in-app and public `/briefing` page; **Admin MCP server** (F20) | ≥100 paying coaches; service line profitable; Directory opens to public search only once coach supply clears the same ≥100 gate |
+| **4 — Intelligence + Community v1** | 15–20 | Practice dashboard, at-risk AI; **Coach Community v1** (Module 11) — connect, post, like, comment, share | Decided from data, not ambition; Community v1 gated on a real base of connected, active coaches — an empty feed is the same cold-start problem as an empty Directory |
+| **5 — Community v2 + scale** | 21+ | **Message + real-time Chat** (Module 11 v2, Supabase Realtime); evaluate corporate/L&D partnerships from leverage | Community v1 shows real engagement (posts, connections, repeat visits) before chat infrastructure is built |
 
 ## 2. Costs (planning figures, not quotes)
 
@@ -44,6 +45,13 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 |---|---|---|
 | News/world-catchup sources | $0 | Wikipedia Current Events Portal (CC BY-SA, world catchup) + direct publisher RSS feeds (category news, learn) — every source individually verified, not assumed; see doc 03 for the four "free tier" traps this avoids (NewsAPI.org, Google News RSS, Mediastack, GNews all restrict free use to non-commercial/dev only) |
 | Admin MCP server (push/pull/update briefing content from Claude) | $0 new infra | Runs locally on the admin's own machine (doc 05 §4.6); image storage rides on Supabase's existing free/starter tier — cost is Claude usage the founder already pays for, not a new line item |
+
+| Coach Community (Module 11) | Cost | Note |
+|---|---|---|
+| Feed v1 (posts, likes, comments, connections, shares) | ~$0 new infra | Same Postgres + Next.js pattern as everything else — no new engine (doc 03) |
+| Chat v2 (Supabase Realtime) | Usage-based, check current limits before Phase 5 build | Already part of the Supabase project; re-verify concurrent-connection and message limits against the coach count at the time, not the numbers in this document |
+| Image/media storage growth | Scales with usage | Budget for this explicitly once posting is live — it's the one cost in this module that isn't flat |
+| **Moderation & trust-and-safety** | **Real cost, not $0** | Report/block tooling, a content policy, and abuse rate-limiting are v1 requirements (doc 02, Module 11) — budget reviewer time or a lightweight moderation queue before launch, not after a problem forces it |
 | AI summarization | Pennies/month | Generated once per category per day, not per coach — a shared cached artifact, not a per-user cost |
 | Public `/briefing` page | $0 new infra | Same Next.js app; doubles as an SEO/content-marketing channel alongside the Directory |
 

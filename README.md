@@ -13,7 +13,7 @@
 
 122,974 professional coaches worldwide generate $5.34B a year, yet only 19% invested in any new technology last year while 54% say better platforms are a priority — the largest documented demand-adoption gap in the industry ([ICF/PwC 2025 Global Coaching Study](https://coachingfederation.org/blog/global-coaching-industry-surpasses-5-34-billion-as-emerging-markets-drive-growth/)). Today a coach stitches together 5–8 disconnected tools (CRM, scheduler, e-sign, email, invoicing, notes). CoachOS replaces the stitching: **one desk, every room of the business**, with AI built into each workflow rather than bolted on — at solo-coach pricing ($29–59/mo), a tier where no incumbent has built AI-first.
 
-## 2. What it does — the ten modules
+## 2. What it does — the eleven modules
 
 | # | Module | What the coach gets | AI or Human? |
 |---|--------|--------------------|--------------|
@@ -27,6 +27,7 @@
 | 8 | **Automations** | Pre-built recipes (silent-lead follow-up, prep-brief scheduling, overdue-invoice reminders) — toggle on, no workflow builder | Platform (n8n-backed) |
 | 9 | **Coach & Mentor Directory** | Public opt-in profile, search, and enquiry routing straight into the coach's own Leads pipeline — our own acquisition channel, not just a feature | Platform |
 | 10 | **Daily Briefing** | News by niche category, a quick world catchup, and a 5-minute daily learn — one shared digest per category (not per coach), also readable on the public website | Platform (AI, RSS-sourced) |
+| 11 | **Coach Community** | LinkedIn-style peer network for coaches: connect, post, like, comment, share — v1. Direct messaging and real-time chat are v2, a separate build (see §4) | Platform |
 
 **The human-service layer** (sold by us, alongside the software — this is deliberate, not a gap):
 - **Onboarding & implementation** — we migrate the coach's clients, templates and calendar in a done-with-you session (paid setup fee; also our retention weapon).
@@ -56,7 +57,9 @@ Now the coach's revenue flows through us. Integrate, don't build: scheduling and
 **Phase 3 (Months 9–14) — the growth loop: Leads + Marketing + Automations + Directory + Daily Briefing.**
 Pipeline CRM, AI follow-ups, content composer, landing pages, automation recipes. Launch the done-for-you marketing service here — service revenue funds the build. The Coach & Mentor Directory gets built this phase too, but stays unlaunched to public search until coach supply clears the same paying-coach gate as everything else — an empty directory is worse than no directory. Daily Briefing ships alongside it: a per-category news/world-catchup/5-minute-learn digest, generated once a day and shared across every coach in that niche rather than regenerated per coach, and readable on the public site as its own SEO channel.
 
-**Phase 4 (Year 2) — intelligence & scale:** practice dashboard, at-risk-client AI, referral network, and (only now, from leverage) evaluate corporate/L&D partnerships.
+**Phase 4 (Months 15–20) — intelligence + community v1.** Practice dashboard, at-risk-client AI, and the Coach Community's feed: connect, post, like, comment, share. Gated the same way as the Directory — a community with no one in it is worse than no community, so this waits for a real base of engaged coaches, not a launch-day feature.
+
+**Phase 5 (Months 21+) — community v2 + scale.** Direct messaging and real-time chat — deliberately a separate phase from the feed, because live chat is a genuinely different engineering problem (presence, instant delivery) from posting and commenting, not just "more of the same." Only from here, with real leverage, do we evaluate corporate/L&D partnerships.
 
 Costs, revenue model and milestones: [`docs/04-roadmap-costs-gtm.md`](docs/04-roadmap-costs-gtm.md)
 

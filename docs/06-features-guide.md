@@ -48,6 +48,10 @@ Open CoachOS and there's a short, honest briefing waiting: the top news in your 
 
 ---
 
+## A real network of coaches, not a folder of contacts
+
+Connect with other coaches, post what you're learning, comment on theirs, share what resonates. It's the professional network this profession has always run on informally — coaches referring coaches — just built into the place you already work, instead of scattered across group chats and LinkedIn. Direct messaging and real-time chat are coming in a later phase, once the basics prove out.
+
 ## The one promise that covers everything above
 
 **CoachOS never sends anything — an email, a post, a message — without you seeing the exact words first and choosing to send them.** AI drafts. You decide. Every time, no exceptions. That's not a limitation we're planning to remove later — it's the whole reason coaches will trust this with their client relationships.

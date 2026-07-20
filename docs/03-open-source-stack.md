@@ -22,6 +22,9 @@ The request behind this doc: *"pull free GitHub repos, merge them, make it a ful
 | 11 | **Meilisearch** (deferred) | github.com/meilisearch/meilisearch | MIT | Directory search (Module 9), only if Supabase full-text search proves insufficient | 3+ | Not adopted yet — v1 uses Supabase's built-in full-text search; add only if relevance genuinely demands it |
 | 12 | **Wikipedia Current Events Portal** | en.wikipedia.org/wiki/Portal:Current_events | CC BY-SA 3.0 | World-catchup source for Module 10, Daily Briefing | 3 | Explicitly licensed for commercial reuse with attribution — verified directly, not assumed |
 | 13 | **Direct publisher RSS feeds** (ICF's own blog confirmed; expand list, verifying each individually) | Each publisher's own site | Varies — verify per publisher | Category news + 5-minute learn source for Module 10 | 3 | Standard headline + snippet + link-back aggregator use, never full-text republishing |
+| 14 | **Supabase Realtime** (reused — same Supabase project, row 6) | Already in the stack | Apache 2.0 | Real-time chat for Module 11 v2 (Broadcast for instant delivery, Presence for online/typing status) | 4 | No new engine — confirmed directly (doc's own examples show a chat component built on Broadcast) that this covers real-time messaging without adding a dedicated chat service like Rocket.Chat or Stream |
+
+**Module 11's v1 (posts, likes, comments, connections, shares) needs no new engine either** — it's the same Postgres tables + Next.js pattern as everything else in this app. The only genuinely new infrastructure in the whole Community module is Realtime for chat, and that's already part of the Supabase project this plan already runs on.
 
 ## The news-source trap to avoid (Module 10) — corrected after direct verification
 
