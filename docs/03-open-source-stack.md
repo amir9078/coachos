@@ -20,17 +20,28 @@ The request behind this doc: *"pull free GitHub repos, merge them, make it a ful
 | 9 | **Gmail API** | Google (not open-source) | Google API ToS | Coach's own-address sending, doc 02 cross-cutting | 2 | Direct OAuth2 integration — requires Google app-verification review, see doc 04 |
 | 10 | **n8n** (reused) | *(already row 5)* | Fair-code | Execution engine behind Module 8 Automation recipes | 3 | Same self-hosted instance, new curated workflow templates — no new service |
 | 11 | **Meilisearch** (deferred) | github.com/meilisearch/meilisearch | MIT | Directory search (Module 9), only if Supabase full-text search proves insufficient | 3+ | Not adopted yet — v1 uses Supabase's built-in full-text search; add only if relevance genuinely demands it |
-| 12 | **RSS feeds** (Google News RSS + curated publication feeds) | N/A — open web standard, not a repo | N/A | News/world-catchup source for Module 10, Daily Briefing | 3 | Direct feed parsing — free, unlimited, no API key |
+| 12 | **Wikipedia Current Events Portal** | en.wikipedia.org/wiki/Portal:Current_events | CC BY-SA 3.0 | World-catchup source for Module 10, Daily Briefing | 3 | Explicitly licensed for commercial reuse with attribution — verified directly, not assumed |
+| 13 | **Direct publisher RSS feeds** (ICF's own blog confirmed; expand list, verifying each individually) | Each publisher's own site | Varies — verify per publisher | Category news + 5-minute learn source for Module 10 | 3 | Standard headline + snippet + link-back aggregator use, never full-text republishing |
 
-## The news-API trap to avoid (Module 10)
+## The news-source trap to avoid (Module 10) — corrected after direct verification
 
-Before reaching for a paid news API, know the trap: **NewsAPI.org's free tier is development-only** — its own terms explicitly forbid using it in a live, revenue-generating product, and its actual production pricing starts at **$449/month**. That's the kind of cost surprise this doc exists to prevent.
+**Every "free" commercial news API and aggregator we checked turned out to restrict its free tier to non-commercial/development use — including sources this plan originally recommended.** Rather than assume any of these are safe, each was checked directly (fetching the actual terms page, not guessing):
 
-**What we use instead, in order:**
-1. **RSS feeds (free, unlimited)** — Google News RSS for the general "world catchup," plus a curated list of RSS feeds from real coaching/business/psychology publications (HBR, ICF's own blog, Forbes Coaches Council, etc.) for the category news and the 5-minute learn. This is the default for all of Phase 3 and likely forever.
-2. **A metered free-tier API, only if RSS coverage proves too thin for a category** — GNews (100 requests/day free, paid from $84/mo) or NewsData.io (200 credits/day free) are viable fallbacks; note their daily caps before relying on them at scale.
+| Source | What it looked like | What it actually says |
+|---|---|---|
+| NewsAPI.org | "Free tier" | Free tier is **development-only**; forbidden in production; real pricing starts at **$449/month** |
+| Google News RSS | Free, no key needed, works instantly | Its own copyright notice restricts it to **"personal, non-commercial use...within a personal feed reader"** |
+| Mediastack | "100 free calls/mo" | Free plan explicitly **excludes commercial use** — that feature only appears on paid tiers |
+| GNews | "Free, no credit card" | Own FAQ states: **"the free subscription cannot be used for commercial projects... non-commercial projects, development, and testing purposes only"** |
+| NewsData.io | "200 free credits/day" | Terms not confirmable via direct check; given every comparable provider above restricts free tiers the same way, **do not rely on this without a direct, current confirmation from NewsData.io itself** |
 
-AI's job is to summarize and select from these real feeds — never to generate a headline or a "fact" from nothing (doc 02, Module 10).
+**This plan previously listed Google News RSS as the primary source and GNews/NewsData.io as fallbacks — all three were wrong, and none of them had actually been verified at the time.** That's now corrected below.
+
+**What we actually use, verified this time:**
+1. **Wikipedia's Current Events Portal, for the world catchup** — explicitly CC BY-SA licensed, confirmed permits commercial reuse with attribution. Structured chronologically with categorized world events, already close to a "world catchup" shape.
+2. **Direct publisher RSS feeds, for category news and the 5-minute learn** — ICF's own blog feed (`coachingfederation.org/feed/`) is confirmed real and directly relevant. Before adding any other publisher (HBR, Forbes, etc.) to the curated list, fetch that specific publisher's actual feed and terms — HBR's RSS syndication page, for example, sits under their paid *store* and its commercial terms were not confirmable, so it's excluded until someone gets a direct answer from HBR. The safe, standard practice regardless of a given publisher's stated terms: show only the headline, a one-line AI summary, and a link back to the original — never republish full article text.
+
+AI's job is to summarize and select from these verified sources — never to generate a headline or a "fact" from nothing (doc 02, Module 10).
 
 ## Why Listmonk specifically (Module 3 — Marketing)
 

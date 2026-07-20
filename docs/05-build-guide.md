@@ -118,7 +118,7 @@ Cost guard: log tokens per call into `audit_log`; alert at $20/mo (it should nev
 
 ### 4.5 Daily Briefing endpoints (Phase 3)
 
-**A scheduled job (n8n, doc 03), not a live API call per request** — runs once a day per category, pulls the RSS feeds listed in doc 03, has Claude summarize the world catchup and pick + summarize the day's "5-minute learn" from the curated publication feeds, and writes one row per category into `daily_briefings`. Every request that follows just reads that cached row.
+**A scheduled job (n8n, doc 03), not a live API call per request** — runs once a day per category, pulls Wikipedia's Current Events Portal (world catchup) and the verified publisher RSS feeds (category news, learn) listed in doc 03, has Claude summarize each into the digest, and writes one row per category into `daily_briefings`. Every request that follows just reads that cached row. **Before adding any new publisher feed to the curated list, verify its actual terms directly (fetch the feed, check for a stated license) — doc 03 documents four sources that looked free but weren't when actually checked; don't repeat that by assumption here.**
 
 **`GET /api/briefing/[category]`** — public, unauthenticated, cached (this is the endpoint both the dashboard card and the public `/briefing` marketing page call — same data, two surfaces). No RLS needed since `daily_briefings` has no per-coach data in it at all.
 

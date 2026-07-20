@@ -42,7 +42,7 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 
 | Daily Briefing (Module 10) | Cost | Note |
 |---|---|---|
-| RSS feeds (news + world catchup + learn sources) | $0 | Unlimited, no API key — see doc 03 for the news-API trap this avoids ($449/mo if you reach for NewsAPI.org by mistake) |
+| News/world-catchup sources | $0 | Wikipedia Current Events Portal (CC BY-SA, world catchup) + direct publisher RSS feeds (category news, learn) — every source individually verified, not assumed; see doc 03 for the four "free tier" traps this avoids (NewsAPI.org, Google News RSS, Mediastack, GNews all restrict free use to non-commercial/dev only) |
 | AI summarization | Pennies/month | Generated once per category per day, not per coach — a shared cached artifact, not a per-user cost |
 | Public `/briefing` page | $0 new infra | Same Next.js app; doubles as an SEO/content-marketing channel alongside the Directory |
 
