@@ -111,6 +111,11 @@ These are the chains that make it one product instead of eleven tools. **Confirm
 - **M4-Q10.** Confirm the chain: booking confirmed → session on client timeline → prep brief scheduled → reminder sent. *(Default: yes, fully automatic.)*
 - **M4-Q11.** Booking page 100% CoachOS-branded on our domain — no third-party name visible anywhere? *(Default: yes — hard requirement.)*
 
+**Meetings & recordings (added after the meetings instruction — full comparison in doc 09 §8):**
+
+- **M4-Q12.** What do your target coaches run sessions on today — Zoom, Google Meet, Teams, phone/WhatsApp calls? Rank them. This decides which recording integration we build first. *(Default: Zoom first — it's the only one whose recordings AND transcripts pull in fully automatically.)*
+- **M4-Q13.** In-platform video ("CoachOS Meet," sessions happen inside CoachOS itself, Phase 3+): must-have, nice-to-have, or skip-if-Zoom-works? *(Default: nice-to-have — Phase 3 decision gate.)*
+
 ## Module 5 — Agreements & Billing
 
 *Inspired by: PandaDoc, Dropbox Sign, Bonsai, HoneyBook, Stripe Invoicing. Engines underneath: Documenso + Stripe (invisible).*
@@ -131,7 +136,8 @@ These are the chains that make it one product instead of eleven tools. **Confirm
 
 *Inspired by: Paperbell, CoachAccountable, Quenza, Practice, Delenta — plus Fathom/Otter for AI session notes.*
 
-- **M6-Q1.** Note input v1 is typed/pasted notes. Audio upload → transcript → summary (coaches record sessions): Phase 2 or sooner? Recording-consent handling matters. *(Default: text v1, audio decided at Phase 2.)*
+- **M6-Q1.** Note input v1 is typed/pasted notes. The recording path now has a full plan (doc 09 §8): upload-any-recording → transcript → AI summary (Phase 1.5), Zoom auto-pull (Phase 2), in-platform CoachOS Meet (Phase 3+). Should the upload path move INTO Phase 1 as part of the wedge — it's a demo-killer feature? *(Default: Phase 1.5 — right after the typed-notes core works.)*
+- **M6-Q1b.** Recording consent: captured once in the coaching agreement + visible notice each recorded session, coach controls retention/deletion. Enough, or should the client also confirm per-session in the portal? *(Default: agreement + in-session notice.)*
 - **M6-Q2.** Summary outputs: client-facing email + coach private note + action items. Anything else — homework list, next-session agenda? *(Default: those three + next-session agenda.)*
 - **M6-Q3.** Client portal — what do clients SEE: approved summaries, action items, goals, session history, shared files? And confirmed NEVER: coach's private notes. *(Default: all five visible; private notes never, enforced at the database level.)*
 - **M6-Q4.** Homework/tasks between sessions with client check-off + reminders (the heart of CoachAccountable/Quenza)? *(Default: v1.1 — right after the wedge core.)*

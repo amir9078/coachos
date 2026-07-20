@@ -70,6 +70,38 @@ Re-checked the field: Discourse/Flarum/NodeBB are forums, not LinkedIn-style fee
 
 Formbricks/OpnForm exist, but our forms are simple (lead capture, intake questionnaires) and deeply tied to our own modules. Another service isn't worth it. Build natively.
 
+## 8. Meetings, recording & transcription — NEW category (added July 2026)
+
+The goal: sessions can happen **inside CoachOS or in the tools coaches already use**, and either way the recording becomes a transcript that feeds Module 6's AI summary automatically — closing the loop so the coach never has to paste notes by hand. This lands in three phases, matching the sync principle (doc 07 §8: meet coaches in their existing tools first).
+
+### Phase 1.5 — upload path (works with ANY meeting tool, near-zero infra)
+
+Coach records anywhere (Zoom, Meet, Teams, phone), uploads the file → transcription → transcript attached to the session → AI summary drafted for approval. Transcription engine: a speech-to-text API at launch (commercial, pennies per hour — e.g. Deepgram/AssemblyAI class), swappable later for self-hosted **Whisper (MIT — open-weight, verified widely)** when volume justifies running it ourselves.
+
+### Phase 2 — blend the coach's existing tools (the "bend Zoom/Meet into this" path)
+
+| | Zoom (via coach's own account) | Google Meet (via coach's own account) |
+|---|---|---|
+| Create meeting from a booking | ✔ API | ✔ Calendar API (already planned) |
+| Meeting **inside** our app | ✔ Meeting SDK embeds the real Zoom meeting in our web page | ✖ Meet cannot be embedded — opens in its own tab |
+| Auto-pull recording after the call | ✔ Cloud Recording API | ✔ Meet REST API — **but** only on Workspace Business Standard+ plans |
+| Auto-pull transcript | ✔ VTT transcript via the same API | ✔ via API, but recording must be started manually in-meeting, and API transcripts expire after 30 days |
+| Verdict | **Primary integration** — the full loop automates | **Supported pull** — works when the coach's plan and habits allow; upload path covers the rest |
+
+So: connect Zoom once (OAuth) → every recorded session flows in automatically: recording → transcript → AI summary → approval queue. Meet gets the same where Google's limits allow.
+
+### Phase 3+ — CoachOS Meet: our own in-platform video
+
+| | LiveKit (recommended) | Jitsi Meet (alternative) |
+|---|---|---|
+| License — verified | **Apache 2.0** (same family as Supabase — zero copyleft issues, full white-label by right) | **Apache 2.0** |
+| Shape | WebRTC infrastructure + SDKs — we build our own meeting UI (total CoachOS branding by construction) | Complete meeting app, embeddable via iframe, rebrandable with effort |
+| Recording | Egress service → MP4 straight into our own storage | Jibri — a headless Chrome + FFmpeg instance per concurrent recording (heavy) |
+| Transcription | Track forwarding via WebSocket → real-time Whisper pipeline (open-source ecosystem exists) | Via Vosk (open-source) or paid Google Speech-to-Text |
+| Verdict | **The target**: cleanest white-label, cleanest recording→transcript pipeline, scales | Faster to ship a full meeting UI if we want a shortcut — decision gate at Phase 3 |
+
+**Built-in consent is non-negotiable in every path:** recording requires a visible in-meeting notice plus the client's explicit consent (captured once in the agreement and confirmable per-session); the coach controls retention and deletion, and transcripts inherit the same confidentiality rules as session notes (docs/05 §4.2). Recording a coaching conversation is the most sensitive data we will ever hold.
+
 ---
 
 ## The final stack (before → after)
@@ -82,6 +114,7 @@ Formbricks/OpnForm exist, but our forms are simple (lead capture, intake questio
 | Newsletter | Listmonk | **Listmonk** ✔ | Mautic 40× heavier for features our AI layer owns |
 | Automation | n8n | **Activepieces (MIT)** | n8n's license doesn't cover powering paid customer features; MIT does, unconditionally |
 | Community/Chat | Native + Supabase Realtime | **Same** ✔ | Nothing in the field fits better |
+| Meetings & transcripts | *(not in plan)* | **NEW: Zoom/Meet pull (Phase 2) → LiveKit in-platform (Phase 3+), Whisper for transcription** | Session → recording → transcript → AI summary, fully automated (§8) |
 | Backend | Supabase | **Same** ✔ | Unchanged (hosted Phase 1–2 → self-hosted Phase 3, doc 07) |
 
 **Net effect: 4 external engines instead of 5, zero license gray zones, less RAM, fewer failure points** — and each engine remains a separate isolated service per the architecture (doc 07), so one failing never takes down the rest.

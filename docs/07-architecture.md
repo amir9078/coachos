@@ -41,11 +41,13 @@ flowchart TB
         Cal["Cal.com — Bookings"]
         Documenso["Documenso — Contracts / e-sign"]
         Listmonk["Listmonk — Newsletter (Marketing)"]
+        LiveKit["LiveKit — CoachOS Meet<br/>in-platform video + recording, Phase 3+"]
     end
 
     subgraph External["⑦ External services — API calls, not hosted by us"]
         Stripe["Stripe — billing"]
         GmailAPI["Gmail API — coach's own-address sending"]
+        MeetAPIs["Zoom API + Google Meet API<br/>recordings → transcripts pulled in, Phase 2"]
         NewsSources["Wikipedia Current Events Portal<br/>+ verified publisher RSS feeds"]
     end
 
@@ -67,8 +69,10 @@ flowchart TB
     NextApp --> Cal
     NextApp --> Documenso
     NextApp --> Listmonk
+    NextApp --> LiveKit
     NextApp --> Stripe
     NextApp --> GmailAPI
+    NextApp --> MeetAPIs
 
     MCPServer --> Postgres
     MCPServer -.triggers.-> Flows
@@ -87,6 +91,7 @@ flowchart TB
     Coolify -.hosts.-> Cal
     Coolify -.hosts.-> Documenso
     Coolify -.hosts.-> Listmonk
+    Coolify -.hosts.-> LiveKit
     Coolify --> VPS
 ```
 
@@ -176,11 +181,13 @@ Adoption dies at the transition. So syncing with the coach's existing daily tool
 | **Google Calendar** | Two-way: their busy times block our slots; our bookings appear in their calendar instantly | Cal.com's native sync engine | 1 |
 | **Outlook / Microsoft 365 calendar** | Same two-way sync | Cal.com's native sync engine | 1–2 |
 | **Gmail** | Sends go out from their real address; replies land in their real inbox | Gmail API OAuth (verification review timeline in doc 04) | 2 |
-| **Google Meet** | Auto-created meeting links on every booking | Calendar API | 1 |
+| **Google Meet** | Auto-created meeting links on every booking; recordings + transcripts pulled in after the call (where the coach's Workspace plan allows) | Calendar API + Meet REST API | 1 (links) / 2 (pull) |
+| **Zoom** | Meeting links on booking; meetings embeddable inside CoachOS via Zoom's SDK; cloud recordings + transcripts pulled in automatically → AI summary | Zoom API + Meeting SDK, coach's own account via OAuth | 2 |
+| **Any recorder (upload path)** | Coach uploads any session recording → transcript → AI summary draft | Speech-to-text API, later self-hosted Whisper | 1.5 |
+| **CoachOS Meet (in-platform)** | Sessions happen inside CoachOS itself — video, recording with consent, automatic transcript | LiveKit self-hosted (Apache 2.0) — doc 09 §8 | 3+ |
 | **Spreadsheets / Excel** | One-click import of existing leads and clients; full export anytime (their data is theirs) | CSV import/export + onboarding service does it for them | 1 |
 | **Google Contacts** | Optional one-time import at onboarding (with consent) | People API | 2–3 (question M12-Q14) |
 | **WhatsApp** | Reminders/notifications where coaches' clients actually are (huge in the Gulf) | WhatsApp Business API — investigate | 3 (question M4-Q5) |
-| **Zoom** | Alternative meeting-link provider | Zoom API | 3 |
 
 Rule of thumb: **CoachOS never asks a coach to abandon a tool on day one** — it plugs into their calendar, their inbox, their spreadsheets first, and becomes the center of gravity gradually.
 

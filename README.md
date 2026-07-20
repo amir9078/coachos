@@ -34,7 +34,8 @@
 - **Done-for-you marketing** — monthly content package produced by our team using the platform's AI + human editing (recurring service revenue at 3–5× software price).
 - **Community & referrals** — curated coach community; coaches refer coaches. This profession sells by word of mouth.
 
-**Plus two cross-cutting capabilities, not numbered modules:**
+**Plus three cross-cutting capabilities, not numbered modules:**
+- **Meetings & recordings** — sessions runnable via the coach's Zoom/Meet (recordings + transcripts pulled in automatically where the platform allows), any recording uploadable for transcription, and in-platform "CoachOS Meet" video from Phase 3+ — every path ends in transcript → AI summary → coach approval. Consent built in; full comparison in [`docs/09-engine-comparison.md`](docs/09-engine-comparison.md) §8.
 - **Gmail integration** — coach-approved sends go out from the coach's own Gmail address so client replies land in their real inbox, not a CoachOS address (Phase 2; Google's app-verification review is a real multi-week timeline risk, tracked in doc 04).
 - **Admin MCP server** — lets the team push, pull, and update Daily Briefing content (news items, images, corrections) directly through a Claude conversation instead of a web admin panel — internal tooling only, never given to coaches (Phase 3, full spec in [`docs/05-build-guide.md`](docs/05-build-guide.md) §4.6).
 
