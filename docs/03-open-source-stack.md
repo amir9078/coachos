@@ -12,7 +12,7 @@ The request behind this doc: *"pull free GitHub repos, merge them, make it a ful
 | 1 | **Cal.com** | github.com/calcom/cal.com | AGPLv3 (+ paid commercial license option) | Bookings module: scheduling links, calendar sync, reminders | 2 | Self-host + embed; or their hosted API if self-hosting is premature |
 | 2 | **Documenso** | github.com/documenso/documenso | AGPLv3 | Contracts module: e-signatures | 2 | Self-host + API |
 | 3 | **Twenty** | github.com/twentyhq/twenty | AGPLv3 | CRM/pipeline core for Leads module | 3 | Self-host + API; we build the AI layer on top |
-| 4 | **Listmonk** | github.com/knadh/listmonk | AGPLv3 | Newsletter/sequence sending | 3 | Self-host + API |
+| 4 | **[Listmonk](https://listmonk.app/)** | github.com/knadh/listmonk | AGPLv3 | Newsletter sending, subscriber lists, nurture sequences (Module 3) | 3 | Self-host + API — single Go binary + Postgres, no separate infra to run |
 | 5 | **n8n** | github.com/n8n-io/n8n | Fair-code (Sustainable Use) | Automation glue between services (triggers, syncs) | 2–3 | Self-host; note fair-code limits on reselling n8n itself |
 | 6 | **Supabase** | github.com/supabase/supabase | Apache 2.0 | Our own app's database, auth, storage, row-level security | 1 | Hosted (free tier → paid) |
 | 7 | **Next.js / React** | github.com/vercel/next.js | MIT | Our own app's frontend | 1 | Direct dependency (MIT = no copyleft concerns) |
@@ -20,6 +20,17 @@ The request behind this doc: *"pull free GitHub repos, merge them, make it a ful
 | 9 | **Gmail API** | Google (not open-source) | Google API ToS | Coach's own-address sending, doc 02 cross-cutting | 2 | Direct OAuth2 integration — requires Google app-verification review, see doc 04 |
 | 10 | **n8n** (reused) | *(already row 5)* | Fair-code | Execution engine behind Module 8 Automation recipes | 3 | Same self-hosted instance, new curated workflow templates — no new service |
 | 11 | **Meilisearch** (deferred) | github.com/meilisearch/meilisearch | MIT | Directory search (Module 9), only if Supabase full-text search proves insufficient | 3+ | Not adopted yet — v1 uses Supabase's built-in full-text search; add only if relevance genuinely demands it |
+
+## Why Listmonk specifically (Module 3 — Marketing)
+
+Newsletter sending is a genuinely solved problem — no reason to build it. [Listmonk](https://listmonk.app/) is a single self-hosted binary (Go + Postgres, Docker image available) that already handles the parts that are tedious to build correctly:
+
+- **Subscriber lists at scale** — single/double opt-in, SQL-based segmentation (e.g. "clients on the Executive pack who haven't opened the last 3 sends") — no cap that matters at our size (it's proven at 7M+ sends on a fraction of one CPU core)
+- **Campaign sending** — visual drag-and-drop or Markdown/HTML composer, multi-threaded SMTP with rate limiting so we don't get flagged as spam
+- **Built-in analytics** — opens, bounces, click-throughs per campaign, without us building a tracking pipeline
+- **Unsubscribes & compliance** — handled by Listmonk out of the box, which matters directly for GDPR (doc 01 §5)
+
+CoachOS's own code only does two things Listmonk can't: (1) the AI draft — turning the coach's session themes + voice profile into the actual newsletter text, and (2) pushing that draft into Listmonk's API once the coach approves it. Listmonk does the sending, tracking, and list hygiene.
 
 ## What we build ourselves (the differentiation)
 

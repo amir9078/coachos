@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoachOS — What It Actually Does</title>
+<style>
+  :root{
+    --bone:#F0EBDD; --bone-2:#E7E0CC; --card:#F5F1E6; --well:#E2DAC4;
+    --ink:#1E2B24; --ink-soft:#54604F; --line:rgba(30,43,36,.16);
+    --brass:#8A6A1F; --brass-soft:rgba(138,106,31,.13);
+    --green:#2E6B4F; --green-soft:rgba(46,107,79,.14);
+    --shadow-s:0 1px 2px rgba(20,28,22,.07),0 6px 18px rgba(20,28,22,.07);
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,'Book Antiqua',Georgia,serif;
+    --sans:Seravek,'Gill Sans Nova','Segoe UI',Calibri,'Trebuchet MS',sans-serif;
+    --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+  h1,h2{font-family:var(--serif);font-weight:600;margin:0;text-wrap:balance}
+  p{margin:0;max-width:56ch}
+  a{color:var(--brass)}
+  .wrap{max-width:920px;margin:0 auto;padding:0 1.5rem}
+  .kicker{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;color:var(--ink-soft)}
+
+  header{padding:4rem 0 2.5rem;border-bottom:1px solid var(--line)}
+  header h1{font-size:clamp(2rem,5.5vw,3rem);line-height:1.08;margin:.7rem 0 1rem}
+  header h1 em{font-style:italic;color:var(--brass)}
+  header .sub{color:var(--ink-soft);font-size:1.15rem;max-width:52ch;margin-bottom:1.4rem}
+  .back{display:inline-flex;gap:.4rem;text-decoration:none;color:var(--ink-soft);font-size:.85rem}
+  .back:hover{color:var(--ink)}
+
+  .item{padding:2.4rem 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:3.2rem 1fr;gap:1.3rem;align-items:start}
+  .item .glyph{font-family:var(--serif);font-size:1.7rem;color:var(--green);background:var(--card);border:1px solid var(--line);width:3.2rem;height:3.2rem;border-radius:50%;display:flex;align-items:center;justify-content:center}
+  .item h2{font-size:1.35rem;margin-bottom:.6rem}
+  .item p{color:var(--ink-soft);font-size:1.02rem;max-width:60ch}
+  .item .also{display:inline-block;margin-top:.7rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--brass);background:var(--brass-soft);padding:.22rem .55rem;border-radius:2px}
+
+  .promise{background:var(--ink);color:var(--bone);border-radius:8px;padding:2.4rem 2.2rem;margin:3rem 0 1.5rem;text-align:center}
+  .promise .kicker{color:rgba(240,235,221,.6)}
+  .promise h2{color:var(--bone);font-size:1.5rem;margin:.8rem 0;max-width:none}
+  .promise p{color:rgba(240,235,221,.85);max-width:56ch;margin:0 auto;font-size:1.05rem}
+
+  .not{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1.6rem 1.8rem;margin:1.5rem 0 3rem}
+  .not h3{font-family:var(--serif);font-size:1.1rem;margin-bottom:.5rem}
+  .not p{color:var(--ink-soft);font-size:.96rem;max-width:none}
+
+  footer{padding:2rem 0 4rem;color:var(--ink-soft);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="back" href="./">← Back to the full plan</a>
+    <span class="kicker" style="display:block;margin-top:1.4rem">Written for coaches, not for developers</span>
+    <h1>What Coach<em>OS</em> actually does for you</h1>
+    <p class="sub">No jargon. Just what happens when you use it, day to day.</p>
+  </header>
+
+  <div class="item">
+    <span class="glyph">❧</span>
+    <div><h2>Never write a session summary from scratch again</h2>
+    <p>After a session, jot down rough notes — even messy, half-finished ones. CoachOS turns them into a clean, warm summary email ready to send your client, plus a private action list just for you.</p>
+    <span class="also">Nothing sends until you approve it</span></div>
+  </div>
+
+  <div class="item">
+    <span class="glyph">⚘</span>
+    <div><h2>Never lose a lead to a forgotten follow-up</h2>
+    <p>Every enquiry lands on one simple board: New → Talked → Proposal → Won. If someone's gone quiet, CoachOS tells you and writes the follow-up message for you. You just read it and hit send.</p></div>
+  </div>
+
+  <div class="item">
+    <span class="glyph">✎</span>
+    <div><h2>Write your newsletter without staring at a blank page</h2>
+    <p>CoachOS learns how you write from a few samples of your own writing. Every week it drafts a social post and a newsletter in your voice, from real (anonymized) themes in your own sessions. It sends through your own subscriber list and tracks who opened it.</p>
+    <span class="also">Powered by Listmonk — listmonk.app</span></div>
+  </div>
+
+  <div class="item">
+    <span class="glyph">◷</span>
+    <div><h2>Fill your calendar without the back-and-forth</h2>
+    <p>Share one link. People pick a time that works for both of you. Reminders go out automatically so fewer people miss sessions — and if someone doesn't show, CoachOS helps you get them rebooked with one click.</p></div>
+  </div>
+
+  <div class="item">
+    <span class="glyph">§</span>
+    <div><h2>Get contracts signed and get paid, without chasing anyone</h2>
+    <p>Send a coaching agreement — your client signs it right on their phone, legally binding. Invoices go out and get chased automatically if they're late. One glance shows you what's been paid and what hasn't.</p></div>
+  </div>
+
+  <div class="item">
+    <span class="glyph">⚙</span>
+    <div><h2>Put the boring repeat tasks on autopilot</h2>
+    <p>Turn on ready-made routines — "if a lead goes quiet for 6 days, follow up," "if an invoice is 3 days late, send a reminder." You approve the exact wording once, when you turn a routine on. After that, CoachOS handles the timing — it never invents new wording on its own.</p></div>
+  </div>
+
+  <div class="item">
+    <span class="glyph">☍</span>
+    <div><h2>Get found by new clients</h2>
+    <p>Your own public profile — your specialty, your rates, your story — listed where people search for a coach like you. Every enquiry from that listing drops straight into your Leads board, no extra work.</p>
+    <span class="also">A listing, never a commission on what you charge</span></div>
+  </div>
+
+  <div class="item">
+    <span class="glyph">◈</span>
+    <div><h2>See how your practice is really doing, at a glance</h2>
+    <p>One dashboard: money coming in, sessions this week, deals in progress. CoachOS quietly notices when a client's engagement seems to be drifting, so you can reach out before they disappear, not after.</p></div>
+  </div>
+
+  <div class="item">
+    <span class="glyph">✉</span>
+    <div><h2>Emails that come from you, not a robot</h2>
+    <p>Connect your Gmail once. From then on, everything CoachOS sends on your behalf comes from your real email address — and when a client replies, it lands in your actual inbox, exactly like normal.</p></div>
+  </div>
+
+  <div class="promise">
+    <span class="kicker">The one promise that covers everything above</span>
+    <h2>CoachOS never sends anything without you seeing the exact words first.</h2>
+    <p>An email, a post, a message — AI drafts, you decide. Every time, no exceptions. That's not a limitation we're planning to remove later. It's the whole reason coaches will trust this with their client relationships.</p>
+  </div>
+
+  <div class="not">
+    <h3>What you're not getting (on purpose)</h3>
+    <p>CoachOS doesn't coach your clients for you, doesn't replace the actual sessions, and doesn't make judgment calls about your clients. It handles the admin around your coaching so you have more time for the coaching itself.</p>
+  </div>
+
+  <footer>Coach<b style="color:var(--brass)">OS</b> — see the <a href="./">full plan</a> or the <a href="./prototype/">live prototype</a>.</footer>
+</div>
+</body>
+</html>

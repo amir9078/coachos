@@ -96,6 +96,8 @@ coachos/
 │   ├── 03-open-source-stack.md    ← build-vs-integrate map, licenses, architecture
 │   ├── 04-roadmap-costs-gtm.md    ← phases, costs, pricing, go-to-market, risks
 │   └── 05-build-guide.md          ← how to build it with Claude Code + Cursor (frontend, backend, functionality-by-functionality)
+│   └── 06-features-guide.md       ← plain-language "what coaches can actually do" guide, no jargon
+├── features.html                  ← the same guide, as a page — open in any browser
 └── prototype/
     └── index.html                 ← animated clickable prototype (open in any browser)
 ```

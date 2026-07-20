@@ -24,7 +24,7 @@ Module-by-module: what it does, what the AI does, what stays human, and how each
 |---|---|---|
 | Voice profile | Onboarding interview + 3 writing samples → stored style profile | AI-built, once |
 | Content composer | Weekly drafts: 3 posts + 1 newsletter in the coach's voice, from their actual session themes (anonymized) | AI drafts, coach edits |
-| Email sequences | Welcome/nurture sequences from templates, personalized by niche | AI + templates |
+| Newsletter &amp; email sequences | Welcome/nurture sequences from templates, personalized by niche — sent and tracked via [Listmonk](https://listmonk.app/) (self-hosted, doc 03), not hand-built | AI drafts + Listmonk sends |
 | Content calendar | Schedule + publish reminders | Platform |
 | **Done-for-you service** | Our human editors polish and manage the coach's content monthly | **Human (our service revenue)** |
 
