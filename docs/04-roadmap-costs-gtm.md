@@ -43,6 +43,7 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 | Daily Briefing (Module 10) | Cost | Note |
 |---|---|---|
 | News/world-catchup sources | $0 | Wikipedia Current Events Portal (CC BY-SA, world catchup) + direct publisher RSS feeds (category news, learn) — every source individually verified, not assumed; see doc 03 for the four "free tier" traps this avoids (NewsAPI.org, Google News RSS, Mediastack, GNews all restrict free use to non-commercial/dev only) |
+| Admin MCP server (push/pull/update briefing content from Claude) | $0 new infra | Runs locally on the admin's own machine (doc 05 §4.6); image storage rides on Supabase's existing free/starter tier — cost is Claude usage the founder already pays for, not a new line item |
 | AI summarization | Pennies/month | Generated once per category per day, not per coach — a shared cached artifact, not a per-user cost |
 | Public `/briefing` page | $0 new infra | Same Next.js app; doubles as an SEO/content-marketing channel alongside the Directory |
 

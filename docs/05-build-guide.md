@@ -83,7 +83,7 @@ Tell Claude Code to create these tables via Supabase migrations:
 | `summaries` | id, session_id, client_facing text, coach_facing text, action_items jsonb, status (draft/approved/sent), sent_at | **status is the approval-first gate** |
 | `audit_log` | id, coach_id, action, entity, at | Who sent what when — trust feature |
 
-Phase 2 adds: `contracts`, `invoices`, `coach_email_accounts` (encrypted OAuth tokens, RLS-scoped, one per coach). Phase 3 adds: `leads`, `pipeline_stages`, `content_drafts`, `email_sequences`, `automation_recipes`, `automation_runs` (audit trail — every automated send logged like any other), `coach_profiles` (public directory fields — the one table where a coach explicitly opts a subset of data into public visibility), `directory_enquiries` (routes into `leads`), `daily_briefings` (one row per **category** per **day** — not per coach: `category`, `date`, `world_catchup_text`, `learn_content_text`, `learn_source_url`, `headlines` jsonb with each headline's AI takeaway + source link).
+Phase 2 adds: `contracts`, `invoices`, `coach_email_accounts` (encrypted OAuth tokens, RLS-scoped, one per coach). Phase 3 adds: `leads`, `pipeline_stages`, `content_drafts`, `email_sequences`, `automation_recipes`, `automation_runs` (audit trail — every automated send logged like any other), `coach_profiles` (public directory fields — the one table where a coach explicitly opts a subset of data into public visibility), `directory_enquiries` (routes into `leads`), and two tables for Daily Briefing — `briefing_days` (one row per **category** per **day**, not per coach: `category`, `date`, `world_catchup_text`, `world_catchup_source_url`, `learn_title`, `learn_summary`, `learn_source_url`, `learn_image_url`) and `briefing_headlines` (many rows per `briefing_days` row: `headline`, `summary`, `source_url`, `image_url`, `position`, `created_by` — `created_by` is either `'system'` for the automated RSS pull or an admin's ID for anything pushed manually via the MCP tool, §4.6).
 
 ### 4.2 Security rules (give these to Claude Code verbatim)
 
@@ -118,9 +118,35 @@ Cost guard: log tokens per call into `audit_log`; alert at $20/mo (it should nev
 
 ### 4.5 Daily Briefing endpoints (Phase 3)
 
-**A scheduled job (n8n, doc 03), not a live API call per request** — runs once a day per category, pulls Wikipedia's Current Events Portal (world catchup) and the verified publisher RSS feeds (category news, learn) listed in doc 03, has Claude summarize each into the digest, and writes one row per category into `daily_briefings`. Every request that follows just reads that cached row. **Before adding any new publisher feed to the curated list, verify its actual terms directly (fetch the feed, check for a stated license) — doc 03 documents four sources that looked free but weren't when actually checked; don't repeat that by assumption here.**
+**A scheduled job (n8n, doc 03), not a live API call per request** — runs once a day per category, pulls Wikipedia's Current Events Portal (world catchup) and the verified publisher RSS feeds (category news, learn) listed in doc 03, has Claude summarize each into the digest, and writes into `briefing_days` + `briefing_headlines` with `created_by='system'`. Every request that follows just reads that cached data. **Before adding any new publisher feed to the curated list, verify its actual terms directly (fetch the feed, check for a stated license) — doc 03 documents four sources that looked free but weren't when actually checked; don't repeat that by assumption here.**
 
-**`GET /api/briefing/[category]`** — public, unauthenticated, cached (this is the endpoint both the dashboard card and the public `/briefing` marketing page call — same data, two surfaces). No RLS needed since `daily_briefings` has no per-coach data in it at all.
+**`GET /api/briefing/[category]`** — public, unauthenticated, cached (this is the endpoint both the dashboard card and the public `/briefing` marketing page call — same data, two surfaces). No RLS needed since these tables have no per-coach data in them at all.
+
+### 4.6 Admin MCP server — push, pull, and update briefing content from Claude
+
+**What this is:** a small MCP (Model Context Protocol) server that exposes the Daily Briefing tables as tools Claude can call directly in a conversation — so you (Amir, or whoever runs content for CoachOS) can manage the news feed by talking to Claude in Claude Desktop or Claude Code, instead of waiting for a web admin panel to exist. This is **internal tooling for the team, never given to coaches** — it's a separate credential and a separate surface from anything in the coach-facing app.
+
+**Tools it exposes:**
+
+| Tool | What it does |
+|---|---|
+| `list_briefing_categories` | Returns the niche categories (Executive, Career, Life & Wellness, Mentoring) |
+| `get_todays_briefing(category)` | Pulls what's currently live for a category — the world catchup, the learn piece, and every headline — so you can see the day's content before touching it |
+| `push_news_item(category, headline, summary, source_url, image_url?)` | Adds a new headline to a category's briefing for today (or a given date), `created_by` set to your admin ID |
+| `update_briefing_item(item_id, fields)` | Edits an existing headline, world catchup, or learn piece — fix a summary, swap a source link, replace an image |
+| `remove_briefing_item(item_id)` | Pulls something down if it's wrong or stale |
+| `upload_image(file_or_url, alt_text)` | Uploads to Supabase Storage (already in the stack, doc 03) and returns a URL to attach to any item |
+| `refresh_category_now(category)` | Manually re-runs the RSS-pull job for one category immediately, instead of waiting for the next scheduled run — useful for breaking news |
+
+**How you'd actually use it, once built:** open a conversation with Claude, say something like *"Pull up today's Executive briefing"* or *"Add this article as a headline in the Career category, here's the link and a photo"* — Claude calls the matching tool, you see the result, done. No admin dashboard to log into.
+
+**Security — this is the part not to skip:**
+- The MCP server authenticates to Supabase with its **own dedicated service-role credential**, scoped only to the briefing tables — never a coach's key, never the same key the coach-facing app uses.
+- That credential lives in a local `.env` file on the machine running the MCP server, the same "never commit a secret" rule as everywhere else in this guide (§4.2).
+- **Run it locally first, not hosted.** The simplest, safest v1 is a small Node/TypeScript process running on your own machine, using the MCP SDK's stdio transport, configured once in Claude Desktop's or Claude Code's MCP settings. A hosted/remote version (so a whole content team can use it, not just you) is a real upgrade to make later, once there's a team — don't build that complexity before it's needed.
+- Log every push/update/delete to `audit_log` with the admin's identity, same as every other write in this system (§4.2) — an admin tool is still a tool that touches production data.
+
+**Build brief to give Claude Code:** *"Create a small MCP server (TypeScript, `@modelcontextprotocol/sdk`) exposing the seven tools listed in docs/05 §4.6 against the `briefing_days`/`briefing_headlines` tables via a dedicated Supabase service-role key, stdio transport, runnable locally and configurable in Claude Desktop's MCP settings. Log every write to `audit_log`."*
 
 **Content rule to build in, not bolt on later:** every headline and the daily learn piece must carry a real `source_url`. If the scheduled job can't find a real source for a category on a given day, it skips that section rather than having Claude invent one — same discipline as doc 01 §6's rejected-claims table.
 
@@ -169,7 +195,7 @@ Build in this exact order. Each has a **done-when** — do not move on until it 
 | F9 | Polish + landing | "Marketing landing page reusing the prototype hero + demo look; app-wide empty/loading/error states." | A stranger understands the product in 30 seconds |
 | — | **Security gate** | Independent review (budgeted in doc 04) + Claude Code self-audit: "Audit auth, RLS, portal tokens, API routes for the §4.2 rules." | Findings fixed **before any real client data** |
 
-Then pilots (doc 04 §4). **Phase 2 (F10–F14):** contracts via Documenso, Stripe billing, invoice chasing, **Gmail OAuth connect (F13 — start Google's verification review the same week, not after building)**, security re-review. **Phase 3 (F15–F20):** leads pipeline + AI scoring, follow-up drafts into the approval queue, marketing composer with voice profile, landing-page builder, **Automations v1 (F17 — 3–5 recipes, n8n-backed, toggle-only UI)**, **Coach & Mentor Directory (F18 — profile + search + enquiry routing, built but not opened to public traffic until the coach-supply gate in doc 04 clears)**, **Daily Briefing (F19 — the scheduled per-category digest job, the dashboard card, and the public `/briefing` page; every item must carry a real source link or get skipped, per §4.5)**.
+Then pilots (doc 04 §4). **Phase 2 (F10–F14):** contracts via Documenso, Stripe billing, invoice chasing, **Gmail OAuth connect (F13 — start Google's verification review the same week, not after building)**, security re-review. **Phase 3 (F15–F20):** leads pipeline + AI scoring, follow-up drafts into the approval queue, marketing composer with voice profile, landing-page builder, **Automations v1 (F17 — 3–5 recipes, n8n-backed, toggle-only UI)**, **Coach & Mentor Directory (F18 — profile + search + enquiry routing, built but not opened to public traffic until the coach-supply gate in doc 04 clears)**, **Daily Briefing (F19 — the scheduled per-category digest job, the dashboard card, and the public `/briefing` page; every item must carry a real source link or get skipped, per §4.5)**, **Admin MCP server (F20 — the seven content-management tools in §4.6, local stdio transport, dedicated service-role credential, never given to coaches)**.
 
 ## 7. CLAUDE.md / .cursorrules template (paste into the app repo)
 
