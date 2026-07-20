@@ -5,7 +5,7 @@
 **Status:** Plan + clickable prototype. Not yet in build.
 **Owner:** Amir Hussain
 **Last updated:** July 2026
-**Live site:** [amir9078.github.io/coachos](https://amir9078.github.io/coachos/) — the whole plan as one navigable page, linking straight into the prototype
+**Confidential:** This repo is private until launch — invited collaborators only (see §8b). To view the plan as a website, open `index.html` in any browser; the prototype is `prototype/index.html`. The hosted GitHub Pages link is offline while the repo is private.
 
 ---
 
