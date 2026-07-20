@@ -42,6 +42,10 @@ One dashboard: money coming in, sessions this week, deals in progress. CoachOS q
 
 Connect your Gmail once. From then on, everything CoachOS sends on your behalf comes from your real email address — and when a client replies, it lands in your actual inbox, exactly like it would if you'd typed it yourself.
 
+## Start your day already caught up
+
+Open CoachOS and there's a short, honest briefing waiting: the top news in your field, a quick catch-up on what's happening in the world, and one thing worth learning today — five minutes, tops. Every headline links back to where it actually came from. You can read the same briefing on our website even before you sign up.
+
 ---
 
 ## The one promise that covers everything above

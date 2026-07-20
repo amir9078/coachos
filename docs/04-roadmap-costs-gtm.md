@@ -8,7 +8,7 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 |---|---|---|---|
 | **1 — Wedge** | 1–3 | Client Delivery (notes→summary, prep briefs, timeline), basic scheduling embed, client portal | 5 pilot coaches using it weekly; ≥3 convert to paid |
 | **2 — Money loop** | 4–8 | Bookings (Cal.com), Contracts (Documenso), Stripe billing; **Gmail integration** (start Google's verification review in parallel, month 4 — see risk below); security re-review | ≥25 paying coaches; churn <5%/mo; coaches running real revenue through us |
-| **3 — Growth loop** | 9–14 | Leads CRM (Twenty), AI follow-ups, marketing composer, landing pages, **Automations v1** (Module 8); done-for-you service launch; **Coach & Mentor Directory** built but held unlaunched | ≥100 paying coaches; service line profitable; Directory opens to public search only once coach supply clears the same ≥100 gate |
+| **3 — Growth loop** | 9–14 | Leads CRM (Twenty), AI follow-ups, marketing composer, landing pages, **Automations v1** (Module 8); done-for-you service launch; **Coach & Mentor Directory** built but held unlaunched; **Daily Briefing** (Module 10) — in-app and public `/briefing` page | ≥100 paying coaches; service line profitable; Directory opens to public search only once coach supply clears the same ≥100 gate |
 | **4 — Intelligence** | 15+ | Practice dashboard, at-risk AI, referral network | Decided from data, not ambition |
 
 ## 2. Costs (planning figures, not quotes)
@@ -39,6 +39,12 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 | Directory search (Supabase full-text) | $0 | No new infra for v1; Meilisearch only if relevance demands it later |
 
 **Business-model note:** the Directory is priced as a listing perk inside existing subscription tiers, **not** a commission on coaching fees (doc 01 §6) — it does not change the unit-economics table above.
+
+| Daily Briefing (Module 10) | Cost | Note |
+|---|---|---|
+| RSS feeds (news + world catchup + learn sources) | $0 | Unlimited, no API key — see doc 03 for the news-API trap this avoids ($449/mo if you reach for NewsAPI.org by mistake) |
+| AI summarization | Pennies/month | Generated once per category per day, not per coach — a shared cached artifact, not a per-user cost |
+| Public `/briefing` page | $0 new infra | Same Next.js app; doubles as an SEO/content-marketing channel alongside the Directory |
 
 ## 3. Pricing
 

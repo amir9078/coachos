@@ -83,7 +83,7 @@ Tell Claude Code to create these tables via Supabase migrations:
 | `summaries` | id, session_id, client_facing text, coach_facing text, action_items jsonb, status (draft/approved/sent), sent_at | **status is the approval-first gate** |
 | `audit_log` | id, coach_id, action, entity, at | Who sent what when — trust feature |
 
-Phase 2 adds: `contracts`, `invoices`, `coach_email_accounts` (encrypted OAuth tokens, RLS-scoped, one per coach). Phase 3 adds: `leads`, `pipeline_stages`, `content_drafts`, `email_sequences`, `automation_recipes`, `automation_runs` (audit trail — every automated send logged like any other), `coach_profiles` (public directory fields — the one table where a coach explicitly opts a subset of data into public visibility), `directory_enquiries` (routes into `leads`).
+Phase 2 adds: `contracts`, `invoices`, `coach_email_accounts` (encrypted OAuth tokens, RLS-scoped, one per coach). Phase 3 adds: `leads`, `pipeline_stages`, `content_drafts`, `email_sequences`, `automation_recipes`, `automation_runs` (audit trail — every automated send logged like any other), `coach_profiles` (public directory fields — the one table where a coach explicitly opts a subset of data into public visibility), `directory_enquiries` (routes into `leads`), `daily_briefings` (one row per **category** per **day** — not per coach: `category`, `date`, `world_catchup_text`, `learn_content_text`, `learn_source_url`, `headlines` jsonb with each headline's AI takeaway + source link).
 
 ### 4.2 Security rules (give these to Claude Code verbatim)
 
@@ -116,6 +116,14 @@ Cost guard: log tokens per call into `audit_log`; alert at $20/mo (it should nev
 
 **Security note — the one deliberate exception to "private by default":** `coach_profiles` is the single table designed to be publicly readable, and only for fields the coach explicitly opts to publish. Build the opt-in toggle and field-level publish controls before this table is reachable by any public route — see §4.2's RLS rule, which still applies to every *other* table without exception.
 
+### 4.5 Daily Briefing endpoints (Phase 3)
+
+**A scheduled job (n8n, doc 03), not a live API call per request** — runs once a day per category, pulls the RSS feeds listed in doc 03, has Claude summarize the world catchup and pick + summarize the day's "5-minute learn" from the curated publication feeds, and writes one row per category into `daily_briefings`. Every request that follows just reads that cached row.
+
+**`GET /api/briefing/[category]`** — public, unauthenticated, cached (this is the endpoint both the dashboard card and the public `/briefing` marketing page call — same data, two surfaces). No RLS needed since `daily_briefings` has no per-coach data in it at all.
+
+**Content rule to build in, not bolt on later:** every headline and the daily learn piece must carry a real `source_url`. If the scheduled job can't find a real source for a category on a given day, it skips that section rather than having Claude invent one — same discipline as doc 01 §6's rejected-claims table.
+
 ## 5. Frontend guide
 
 ### 5.1 Design tokens (carry the prototype identity 1:1)
@@ -133,7 +141,8 @@ Rule for Claude Code: *"Match `prototype/index.html` in the planning repo for lo
 
 | Screen | Contains | Key components |
 |---|---|---|
-| Dashboard ("Today") | Greeting, KPI tiles, **Approval Queue** (drafts with Approve/Edit buttons), today's sessions | `KpiTile`, `ApprovalQueue`, `SessionRow` |
+| Dashboard ("Today") | Greeting, KPI tiles, **Approval Queue** (drafts with Approve/Edit buttons), today's sessions, **Daily Briefing card** (category news, world catchup, 5-min learn) | `KpiTile`, `ApprovalQueue`, `SessionRow`, `BriefingCard` |
+| Public briefing (`/briefing`) | Same content as the dashboard's Briefing card, no login required — a content/SEO surface | `BriefingCard` (reused) |
 | Clients list | Search, cards with engagement progress, at-risk badge | `ClientCard`, `RiskBadge` |
 | Client detail | Goals + progress timeline, sessions list, notes box, **"✦ Summarize with AI"**, draft view with Approve & send | `Timeline`, `NotesEditor`, `AiDraftPanel` |
 | Bookings | Cal.com embed, upcoming list with reminder status | `CalEmbed`, `SessionRow` |
@@ -160,7 +169,7 @@ Build in this exact order. Each has a **done-when** — do not move on until it 
 | F9 | Polish + landing | "Marketing landing page reusing the prototype hero + demo look; app-wide empty/loading/error states." | A stranger understands the product in 30 seconds |
 | — | **Security gate** | Independent review (budgeted in doc 04) + Claude Code self-audit: "Audit auth, RLS, portal tokens, API routes for the §4.2 rules." | Findings fixed **before any real client data** |
 
-Then pilots (doc 04 §4). **Phase 2 (F10–F14):** contracts via Documenso, Stripe billing, invoice chasing, **Gmail OAuth connect (F13 — start Google's verification review the same week, not after building)**, security re-review. **Phase 3 (F15–F19):** leads pipeline + AI scoring, follow-up drafts into the approval queue, marketing composer with voice profile, landing-page builder, **Automations v1 (F17 — 3–5 recipes, n8n-backed, toggle-only UI)**, **Coach & Mentor Directory (F18 — profile + search + enquiry routing, built but not opened to public traffic until the coach-supply gate in doc 04 clears)**.
+Then pilots (doc 04 §4). **Phase 2 (F10–F14):** contracts via Documenso, Stripe billing, invoice chasing, **Gmail OAuth connect (F13 — start Google's verification review the same week, not after building)**, security re-review. **Phase 3 (F15–F20):** leads pipeline + AI scoring, follow-up drafts into the approval queue, marketing composer with voice profile, landing-page builder, **Automations v1 (F17 — 3–5 recipes, n8n-backed, toggle-only UI)**, **Coach & Mentor Directory (F18 — profile + search + enquiry routing, built but not opened to public traffic until the coach-supply gate in doc 04 clears)**, **Daily Briefing (F19 — the scheduled per-category digest job, the dashboard card, and the public `/briefing` page; every item must carry a real source link or get skipped, per §4.5)**.
 
 ## 7. CLAUDE.md / .cursorrules template (paste into the app repo)
 

@@ -102,6 +102,22 @@ Revenue, pipeline conversion, retention curves; AI flags at-risk clients (missed
 
 **New AI use case to flag:** if a future "AI recommends your best-matched coach" feature is added, that's a recommender/matching system — minimal-risk under the EU AI Act (not an Annex III employment-evaluation use), but it's a new AI surface not covered by the original doc 01 §5 assessment and should get its own quick review before shipping.
 
+## Module 10 — Daily Briefing · *Phase 3, public-facing too*
+
+**Job:** the coach opens CoachOS and is already caught up — on their field, on the world, and on one new thing worth knowing — before they've had coffee.
+
+| Capability | How it works |
+|---|---|
+| News by category | Curated headlines filtered to the coach's niche pack (Executive → leadership/business; Career → job market/workplace trends; Life &amp; Wellness → psychology/wellness research; Mentoring → L&amp;D/talent trends), each with an AI one-line takeaway and a link to the original source |
+| World catchup | A short, neutral summary of the day's top general headlines — 2–3 minutes, not niche-specific |
+| 5-minute daily learn | One bite-sized professional-development piece a day — a coaching technique, a research finding, a concept — **summarized from a real, cited source, never invented from nothing** |
+
+**Where it lives:** a card on the dashboard for logged-in coaches, **and** a public page on the marketing site (`/briefing`) that anyone can read without an account — doubling as a content/SEO channel that feeds the same organic-acquisition thesis as the Directory (Module 9).
+
+**The cost discipline that makes this cheap:** the briefing is generated **once per category, per day** — not once per coach. A few hundred coaches split across 4–5 niche categories means a handful of AI summarization calls a day for the whole platform, not one per coach. This is a shared, cached daily artifact, the same way a newspaper prints one edition for everyone in a region rather than one per subscriber.
+
+**Sourcing rule, not just a nice-to-have:** every headline and every "5-minute learn" links back to its real source. AI's job here is to summarize and select, never to generate a fact from scratch — the same discipline the plan already applies to its own market research (doc 01 §6's "rejected claims" table exists because of exactly this kind of mistake).
+
 ---
 
 ## The human-service layer (our second revenue line)

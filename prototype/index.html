@@ -201,6 +201,15 @@
   }
   .nudge b{color:var(--brass)}
 
+  .briefing{border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:1.2rem}
+  .briefing-head{background:var(--well);padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
+  .briefing-body{display:grid;grid-template-columns:repeat(3,1fr);background:var(--line);gap:1px}
+  @media(max-width:760px){.briefing-body{grid-template-columns:1fr}}
+  .brief-col{background:var(--card);padding:.85rem .95rem}
+  .brief-col .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;color:var(--brass);display:block;margin-bottom:.35rem}
+  .brief-col p{font-size:.82rem;color:var(--ink-soft);margin:0 0 .3rem}
+  .brief-col a{font-size:.72rem}
+
   .slots{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem;margin-bottom:1.2rem}
   @media(max-width:640px){.slots{grid-template-columns:repeat(4,1fr)}}
   .slot{background:var(--bone);border:1px solid var(--line);border-radius:3px;text-align:center;padding:.5rem .2rem;font-size:.72rem;color:var(--ink-soft)}
@@ -307,6 +316,7 @@
       <div class="room reveal"><span class="tag">AI</span><span class="glyph">◈</span><h3>Intelligence</h3><p>Revenue, retention, and at-risk clients flagged early.</p></div>
       <div class="room reveal"><span class="glyph">⚙</span><h3>Automations</h3><p>Pre-built recipes you toggle on — never a workflow builder.</p></div>
       <div class="room reveal"><span class="tag">New channel</span><span class="glyph">☍</span><h3>Directory</h3><p>Public coach profile — enquiries route straight into your pipeline.</p></div>
+      <div class="room reveal"><span class="glyph">☀</span><h3>Daily Briefing</h3><p>Category news, a world catchup, and a 5-minute learn — every morning.</p></div>
     </div>
   </div>
 </section>
@@ -340,6 +350,14 @@
               <div class="kpi"><div class="v">11</div><div class="l">Sessions this week</div><div class="d up">▲ 2</div></div>
               <div class="kpi"><div class="v">$9,400</div><div class="l">Pipeline value</div><div class="d up">▲ 3 new leads</div></div>
               <div class="kpi"><div class="v">1</div><div class="l">Client at risk</div><div class="d warn">Maya — stalled 3 wks</div></div>
+            </div>
+            <div class="briefing">
+              <div class="briefing-head">☀ Daily briefing · Executive pack · Tue 20 Jul</div>
+              <div class="briefing-body">
+                <div class="brief-col"><span class="k">Your field</span><p>Boards are quietly cutting Q4 travel budgets — three headlines this week say the same thing.</p><a href="#">Read the source →</a></div>
+                <div class="brief-col"><span class="k">World catchup</span><p>Three-minute read: today's top general headlines, condensed.</p><a href="#">2-min catchup →</a></div>
+                <div class="brief-col"><span class="k">5-minute learn</span><p>"The pause before the answer" — why the best executive coaches let silence do the work.</p><a href="#">Read (5 min) →</a></div>
+              </div>
             </div>
             <div class="queue">
               <div class="queue-head">AI drafts — nothing sends without you</div>
