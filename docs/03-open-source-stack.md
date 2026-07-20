@@ -5,20 +5,22 @@ The request behind this doc: *"pull free GitHub repos, merge them, make it a ful
 1. **Licensing.** Most of the best engines are AGPLv3. Running them as separate self-hosted services that our app talks to over APIs is clean. Copy-merging AGPL code into a proprietary codebase legally obligates us to open-source the entire product — a business-model decision we should not make by accident.
 2. **Maintenance.** A merged fork means we own every future security patch of five massive codebases. Integration means upstream keeps maintaining them for free — which is the actual point of using open source.
 
+> **Re-verified July 2026:** every engine below was re-researched against its rivals (features + licenses fetched directly from each repo). Two changes resulted — Twenty dropped for a native build, n8n replaced by Activepieces. Full comparison with license proofs: [`docs/09-engine-comparison.md`](09-engine-comparison.md).
+
 ## The map
 
 | # | Engine | Repo | License | What we use it for | Phase | Integration mode |
 |---|---|---|---|---|---|---|
 | 1 | **Cal.com** | github.com/calcom/cal.com | AGPLv3 (+ paid commercial license option) | Bookings module: scheduling links, calendar sync, reminders | 2 | Self-host + embed; or their hosted API if self-hosting is premature |
 | 2 | **Documenso** | github.com/documenso/documenso | AGPLv3 | Contracts module: e-signatures | 2 | Self-host + API |
-| 3 | **Twenty** | github.com/twentyhq/twenty | AGPLv3 | CRM/pipeline core for Leads module | 3 | Self-host + API; we build the AI layer on top |
+| 3 | ~~Twenty~~ **→ built natively** | *(dropped — see [`docs/09`](09-engine-comparison.md) §3)* | Ours (proprietary) | CRM/pipeline for Leads — native Postgres tables + our UI, with Twenty and EspoCRM as the design brief. One less service, ~4 GB less RAM, fully white-label | 3 | Native build |
 | 4 | **[Listmonk](https://listmonk.app/)** | github.com/knadh/listmonk | AGPLv3 | Newsletter sending, subscriber lists, nurture sequences (Module 3) | 3 | Self-host + API — single Go binary + Postgres, no separate infra to run |
-| 5 | **n8n** | github.com/n8n-io/n8n | Fair-code (Sustainable Use) | Automation glue between services (triggers, syncs) | 2–3 | Self-host; note fair-code limits on reselling n8n itself |
+| 5 | ~~n8n~~ **→ Activepieces** | github.com/activepieces/activepieces | **MIT** (Community Edition — verified at the repo) | Automation engine: recipes, scheduled flows, triggers, syncs. Replaced n8n: its Sustainable Use License doesn't cover powering a paid customer-facing feature ([`docs/09`](09-engine-comparison.md) §5, license text quoted) | 2–3 | Self-host + API; coaches only ever see our own recipes UI |
 | 6 | **Supabase** | github.com/supabase/supabase | Apache 2.0 | Our own app's database, auth, storage, row-level security | 1 | Hosted (free tier → paid) |
 | 7 | **Next.js / React** | github.com/vercel/next.js | MIT | Our own app's frontend | 1 | Direct dependency (MIT = no copyleft concerns) |
 | 8 | **Stripe SDKs** | github.com/stripe | MIT | Billing (not open-source service, but free SDKs) | 2 | API |
 | 9 | **Gmail API** | Google (not open-source) | Google API ToS | Coach's own-address sending, doc 02 cross-cutting | 2 | Direct OAuth2 integration — requires Google app-verification review, see doc 04 |
-| 10 | **n8n** (reused) | *(already row 5)* | Fair-code | Execution engine behind Module 8 Automation recipes | 3 | Same self-hosted instance, new curated workflow templates — no new service |
+| 10 | **Activepieces** (reused) | *(already row 5)* | MIT | Execution engine behind Module 8 recipes AND Module 10 Daily Briefing pulls AND the MCP refresh trigger | 3 | Same self-hosted instance, curated flow templates — no new service |
 | 11 | **Meilisearch** (deferred) | github.com/meilisearch/meilisearch | MIT | Directory search (Module 9), only if Supabase full-text search proves insufficient | 3+ | Not adopted yet — v1 uses Supabase's built-in full-text search; add only if relevance genuinely demands it |
 | 12 | **Wikipedia Current Events Portal** | en.wikipedia.org/wiki/Portal:Current_events | CC BY-SA 3.0 | World-catchup source for Module 10, Daily Briefing | 3 | Explicitly licensed for commercial reuse with attribution — verified directly, not assumed |
 | 13 | **Direct publisher RSS feeds** (ICF's own blog confirmed; expand list, verifying each individually) | Each publisher's own site | Varies — verify per publisher | Category news + 5-minute learn source for Module 10 | 3 | Standard headline + snippet + link-back aggregator use, never full-text republishing |

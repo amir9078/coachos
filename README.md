@@ -24,7 +24,7 @@
 | 5 | **Contracts & Payments** | Coaching-agreement templates, e-signature, invoicing, package/subscription billing | Platform |
 | 6 | **Client Delivery** | Session notes → AI summary + action items, client progress timeline, AI session-prep briefs | Platform (AI) — *the wedge, see §4* |
 | 7 | **Practice Intelligence** | Dashboard: revenue, pipeline health, client retention, at-risk clients flagged by AI | Platform (AI) |
-| 8 | **Automations** | Pre-built recipes (silent-lead follow-up, prep-brief scheduling, overdue-invoice reminders) — toggle on, no workflow builder | Platform (n8n-backed) |
+| 8 | **Automations** | Pre-built recipes (silent-lead follow-up, prep-brief scheduling, overdue-invoice reminders) — toggle on, no workflow builder | Platform (Activepieces-backed) |
 | 9 | **Coach & Mentor Directory** | Public opt-in profile, search, and enquiry routing straight into the coach's own Leads pipeline — our own acquisition channel, not just a feature | Platform |
 | 10 | **Daily Briefing** | News by niche category, a quick world catchup, and a 5-minute daily learn — one shared digest per category (not per coach), also readable on the public website | Platform (AI, RSS-sourced) |
 | 11 | **Coach Community** | LinkedIn-style peer network for coaches: connect, post, like, comment, share — v1. Direct messaging and real-time chat are v2, a separate build (see §4) | Platform |
@@ -72,10 +72,12 @@ We do **not** hand-build commodity modules. Proven open-source engines exist for
 |---|---|---|
 | Scheduling | [Cal.com](https://github.com/calcom/cal.com) | AGPLv3 (+commercial) |
 | E-signatures | [Documenso](https://github.com/documenso/documenso) | AGPLv3 |
-| CRM core | [Twenty](https://github.com/twentyhq/twenty) | AGPLv3 |
+| CRM/pipeline | **Built natively** — Twenty + EspoCRM as design brief, see `docs/09` | Ours (proprietary) |
 | Email/newsletters | [Listmonk](https://github.com/knadh/listmonk) | AGPLv3 |
-| Automation glue | [n8n](https://github.com/n8n-io/n8n) | Fair-code |
+| Automation engine | [Activepieces](https://github.com/activepieces/activepieces) — replaced n8n after direct license verification, see `docs/09` §5 | MIT |
 | Backend/auth/DB | [Supabase](https://github.com/supabase/supabase) | Apache 2.0 |
+
+Every engine choice was re-verified against its rivals feature-by-feature and license-by-license (fetched from each repo directly, not assumed) — full comparison and the two resulting changes in [`docs/09-engine-comparison.md`](docs/09-engine-comparison.md). All engines run headless behind our own screens: coaches and clients only ever see CoachOS.
 
 **Why we integrate rather than "merge" these repos into ours:** most are AGPL-licensed — running them as separate self-hosted services with API calls between them is clean; copying their code into a proprietary codebase would legally force us to open-source the whole product. The integration architecture, license obligations, and per-phase adoption plan are in [`docs/03-open-source-stack.md`](docs/03-open-source-stack.md).
 
@@ -105,7 +107,8 @@ coachos/
 │   └── 05-build-guide.md          ← how to build it with Claude Code + Cursor (frontend, backend, functionality-by-functionality)
 │   ├── 06-features-guide.md       ← plain-language "what coaches can actually do" guide, no jargon
 │   ├── 07-architecture.md        ← the single project architecture diagram — every layer, module-mapped, phase-gated
-│   └── 08-module-questionnaire.md ← 120+ product decisions per module, with defaults — answered → per-module build prompts
+│   ├── 08-module-questionnaire.md ← 120+ product decisions per module, with defaults — answered → per-module build prompts
+│   └── 09-engine-comparison.md   ← re-verified open-source research: rivals compared per category, final picks, license proofs
 ├── features.html                  ← the same guide, as a page — open in any browser
 └── prototype/
     └── index.html                 ← animated clickable prototype (open in any browser)
@@ -113,16 +116,25 @@ coachos/
 
 **To view the prototype:** open `prototype/index.html` in a browser — no install needed.
 
-## 8b. Confidentiality & repo-privacy plan
+## 8b. Confidentiality — the binding rules for the entire build (STANDING ORDER)
 
-This plan is a competitive asset. Standing rules:
+This is a competitive market and this plan is a competitive asset. **From now until a deliberate, owner-approved public launch, everything about this project is private — the plan, the source code, the infrastructure, all of it.** These rules bind every session, every collaborator, and every future repository:
 
-1. **Repository stays private.** On GitHub: Settings → General → Danger Zone → *Change visibility* → Private (if it was created public). Verify the repo page shows the "Private" badge.
-2. **Access by invitation only.** Settings → Collaborators → add team members individually with the least role they need (Read for reviewers, Write for contributors). No org-wide or public links.
-3. **Proprietary license in-repo** (see `LICENSE`) so every collaborator sees the terms — a private repo controls access; the license states the rights.
-4. **No secrets in the repo, ever.** API keys, tokens and credentials live in `.env` files (git-ignored) and the host's secret manager — never committed, even to a private repo.
-5. **Shared artifacts stay private** until deliberately shared from their share menus; share with named people, not public links.
-6. **Before any public launch page**, split marketing content into a separate public repo — this planning repo never goes public.
+**Repositories**
+1. **This planning repo is private.** GitHub: Settings → General → Danger Zone → *Change visibility* → Private. Verify the "Private" badge shows.
+2. **Every future repository is created private from birth** — frontend, backend, the MCP server, infrastructure configs, everything. No repo for this project is ever created public, even for a moment "to test something."
+3. **Access by invitation only.** Named individuals, least role needed (Read for reviewers, Write for contributors). No org-wide access, no public links, no link-sharing.
+4. **Proprietary license in every repo** (see `LICENSE`) so every collaborator sees the terms.
+
+**Deployments & infrastructure**
+5. **No public URLs during the build.** Staging and test deployments sit behind authentication (password/Vercel protection/IP allowlist) and carry `noindex` — nothing crawlable, nothing guessable, nothing demoable without a login we issued.
+6. **No secrets in any repo, ever** — private or not. API keys, tokens, credentials live in git-ignored `.env` files and the host's secret manager only.
+7. **Third-party services get minimum footprint**: accounts created for the project reveal nothing in public profiles, app names, or OAuth consent screens beyond what a service strictly requires.
+
+**People & sharing**
+8. **Shared artifacts (documents, prototypes, links) go to named people only** — never public share links.
+9. **No public writing about what we're building** — no posts, screenshots, demos, or "sneak peeks" by anyone on the team before launch.
+10. **The go-public decision is a single deliberate event** owned by Amir — nothing becomes public gradually or by accident. If open-sourcing any part is ever chosen post-launch, that's a separate, explicit licensing decision made at that time (nothing in the build blocks it; nothing in the build presumes it).
 
 ## 9. What this plan is not
 

@@ -18,9 +18,9 @@
 |---|---|
 | Cal.com | **Bookings** — "CoachOS Calendar" |
 | Documenso | **Agreements** — signing happens on a CoachOS-branded page |
-| Twenty | Invisible — it's just the database behind **Pipeline** |
+| *(no engine — built natively)* | **Pipeline** — our own code end to end (see doc 09 §3) |
 | Listmonk | Invisible — the sending engine behind **Marketing Studio** |
-| n8n | Invisible — the engine behind **Autopilot** (Automations) |
+| Activepieces (MIT) | Invisible — the engine behind **Autopilot** and the Daily Briefing (replaced n8n, doc 09 §5) |
 | Supabase | Invisible — infrastructure |
 
 ### 0.2 Failure isolation (the "one error shouldn't affect the rest" instruction)
@@ -64,7 +64,7 @@ These are the chains that make it one product instead of eleven tools. **Confirm
 
 ## Module 2 — Leads: Manage (Pipeline)
 
-*Inspired by: Pipedrive, HubSpot, HoneyBook, Dubsado. Engine underneath: Twenty (invisible).*
+*Inspired by: Pipedrive, HubSpot, HoneyBook, Dubsado. Built natively — no external engine (doc 09 §3).*
 
 - **M2-Q1.** Pipeline stages: fixed default (Enquiry → Discovery → Proposal → Won/Lost) or customizable? *(Default: default stages, coach can rename + add 2.)*
 - **M2-Q2.** Silent-lead nudge: after how many days quiet does the AI nudge the coach with a drafted follow-up? *(Default: 6 days.)*
@@ -77,6 +77,7 @@ These are the chains that make it one product instead of eleven tools. **Confirm
 - **M2-Q9.** Same person enquires twice (directory + landing page): auto-merge? *(Default: auto-merge on matching email, coach notified.)*
 - **M2-Q10.** Import from existing tools (spreadsheet, HoneyBook, Excel) at launch? *(Default: CSV import + our onboarding service does the migration — that's the paid setup fee.)*
 - **M2-Q11.** Anything that must NEVER be stored on a lead (health details, etc.)? *(Default: we warn coaches not to store sensitive personal data on leads.)*
+- **M2-Q12.** The pipeline is now built natively (doc 09 §3) with Twenty + EspoCRM as the design brief. From tools coaches already use (HoneyBook, Pipedrive, Dubsado, a spreadsheet): is there one pipeline feature they'd genuinely miss that we should make sure to include? *(Default: the design brief covers board view, saved filters, email activity on the lead record, and notes.)*
 
 ## Module 3 — Marketing Studio
 
@@ -159,7 +160,7 @@ These are the chains that make it one product instead of eleven tools. **Confirm
 
 ## Module 8 — Autopilot (Automations)
 
-*Inspired by: Zapier, Make, HoneyBook automations. Engine underneath: n8n (invisible).*
+*Inspired by: Zapier, Make, HoneyBook automations. Engine underneath: Activepieces (invisible — MIT-licensed, replaced n8n per doc 09 §5).*
 
 - **M8-Q1.** First five recipes — pick from: silent-lead follow-up, overdue-invoice reminder, no-show recovery, pre-session prep brief, post-session "write your notes" nudge, testimonial ask when a package ends, past-client re-engagement after 90 days. *(Default: first five listed.)*
 - **M8-Q2.** Approval model: coach approves exact wording once when enabling a recipe; after that it runs on schedule. Are there recipes where even that's too autonomous and every send needs individual approval? *(Default: client-facing money messages — invoice reminders — run auto after one-time approval; everything else too. You veto specifics.)*
@@ -232,6 +233,18 @@ These are the chains that make it one product instead of eleven tools. **Confirm
 - **M12-Q9.** Reliability promise in our terms: 99.5% uptime target, daily backups, 30-day retention — sane starting commitment? *(Default: yes.)*
 - **M12-Q10.** When a coach adds an assistant: which modules can a VA touch — Pipeline + Bookings + Marketing drafts, but never session notes? *(Default: exactly that, Phase 3.)*
 - **M12-Q11.** Sales reality: which two modules will YOU personally demo in every sales call? (Those get the deepest polish first.)
+
+**Sync & migration (added after the max-sync instruction — see doc 07 §8 for the full sync table):**
+
+- **M12-Q12.** Which tools do your target coaches live in today — rank: Google Calendar + Gmail, Outlook + Microsoft 365, WhatsApp, Zoom, Excel/Google Sheets, Calendly, Notion? This sets sync build order. *(Default: Google-first, Outlook a close second.)*
+- **M12-Q13.** Calendar sync depth: full two-way (their existing events block our booking slots, and our bookings appear in their calendar instantly)? *(Default: yes, two-way from day one — Cal.com does this natively.)*
+- **M12-Q14.** Google Contacts: optional one-time import at onboarding (with the coach's consent) so their existing contacts are ready to become leads/clients? *(Default: yes, Phase 2–3.)*
+- **M12-Q15.** Migration importers beyond CSV — should our done-with-you onboarding service handle specific tools (HoneyBook export, Calendly event types, Mailchimp lists)? Name the ones your pilot coaches actually use. *(Default: CSV universal + onboarding service handles the rest manually.)*
+
+**Interlink editability (added after the editable-connections instruction — see doc 07 §7):**
+
+- **M12-Q16.** Every module-to-module chain is a named connection the coach can switch on/off and tune (timing, wording, trigger stage). Should any chains be locked always-on because turning them off breaks the product (e.g. "booking → session on timeline")? *(Default: yes — structural chains locked, behavioral chains [nudges, sequences, publishing] fully editable.)*
+- **M12-Q17.** Should our team be able to custom-wire extra connections for a coach as a paid service (built on the hidden engine, appears as "my custom recipe")? *(Default: yes — same answer as M8-Q9, confirming it applies to interlinks too.)*
 
 ---
 

@@ -34,13 +34,12 @@ flowchart TB
     end
 
     subgraph Automation["⑤ Automation layer"]
-        N8N["n8n — self-hosted<br/>Automations recipes · Daily Briefing pulls (scheduled + on-demand) · MCP refresh trigger"]
+        Flows["Activepieces — self-hosted, MIT<br/>Autopilot recipes · Daily Briefing pulls (scheduled + on-demand) · MCP refresh trigger"]
     end
 
     subgraph OSS["⑥ Self-hosted open-source engines"]
         Cal["Cal.com — Bookings"]
         Documenso["Documenso — Contracts / e-sign"]
-        Twenty["Twenty — CRM core (Leads)"]
         Listmonk["Listmonk — Newsletter (Marketing)"]
     end
 
@@ -67,28 +66,26 @@ flowchart TB
     NextApp --> Realtime
     NextApp --> Cal
     NextApp --> Documenso
-    NextApp --> Twenty
     NextApp --> Listmonk
     NextApp --> Stripe
     NextApp --> GmailAPI
 
     MCPServer --> Postgres
-    MCPServer -.triggers.-> N8N
+    MCPServer -.triggers.-> Flows
 
-    N8N --> NewsSources
-    N8N --> ClaudeAPI
-    N8N --> Postgres
-    N8N -.reads/writes via.-> Cal
+    Flows --> NewsSources
+    Flows --> ClaudeAPI
+    Flows --> Postgres
+    Flows -.reads/writes via.-> Cal
 
     Coolify -.hosts.-> NextApp
     Coolify -.hosts.-> Postgres
     Coolify -.hosts.-> Auth
     Coolify -.hosts.-> Storage
     Coolify -.hosts.-> Realtime
-    Coolify -.hosts.-> N8N
+    Coolify -.hosts.-> Flows
     Coolify -.hosts.-> Cal
     Coolify -.hosts.-> Documenso
-    Coolify -.hosts.-> Twenty
     Coolify -.hosts.-> Listmonk
     Coolify --> VPS
 ```
@@ -105,8 +102,8 @@ flowchart TB
 | ② | Application layer | One Next.js app, all API routes, RLS-enforced | doc 05 §3–4 |
 | ③ | AI layer | Claude API for every AI-drafted artifact; the MCP server as a separate, admin-only surface | doc 05 §4.3–4.6 |
 | ④ | Data layer | Postgres + Auth + Storage + Realtime — the exact Supabase software stack, run by us instead of paid for by the MAU/GB (doc 03, doc 04 infra-cost section) | doc 03, doc 04 |
-| ⑤ | Automation layer | n8n as the one automation engine behind Automations (Module 8), Daily Briefing (Module 10), and the MCP's manual-refresh trigger | doc 02 Module 8, doc 05 §4.5–4.6 |
-| ⑥ | Self-hosted OSS engines | Cal.com, Documenso, Twenty, Listmonk — integrated, not merged into our codebase (AGPL reasons) | doc 03 |
+| ⑤ | Automation layer | Activepieces (MIT) as the one automation engine behind Automations (Module 8), Daily Briefing (Module 10), and the MCP's manual-refresh trigger — replaced n8n after direct license verification | doc 09 §5 |
+| ⑥ | Self-hosted OSS engines | Cal.com, Documenso, Listmonk — integrated, not merged into our codebase (AGPL reasons). The CRM/pipeline is built natively (doc 09 §3) | doc 03, doc 09 |
 | ⑦ | External services | Stripe, Gmail API, and the verified free news sources (Wikipedia CEP + publisher RSS) — API calls, nothing to host | doc 03, doc 04 |
 | ⑧ | Hosting | Coolify orchestrating every self-hosted piece on one VPS, flat cost instead of metered | this session's infra decision |
 
@@ -118,18 +115,18 @@ Which of the eleven modules touches which part of the system — useful for scop
 
 | Module | Client surface | Touches |
 |---|---|---|
-| 1–2. Leads | Coach App | Twenty (CRM), Postgres, Claude API (scoring/drafts) |
+| 1–2. Leads | Coach App | Native pipeline (own Postgres tables), Claude API (scoring/drafts) |
 | 3. Marketing | Coach App | Listmonk, Claude API, Postgres |
 | 4. Bookings | Coach App | Cal.com, Postgres |
 | 5. Contracts & Payments | Coach App | Documenso, Stripe, Postgres |
 | 6. Client Delivery | Coach App + Client Portal | Claude API, Postgres, Storage |
 | 7. Practice Intelligence | Coach App | Postgres, Claude API |
-| 8. Automations | Coach App | n8n, Postgres |
+| 8. Automations | Coach App | Activepieces, Postgres |
 | 9. Directory | Public Site | Postgres (full-text search), Storage |
-| 10. Daily Briefing | Coach App + Public Site | n8n, Claude API, News Sources, Postgres |
+| 10. Daily Briefing | Coach App + Public Site | Activepieces, Claude API, News Sources, Postgres |
 | 11. Community | Coach App | Postgres, Realtime (v2), Storage |
 | — Gmail integration | Coach App | Gmail API, Postgres (encrypted tokens) |
-| — Admin MCP server | Admin/Claude | Postgres, n8n, Storage, `team_members` gate |
+| — Admin MCP server | Admin/Claude | Postgres, Activepieces, Storage, `team_members` gate |
 
 ---
 
@@ -161,6 +158,38 @@ Everything above is the Phase 3+ target. Before that, doc 04's own "don't build 
 
 ---
 
+## 7. Interlinks are configurable, not hard-wired
+
+The 12 module-to-module chains (listed in doc 08 §0.3 — directory→pipeline, won-lead→client, signed-agreement→invoice+intake, booking→timeline+prep-brief, etc.) are **not buried in code**. Each chain is implemented as a named *connection* with:
+
+- an **on/off switch** per coach (in their settings — e.g. a coach can disconnect "lost lead → newsletter list" entirely),
+- **editable settings** where the chain has knobs (timing, wording templates, which stage triggers it),
+- a **single event pattern underneath**: modules publish events ("agreement.signed", "lead.won", "session.booked") and other modules subscribe — no module ever reaches into another module's tables directly. This is what makes pushing data between modules smooth *and* keeps the failure isolation: if the subscriber module is down, the event waits in a queue and completes when it's back, instead of the whole chain crashing.
+- an **admin view for us**: our team can see, test, and re-wire any coach's connections when support or the done-for-you service needs to (logged in the audit trail).
+
+## 8. Sync & migration principle — meet coaches inside the tools they already use
+
+Adoption dies at the transition. So syncing with the coach's existing daily tools is a **first-class requirement**, not a nice-to-have:
+
+| Their tool | Our sync | How | Phase |
+|---|---|---|---|
+| **Google Calendar** | Two-way: their busy times block our slots; our bookings appear in their calendar instantly | Cal.com's native sync engine | 1 |
+| **Outlook / Microsoft 365 calendar** | Same two-way sync | Cal.com's native sync engine | 1–2 |
+| **Gmail** | Sends go out from their real address; replies land in their real inbox | Gmail API OAuth (verification review timeline in doc 04) | 2 |
+| **Google Meet** | Auto-created meeting links on every booking | Calendar API | 1 |
+| **Spreadsheets / Excel** | One-click import of existing leads and clients; full export anytime (their data is theirs) | CSV import/export + onboarding service does it for them | 1 |
+| **Google Contacts** | Optional one-time import at onboarding (with consent) | People API | 2–3 (question M12-Q14) |
+| **WhatsApp** | Reminders/notifications where coaches' clients actually are (huge in the Gulf) | WhatsApp Business API — investigate | 3 (question M4-Q5) |
+| **Zoom** | Alternative meeting-link provider | Zoom API | 3 |
+
+Rule of thumb: **CoachOS never asks a coach to abandon a tool on day one** — it plugs into their calendar, their inbox, their spreadsheets first, and becomes the center of gravity gradually.
+
+## 9. Confidential build mode
+
+From the first line of code until a deliberate public launch, **everything is private**: every repository (plan + source code, frontend and backend), every staging deployment (behind authentication, unindexed), every document. The full binding rules live in the README §8b — they apply to every future session and every collaborator.
+
+---
+
 ## How to request a change
 
-Reference a section number (§1–6) or a node label from the diagram (e.g. "swap Twenty for something else," "add a CDN in front of ⑦," "Phase 1–2 should use X instead of Vercel") and the specific doc(s) it touches get updated to match, same as everything else in this repo.
+Reference a section number (§1–9) or a node label from the diagram (e.g. "swap Twenty for something else," "add a CDN in front of ⑦," "Phase 1–2 should use X instead of Vercel") and the specific doc(s) it touches get updated to match, same as everything else in this repo.
