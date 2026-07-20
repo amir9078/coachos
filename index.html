@@ -141,6 +141,7 @@
       <li><a href="#stack">Open-source stack</a></li>
       <li><a href="#roadmap">Roadmap &amp; costs</a></li>
       <li><a href="#build">Build guide</a></li>
+      <li><a href="#architecture">Architecture</a></li>
       <li><a href="./features.html">Coach-facing features →</a></li>
       <li><a href="#repo">Repository</a></li>
     </ol>
@@ -319,13 +320,28 @@ using the prompt template in docs/05 §4.3. RLS on. Nothing sends until approved
       </div>
     </section>
 
+    <section id="architecture">
+      <span class="eyebrow">07 — Architecture</span>
+      <h2>The one diagram of record</h2>
+      <p class="lede">Every layer this plan has described — client surfaces, the Next.js app, the AI layer, the Supabase data layer, n8n, the four self-hosted OSS engines, external services, and hosting — drawn as one system, module-mapped, phase-gated. GitHub renders the diagram directly on the page below.</p>
+      <ul style="padding-left:1.1rem;color:var(--ink-soft);font-size:.92rem;margin-bottom:1rem">
+        <li>① Client surfaces → ② Application layer → ③ AI layer (Claude API + admin MCP server)</li>
+        <li>④ Data layer (Supabase: Postgres, Auth, Storage, Realtime) → ⑤ n8n automation → ⑥ Cal.com / Documenso / Twenty / Listmonk</li>
+        <li>⑦ External services (Stripe, Gmail API, verified news sources) → ⑧ Hosting — Vercel + hosted Supabase for Phase 1–2, migrating to Coolify + self-hosted Supabase from Phase 3</li>
+      </ul>
+      <div class="cta-block">
+        <div><h3>Full architecture doc + diagram</h3><p>Module-to-component map, the trust boundary, what's deliberately excluded, and the Phase 1–2 → Phase 3+ infrastructure migration trigger.</p></div>
+        <a class="btn primary" href="https://github.com/amir9078/coachos/blob/main/docs/07-architecture.md" target="_blank" rel="noopener">Open docs/07-architecture.md →</a>
+      </div>
+    </section>
+
     <section id="repo">
-      <span class="eyebrow">07 — Repository</span>
+      <span class="eyebrow">08 — Repository</span>
       <h2>What's in the repo</h2>
       <ul style="padding-left:1.1rem;color:var(--ink-soft);font-size:.92rem">
         <li><code>README.md</code> — master plan (same content as this page, in Markdown)</li>
         <li><code>LICENSE</code> — proprietary, all rights reserved — public visibility does not grant reuse rights</li>
-        <li><code>docs/01</code>–<code>05</code> — market research, product spec, open-source stack, roadmap/costs, build guide</li>
+        <li><code>docs/01</code>–<code>07</code> — market research, product spec, open-source stack, roadmap/costs, build guide, features guide, architecture</li>
         <li><code>prototype/</code> — the animated clickable demo, also linked at the top of this page</li>
       </ul>
       <p>No secrets or credentials are ever committed here — API keys and tokens live only in local <code>.env</code> files and each hosting provider's secret manager, per <code>docs/05-build-guide.md</code> §4.2.</p>

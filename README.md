@@ -39,6 +39,7 @@
 - **Admin MCP server** — lets the team push, pull, and update Daily Briefing content (news items, images, corrections) directly through a Claude conversation instead of a web admin panel — internal tooling only, never given to coaches (Phase 3, full spec in [`docs/05-build-guide.md`](docs/05-build-guide.md) §4.6).
 
 Full module-by-module specification: [`docs/02-product-spec.md`](docs/02-product-spec.md)
+Full system architecture — one diagram, every layer, module-mapped: [`docs/07-architecture.md`](docs/07-architecture.md)
 
 ## 3. Why this wins (and what we deliberately don't do)
 
@@ -102,7 +103,8 @@ coachos/
 │   ├── 03-open-source-stack.md    ← build-vs-integrate map, licenses, architecture
 │   ├── 04-roadmap-costs-gtm.md    ← phases, costs, pricing, go-to-market, risks
 │   └── 05-build-guide.md          ← how to build it with Claude Code + Cursor (frontend, backend, functionality-by-functionality)
-│   └── 06-features-guide.md       ← plain-language "what coaches can actually do" guide, no jargon
+│   ├── 06-features-guide.md       ← plain-language "what coaches can actually do" guide, no jargon
+│   └── 07-architecture.md        ← the single project architecture diagram — every layer, module-mapped, phase-gated
 ├── features.html                  ← the same guide, as a page — open in any browser
 └── prototype/
     └── index.html                 ← animated clickable prototype (open in any browser)
