@@ -104,7 +104,8 @@ coachos/
 │   ├── 04-roadmap-costs-gtm.md    ← phases, costs, pricing, go-to-market, risks
 │   └── 05-build-guide.md          ← how to build it with Claude Code + Cursor (frontend, backend, functionality-by-functionality)
 │   ├── 06-features-guide.md       ← plain-language "what coaches can actually do" guide, no jargon
-│   └── 07-architecture.md        ← the single project architecture diagram — every layer, module-mapped, phase-gated
+│   ├── 07-architecture.md        ← the single project architecture diagram — every layer, module-mapped, phase-gated
+│   └── 08-module-questionnaire.md ← 120+ product decisions per module, with defaults — answered → per-module build prompts
 ├── features.html                  ← the same guide, as a page — open in any browser
 └── prototype/
     └── index.html                 ← animated clickable prototype (open in any browser)
