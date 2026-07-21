@@ -100,6 +100,8 @@ So: connect Zoom once (OAuth) → every recorded session flows in automatically:
 | Transcription | Track forwarding via WebSocket → real-time Whisper pipeline (open-source ecosystem exists) | Via Vosk (open-source) or paid Google Speech-to-Text |
 | Verdict | **The target**: cleanest white-label, cleanest recording→transcript pipeline, scales | Faster to ship a full meeting UI if we want a shortcut — decision gate at Phase 3 |
 
+**Hosting note (added after evaluating Railway, doc 07 §6):** LiveKit needs native UDP for good WebRTC quality. Railway (our Phase 2 hosting bridge) doesn't support UDP and falls back to a TCP-only proxy — workable for testing, not for a real coach-client video product. LiveKit should go live on Coolify + VPS (Phase 3+), where UDP works natively.
+
 **Built-in consent is non-negotiable in every path:** recording requires a visible in-meeting notice plus the client's explicit consent (captured once in the agreement and confirmable per-session); the coach controls retention and deletion, and transcripts inherit the same confidentiality rules as session notes (docs/05 §4.2). Recording a coaching conversation is the most sensitive data we will ever hold.
 
 ---

@@ -149,17 +149,25 @@ Three things never cross a line, and this diagram is where that's easiest to see
 - No mobile app, no third-party API surface, no multi-language — explicit non-goals (doc 05 §9).
 - No AI-that-coaches-the-client anywhere in ③ — Claude API only ever drafts for a human to approve.
 
-## 6. Phase 1–2 runs a simpler version of this
+## 6. Phase 1–2 runs a simpler version of this — three real hosting stages, not two
 
-Everything above is the Phase 3+ target. Before that, doc 04's own "don't build for scale you don't have" discipline applies to infrastructure too:
+Everything in §1 is the Phase 3+ target. Before that, doc 04's own "don't build for scale you don't have" discipline applies to infrastructure too — but there are three stages, not two, because Vercel genuinely cannot run the self-hosted engines (⑥) at all (it's serverless-only — no persistent containers, no Docker). Something has to fill that gap between "just Vercel" and "fully self-hosted via Coolify." **Verified directly (Railway's own pricing page + template marketplace + LiveKit's own deployment docs):**
 
-| | Phase 1–2 (now) | Phase 3+ (this diagram) |
-|---|---|---|
-| Hosting | Vercel | Coolify + VPS |
-| Data layer | Supabase.com (hosted, free/Pro tier) | Supabase stack, self-hosted via Coolify |
-| Everything else (①②③⑤⑥⑦) | Identical | Identical |
+| | Phase 1 (the wedge) | Phase 2 (money loop) | Phase 3+ (this diagram) |
+|---|---|---|---|
+| App hosting | Vercel | **Railway** — container-based, so it can actually run Documenso etc. (Vercel can't) | Coolify + VPS |
+| Data layer | Supabase.com hosted (free/Pro) | Supabase.com hosted, or self-hosted on Railway | Supabase stack, self-hosted via Coolify |
+| Cal.com | Cal.com's own hosted product — no self-hosting needed yet | Same, or self-host on Railway (verified one-click template) | Self-hosted via Coolify |
+| Documenso | *(not needed yet — Phase 2 module)* | **Self-hosted on Railway** (verified one-click template — this is the gap Vercel can't fill) | Self-hosted via Coolify |
+| Listmonk / Activepieces | *(not needed yet — Phase 3 modules)* | *(not needed yet)* | Self-hosted via Coolify |
 
-**The migration trigger:** move to the self-hosted target when Supabase's free tier is genuinely being approached (50k MAU, 500MB DB) or Pro-tier overages start actually appearing on a bill — not before, and not on a guess. Nothing in the application code changes when this migration happens; only where ④ physically runs.
+**Why Railway is the right Phase 2 answer, not the long-term one:** it's genuinely more capable than Vercel (supports WebSockets, background workers, long-running processes — real gaps Vercel has), and every engine we need has a verified one-click template. But its pricing is **usage-metered** (~$20/vCPU/month + $10/GB RAM/month + egress + storage — a single small service already runs ~$30/month in compute alone) — the same growing-cost shape we already rejected once with Supabase's overage pricing. Running 6+ services on it long-term reintroduces that problem. And **LiveKit (Phase 3+ meetings, doc 09 §8) needs native UDP for proper WebRTC quality — Railway doesn't support UDP and falls back to a TCP-only proxy, a real degradation for live video.** So: Railway bridges Phase 2, Coolify+VPS remains the Phase 3+ target for both cost predictability and LiveKit's video quality.
+
+**The migration triggers:**
+- Supabase.com → self-hosted: when the free tier is genuinely being approached (50k MAU, 500MB DB) or Pro-tier overages actually appear on a bill.
+- Railway → Coolify+VPS: when Railway's metered bill starts approaching flat-VPS cost, or when LiveKit goes live (whichever comes first).
+
+Nothing in the application code changes at either migration — only where ④/⑥ physically run.
 
 ---
 
