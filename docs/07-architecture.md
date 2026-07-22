@@ -15,6 +15,7 @@ flowchart TB
         PublicSite["Public site — plan.coachos, /briefing, /directory<br/>no login required"]
         ClientPortal["Client portal — signed link<br/>read-only, no login friction"]
         AdminClaude["Admin — Claude Desktop / Claude Code<br/>talking to the MCP server"]
+        CoachClaude["Coach — their own Claude<br/>talking to the coach-facing MCP (doc 11)"]
     end
 
     subgraph App["② Application layer"]
@@ -25,6 +26,8 @@ flowchart TB
         ClaudeAPI["Claude API — Haiku 4.5 default<br/>summaries, prep briefs, briefing drafts, post-drafting help"]
         Mastra["Mastra (Apache 2.0) — Pipeline Agent<br/>multi-step reasoning + approval pause, Leads module"]
         MCPServer["Admin MCP server — local process<br/>gated by team_members.is_content_admin"]
+        CoachMCP["Coach-facing MCP (doc 11)<br/>per-coach API key, own data only, never bypasses send-approval"]
+        OpsMCP["Ops MCP (doc 11)<br/>logs, rollback, feature flags, service restart — never raw code edits"]
     end
 
     subgraph Data["④ Data layer — the Supabase stack, self-hosted"]
@@ -78,8 +81,13 @@ flowchart TB
     NextApp --> GmailAPI
     NextApp --> MeetAPIs
 
+    CoachClaude --> CoachMCP
+    CoachMCP --> Postgres
+
     MCPServer --> Postgres
     MCPServer -.triggers.-> Flows
+    OpsMCP -.reads.-> NextApp
+    OpsMCP -.rollback/flags/restart.-> Coolify
 
     Flows --> NewsSources
     Flows --> ClaudeAPI
@@ -109,7 +117,7 @@ flowchart TB
 |---|---|---|---|
 | ① | Client surfaces | Four distinct front doors: the coach's own app, the public marketing/content site, the client's read-only portal, and the admin's Claude conversation | doc 05 §5, §4.6 |
 | ② | Application layer | One Next.js app, all API routes, RLS-enforced | doc 05 §3–4 |
-| ③ | AI layer | Claude API for every AI-drafted artifact; Mastra for the Pipeline Agent's multi-step reasoning + approval pause (Leads module); the MCP server as a separate, admin-only surface | doc 05 §4.3–4.6, doc 10 |
+| ③ | AI layer | Claude API for every AI-drafted artifact; Mastra for the Pipeline Agent's multi-step reasoning + approval pause (Leads module); the admin MCP, coach-facing MCP, and Ops MCP as three separate, differently-scoped surfaces | doc 05 §4.3–4.6, doc 10, doc 11 |
 | ④ | Data layer | Postgres + Auth + Storage + Realtime — the exact Supabase software stack, run by us instead of paid for by the MAU/GB (doc 03, doc 04 infra-cost section) | doc 03, doc 04 |
 | ⑤ | Automation layer | Activepieces (MIT) as the one automation engine behind Automations (Module 8), Daily Briefing (Module 10), and the MCP's manual-refresh trigger — replaced n8n after direct license verification | doc 09 §5 |
 | ⑥ | Self-hosted OSS engines | Cal.com, Documenso, Listmonk — integrated, not merged into our codebase (AGPL reasons). The CRM/pipeline is built natively (doc 09 §3) | doc 03, doc 09 |

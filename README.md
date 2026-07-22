@@ -110,7 +110,8 @@ coachos/
 │   ├── 07-architecture.md        ← the single project architecture diagram — every layer, module-mapped, phase-gated
 │   ├── 08-module-questionnaire.md ← 130+ product decisions, organized journey-by-journey (interconnection-first) with defaults — answered → per-module build prompts
 │   ├── 09-engine-comparison.md   ← re-verified open-source research: rivals compared per category, final picks, license proofs
-│   └── 10-ai-agent-layer.md      ← the Pipeline Agent: agent framework research, license proofs, and a working demo
+│   ├── 10-ai-agent-layer.md      ← the Pipeline Agent: agent framework research, license proofs, and a working demo
+│   └── 11-api-and-mcp-access.md  ← per-coach API + MCP, and an Ops MCP for admins (bug fixes stay in normal engineering, not ungated code edits)
 ├── features.html                  ← the same guide, as a page — open in any browser
 └── prototype/
     └── index.html                 ← animated clickable prototype (open in any browser)
