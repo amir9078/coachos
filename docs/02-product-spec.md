@@ -153,22 +153,44 @@ Both paths use one engine (Stripe/Stripe Connect), so there's no second payment 
 
 Plain-language explanation of any clause on hover ("this means…"), explicitly labeled "not legal advice."
 
-## Module 6 — Client Delivery · *Phase 1 — THE WEDGE*
+## Module 6 — Client Delivery · *Phase 1 — THE WEDGE* · decided in docs/08 §Journey 3–4
 
 The daily-use core, and the first thing we build.
 
 | Capability | How it works |
 |---|---|
-| Session notes → summary | Coach dictates or pastes rough notes → AI returns (a) client-facing summary email, (b) coach-facing action list. Coach approves before anything is shared. |
-| Progress timeline | Every session logged against the client's stated goals; visual arc of the engagement |
-| AI prep brief | 30 min before a session: "Last time Maya committed to X; she flagged Y as a blocker; her goal-3 progress has stalled 3 weeks." |
-| Client portal | Client sees shared summaries, actions, bookings — one link, no login friction |
+| Recording + transcripts | **In the first release**, built directly into CoachOS Meet — not a Phase 1.5 add-on. Client gets a visible notification that recording is happening; no extra confirmation step required. |
+| Session notes → summary | Coach's notes (typed or transcribed) → AI drafts client email, coach-private note, action items, and next-session agenda. **All four are coach-configurable** — the coach chooses what gets generated and what's included in each, not a fixed one-size-fits-all set. Nothing shares until approved. |
+| Delivery to the client | **Two modes, both available:** (a) the summary emailed directly to the client, readable right in their inbox, no click-through needed; (b) an optional **personal portal link** (a private, unique, no-login-required web page) for anything that needs to persist or be interactive over time — homework checkboxes, full session history, goals. Email alone can show a one-time summary; the portal is what makes ongoing things like homework tracking possible. **The portal is optional and its look/branding is coach-customizable** — a coach can run email-only if they prefer the simpler mode. |
+| Homework/tasks | **Built from the first release**, not deferred — a short to-do list between sessions, client checks items off via the portal, gentle reminders if something's still open close to the next session. |
+| Goals | Lightweight (not milestone-heavy). **Coach writes them by default**, but editing access is a **permission the coach controls** — they can choose to let a specific client edit their own goals through the portal, or keep that control entirely on the coach's side. |
+| Progress timeline | Every session logged against the client's goals; a visual arc of the engagement. |
+| AI prep brief | **Built from the first release.** 30 minutes before a session: "Last time Maya committed to X; she flagged Y as a blocker; her goal-3 progress has stalled 3 weeks." Coach-only, never shown to the client. |
+| Data rights | Retention period is **a setting the coach configures** when they onboard (not a fixed rule we impose) — auto-delete after a chosen period, or keep indefinitely. Before any actual deletion happens (retention expiring, or a manual request), **the affected client gets notified first** — a courtesy/safety step before anything is permanently removed. Full export always available. |
+| Coaching unit — 1:1, and family/team | **1:1 stays the core shape**, but a "client" can also be a **family or team unit** (e.g. a couple, a family of 4, a leadership team) — multiple people sharing one engagement, attending sessions together, and viewing shared portal material as one unit. This is genuinely different from — and simpler to build than — an ongoing **cohort program** (a structured multi-week course for many unrelated individuals), which stays a separate, later, not-yet-built feature. |
+
+**Still open — no default, worth real thought:** in a live demo, which single flow makes a coach say "I need this right now" — the notes→summary flow, the prep brief, or the client portal? Whichever it is gets the deepest polish first. Come back to this whenever you're ready — everything else above is locked in.
 
 **Why first:** highest-frequency use (every session), clearest AI value, generates the data that powers Modules 2, 3 and 7 later, and creates switching costs from week one.
 
-## Module 7 — Practice Intelligence · *Phase 4*
+## Module 7 — Practice Intelligence · *Phase 4* · decided in docs/08 §Journey 6
 
-Revenue, pipeline conversion, retention curves; AI flags at-risk clients (missed sessions, stalled goals, sentiment drop in notes) and suggests an intervention. **Guardrail:** insights go to the coach only — never scoring of employees for corporate buyers (EU AI Act line, see doc 01 §5).
+| Capability | Decision |
+|---|---|
+| The dashboard | Revenue, sessions, pipeline value, invoices, retention, lead-response time — **all shown as a filterable, customizable dashboard** rather than a fixed ranked list. This "dashboard + filters on every field" standard **applies across every module in the product**, not just here — see the new cross-cutting principle below. |
+| At-risk client signals | **Fully customizable** — the coach selects which signals they want active (missed sessions, slower replies, stalled goals, shorter sessions), rather than a fixed conservative pair. |
+| Anonymized niche benchmarks | *(Explained on request):* this would show a coach how their own pricing/practice compares to other coaches in their niche — e.g. "executive coaches in your region typically charge $X–$Y" — built from fully anonymized, aggregated data across the platform, never revealing which specific coach charges what. Stays a Phase 5, opt-in-only feature for now — revisit once there's real usage data to anonymize in the first place. |
+| Revenue forecasting from booked packages | **Moved up — build now**, not deferred to later. |
+| Delivery | Both a digest and an always-on dashboard, **with the digest's day/frequency fully coach-customizable** — not fixed to Monday mornings. |
+| Accountant export | Confirmed — simple income-summary CSV. |
+| Revenue-target nudges | Confirmed as an optional feature, off by default — the coach turns it on if they want the motivation. |
+| Time analytics (coaching vs. admin hours) | **Reversed — build it**, not skipped. |
+| Action-button philosophy | Confirmed — every insight ships with a next action, never a bare number. |
+| Coach-eyes-only | Confirmed, absolute — a client never sees any analysis about themselves. **Guardrail unchanged:** never scoring of employees for corporate buyers (EU AI Act line, doc 01 §5). |
+
+### Cross-cutting: dashboard + filters, everywhere (new standing UI principle, decided here but applies to every module)
+
+Every module gets its own dashboard-style view of its key data, with **filter options on every available field** — Leads, Bookings, Agreements, Client Delivery, all of it. Module 7 is the whole-business rollup that pulls from all of them, but each module also gets this treatment for its own data, not just the top-level view. This sits alongside the existing "customization lives in organized side panels, not cluttering the main view" rule from Module 2 — a filterable dashboard is exactly that kind of organized, one-click-away power feature.
 
 ## Cross-cutting — Gmail (and email account) integration · *Phase 2*
 

@@ -122,12 +122,12 @@
 - **M4-Q12.** ✔ Prioritized as an in-platform, join-link experience (like Meet) with Zoom-level recording/transcription/summary richness — not a choice between external Zoom vs. Meet links.
 - **M4-Q13.** ✔ **Reversed — needed from the beginning, at least to test it**, not deferred to Phase 3+. Resolved the Phase 3+ hosting gate by standing up LiveKit on one small, separate test VPS now (doc 07 §6), independent of the main app's hosting phase — folds into the full Coolify migration later rather than being thrown away.
 
-**Where the session lands — notes to summary to timeline (M6):**
-- **M6-Q1.** Should the upload-any-recording→transcript path move into Phase 1 itself, as part of the wedge? *(Phase 1.5, right after typed notes work)*
-- **M6-Q1b.** Recording consent: agreement + in-session notice enough, or per-session client confirmation too? *(agreement + notice)*
-- **M6-Q2.** Summary outputs — client email + coach note + action items + next-session agenda? *(yes, all four)*
-- **M6-Q3.** What clients see in the portal (summaries, action items, goals, history, files) — and confirm coach's private notes are never visible there? *(all five visible; private notes never, enforced at the database level)*
-- **M6-Q6.** Prep brief: 30 min before, containing last session's commitments, open blockers, stalled goals — exactly as specced? *(yes)*
+**Where the session lands — notes to summary to timeline (M6) — ANSWERED (see docs/02 Module 6 for the full write-up):**
+- **M6-Q1.** ✔ Reversed — recording + transcripts in the **first release**, built into CoachOS Meet, not Phase 1.5.
+- **M6-Q1b.** ✔ Simplified to a visible notification only, no per-session confirmation step.
+- **M6-Q2.** ✔ Confirmed the four outputs, **made fully coach-configurable** — coach chooses what's generated and what's in each.
+- **M6-Q3.** ✔ Clarified and expanded: clients never have logins — they get either the summary emailed directly, or an optional, coach-customizable personal portal link (no login) for anything ongoing/interactive (homework, history, goals). Private notes stay coach-only either way.
+- **M6-Q6.** ✔ Confirmed, and built from the first release, not deferred.
 
 ---
 
@@ -138,13 +138,13 @@
 **End goal:** a client relationship that renews itself through visible momentum, not through the coach remembering to check in.
 **Result the coach sees:** a renewal proposal or testimonial ask appears in the approval queue exactly when the data says it should — not because the coach set a calendar reminder.
 
-**Delivery mechanics that feed the timers (M6):**
-- **M6-Q4.** Homework/tasks between sessions with client check-off + reminders? *(v1.1, right after the wedge core)*
-- **M6-Q5.** Goals: formal milestones or lightweight themes? Who sets them — coach, client, or together? *(lightweight, coach-created)*
-- **M6-Q7.** Reality check for scale: how many active clients does a typical pilot coach carry? (no default — shapes how heavy Autopilot's workload needs to be)
-- **M6-Q9.** Right to be forgotten, coach-controlled retention, full export — confirm? *(yes to all — GDPR requires it anyway)*
-- **M6-Q10.** 1:1 coaching only in v1, group/cohort programs later? *(yes, 1:1 only)*
-- **M6-Q11.** Your sales gut: which single flow makes a coach say "I need this" — notes→summary, prep brief, or the client portal? (no default — that flow gets polished hardest across this whole journey)
+**Delivery mechanics that feed the timers (M6) — ANSWERED (see docs/02 Module 6):**
+- **M6-Q4.** ✔ Reversed — built from the **first release**, not v1.1.
+- **M6-Q5.** ✔ Lightweight, coach-created by default, **plus a permission toggle** — the coach can grant a specific client edit access to their own goals, or keep it coach-only.
+- **M6-Q7.** ✔ **10 active clients** per typical pilot coach.
+- **M6-Q9.** ✔ Confirmed, **plus made configurable** — retention period is a setting the coach chooses at onboarding, and the affected client gets notified before any actual deletion happens.
+- **M6-Q10.** ✔ **Expanded** — 1:1 stays the core shape, but a "client" can also be a **family or team unit** (multiple people, one shared engagement) — genuinely different from and simpler than an ongoing multi-person cohort *program*, which stays deferred.
+- **M6-Q11.** **Still open** — genuinely worth real thought given this is the wedge module; no default applied, revisit whenever ready.
 
 **Autopilot, the nervous system running the timers (M8):**
 - **M8-Q1.** First five recipes — pick from: silent-lead follow-up, overdue-invoice reminder, no-show recovery, pre-session prep brief, post-session notes nudge, testimonial ask, past-client re-engagement (90 days)? *(first five listed)*
@@ -199,16 +199,17 @@
 **End goal:** a coach can answer "how is my practice actually doing?" in one glance, without opening five different tabs.
 **Result the coach sees:** a Monday-morning digest and always-on dashboard where every number links to the specific pipeline/client/invoice behind it.
 
-- **M7-Q1.** Rank the numbers a coach checks weekly: revenue, sessions booked, pipeline value, outstanding invoices, client retention, lead-response time. (no default)
-- **M7-Q2.** At-risk client signals — which feel fair, which feel creepy: missed sessions, slowed replies, stalled goals, shorter sessions? *(missed sessions + stalled goals only — the conservative pair)*
-- **M7-Q3.** Anonymized niche benchmarks ("coaches like you charge $X") — valuable or invasive? *(Phase 5, opt-in only)*
-- **M7-Q4.** Simple revenue forecast from booked packages — v1 or later? *(later)*
-- **M7-Q5.** Monday-morning digest + always-on dashboard, both? *(yes)*
-- **M7-Q6.** Accountant export (income summary CSV) at launch? *(yes — cheap, loved at tax time)*
-- **M7-Q7.** Revenue-target nudges ("62% to your $10k month") — motivating or pressure? *(optional, off by default)*
-- **M7-Q8.** Time analytics (coaching vs. admin hours) — do coaches actually care? *(skip v1)*
-- **M7-Q9.** Every insight comes with an action button, never a bare number — confirm this philosophy holds everywhere? *(yes)*
-- **M7-Q10.** Coach-eyes-only — no client ever sees analysis about themselves? *(yes, absolute)*
+**ANSWERED (see docs/02 Module 7 for the full write-up):**
+- **M7-Q1.** ✔ Reframed — shown as a **filterable, customizable dashboard** rather than a fixed ranking, and this "dashboard + filters" standard now applies to every module in the product.
+- **M7-Q2.** ✔ Made fully customizable — coach selects which signals they want active.
+- **M7-Q3.** Explained on request (see docs/02): anonymized, aggregated pricing/practice benchmarks by niche, never revealing individual coaches' numbers. Default confirmed — Phase 5, opt-in only.
+- **M7-Q4.** ✔ Reversed — build now.
+- **M7-Q5.** ✔ Confirmed both, **plus the digest's day/frequency made coach-customizable**.
+- **M7-Q6.** ✔ Confirmed.
+- **M7-Q7.** ✔ Confirmed as-is — optional, off by default.
+- **M7-Q8.** ✔ Reversed — build it.
+- **M7-Q9.** ✔ Confirmed.
+- **M7-Q10.** ✔ Confirmed, absolute.
 
 ---
 
