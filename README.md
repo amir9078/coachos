@@ -108,7 +108,7 @@ coachos/
 │   └── 05-build-guide.md          ← how to build it with Claude Code + Cursor (frontend, backend, functionality-by-functionality)
 │   ├── 06-features-guide.md       ← plain-language "what coaches can actually do" guide, no jargon
 │   ├── 07-architecture.md        ← the single project architecture diagram — every layer, module-mapped, phase-gated
-│   ├── 08-module-questionnaire.md ← 120+ product decisions per module, with defaults — answered → per-module build prompts
+│   ├── 08-module-questionnaire.md ← 130+ product decisions, organized journey-by-journey (interconnection-first) with defaults — answered → per-module build prompts
 │   ├── 09-engine-comparison.md   ← re-verified open-source research: rivals compared per category, final picks, license proofs
 │   └── 10-ai-agent-layer.md      ← the Pipeline Agent: agent framework research, license proofs, and a working demo
 ├── features.html                  ← the same guide, as a page — open in any browser
