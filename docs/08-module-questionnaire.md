@@ -80,18 +80,17 @@
 
 **Standing UI principle from this module (applies everywhere going forward):** the more customizable a module gets, the more its power features belong in an organized side panel, one click away — never cluttering the primary view by default.
 
-**The handoff into Agreements & Billing (M5):**
-- **M5-Q1.** **Which market's coaches first — UAE, UK, US, EU?** This single decision sets the legal template, VAT logic, and payment methods for every agreement this journey produces. (no default — the biggest open decision in the whole plan)
-- **M5-Q2.** Local payment methods beyond Stripe cards (bank transfer, Tabby)? *(Stripe + manual mark-as-paid)*
-- **M5-Q3.** Pricing models at launch: one-off, package, retainer, subscription? *(one-off + package v1)*
-- **M5-Q4.** Auto-invoice the moment the agreement is signed — the literal trigger into the next step of this journey? *(yes)* Per-coach VAT rate field? *(yes)*
-- **M5-Q5.** Multi-currency per coach, or one? *(one per coach)*
-- **M5-Q6.** Late-invoice reminders at +3/+7 days, then coach decides? *(yes — never auto-suspend a client without the coach clicking it)*
-- **M5-Q7.** Deposits/split payments for large packages? *(50% deposit option v1)*
-- **M5-Q8.** Confirm: money flows client → coach's own Stripe → coach's bank, we never touch it? *(yes)*
-- **M5-Q9.** Confirm: flat subscription revenue only, never a commission on coach revenue? *(yes, no commission ever)*
-- **M5-Q10.** Simple e-sign sufficient, or does any target market need ID verification? *(simple e-sign)*
-- **M5-Q11.** Refund/cancellation policy shown before signing? *(yes, template provided)*
+**The handoff into Agreements & Billing (M5) — ANSWERED (see docs/02 Module 5 for the full write-up):**
+- **M5-Q1.** ✔ **Global from the beginning** — but with a key distinction: payments/currency genuinely can be global day one (Stripe already covers this), while legal agreement templates are structurally global-ready but legally reviewed **market-by-market as coaches from that market actually sign up**, not all four jurisdictions reviewed speculatively before any real coach exists.
+- **M5-Q2.** ✔ Global — Stripe's own infrastructure already covers cards + a wide range of local methods across most regions, so this is largely already solved by the engine, not something built from scratch.
+- **M5-Q3.** ✔ All four pricing models exist, but **which ones a coach account can use is admin-controlled** via a checkbox-style entitlement panel (internal only, never public) — access granted deliberately per coach, not self-served automatically.
+- **M5-Q4.** ✔ Confirmed, **plus a dual money-flow model** — see below.
+- **M5-Q5.** ✔ Reversed — coach chooses whichever currency(ies) fit their clients, not locked to one.
+- **M5-Q6.** ✔ Reminder cadence fully coach-set (not fixed at +3/+7), never auto-suspending without the coach's click.
+- **M5-Q7.** ✔ Built as a **Stripe Payment Link** — coach-customizable amount/split, mark-as-paid automatically or after manual verification, coach's choice.
+- **M5-Q8/Q9 — the money flow, answered together:** two compliant paths, both on Stripe (verified directly, doc 03 row 8b): **Path A** — coach has their own Stripe account, money never touches us, flat subscription only, no commission (original default, unchanged). **Path B** — coach has no payment account/license; built on **Stripe Connect**, which handles KYC and fund-holding itself (we never do), with its built-in "application fee" mechanism powering an **admin-configured, case-by-case commission on Path B only**. Path A's no-commission promise stays intact.
+- **M5-Q10.** ✔ Simple e-sign, **required via email**, with configurable reminder notifications if left unsigned.
+- **M5-Q11.** ✔ Confirmed, and made fully coach-editable, not just a fixed template.
 
 **Where this journey lands — the client record and first touch (M6, M3):**
 - **M6-Q8.** New-client intake questionnaire auto-sent the moment the agreement is signed? *(yes, Phase 2)*

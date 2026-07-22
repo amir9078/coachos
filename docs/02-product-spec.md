@@ -125,14 +125,33 @@ Full multi-language support for both dashboard UI and AI-drafted communications,
 
 Recording, transcripts, and a written summary are core to the product, not a later nice-to-have — so rather than waiting for Phase 3's full self-hosted infrastructure, LiveKit gets stood up **now** on one small, dedicated, independent test server (doc 07 §6), purely so the real meeting/recording/transcript experience can be built and tried immediately. It folds into the full infrastructure migration later rather than being thrown away. The target experience: a simple join link like Google Meet's, recording and transcription like Zoom's, all inside CoachOS's own screens.
 
-## Module 5 — Contracts & Payments · *Phase 2*
+## Module 5 — Agreements & Billing · *Phase 2* · decided in docs/08 §Journey 2
 
-| Capability | How | Notes |
-|---|---|---|
-| Agreement templates | Coaching-specific templates (packages, cancellation, confidentiality) | Lawyer-reviewed once, per-market variants |
-| E-signature | Integrate Documenso | Legally binding (eIDAS/ESIGN) |
-| Invoicing & billing | Stripe: one-off packages + recurring subscriptions | Platform |
-| AI assist | Plain-language explanation of any clause on hover ("this means…") — explicitly labeled "not legal advice" | AI |
+**Market scope — global from the beginning, with one important distinction:** payments and currency genuinely can be global on day one (Stripe's own infrastructure already covers this — see below). **Legal agreement templates cannot follow the same "instant global" path** — a coaching agreement is reviewed against one jurisdiction's actual contract law at a time, and reviewing four+ legal systems (UAE, UK, US, EU) simultaneously before a single paying coach exists is real, avoidable cost and delay for no immediate benefit. The practical resolution: **the template system is built structurally global-ready (any region can be added), and the legally-reviewed content itself rolls out market-by-market as coaches from that market actually sign up** — the first real coach from a new region triggers that region's legal review, not a guess in advance.
+
+| Capability | Decision |
+|---|---|
+| Agreement templates | Structurally global, legally reviewed market-by-market as above. |
+| E-signature | Documenso (white-labeled). Simple click-to-sign, sent and **required via email**, with **configurable reminder notifications** if left unsigned (same rules-engine pattern as Bookings/Autopilot). |
+| Payment methods | Stripe, genuinely global — Stripe's own infrastructure already supports cards plus a wide range of local methods across most regions natively, so "global payments" is largely already solved by the engine we picked, not something we build ourselves. |
+| Currency | Coach chooses whichever currency (or currencies) fit their clients — not locked to one. |
+| Pricing models | One-off, package, retainer, subscription all exist as capabilities, but **which ones a given coach account can actually use is admin-controlled** — a checkbox-style entitlement panel (internal, never public) where access is granted deliberately, based on understanding that coach's situation, not automatically self-served. |
+| Deposits / split payments | Built as a **Payment Link** (Stripe's own product for exactly this) — shareable, coach-customizable amount/split, and mark-as-paid either automatically on payment or after manual verification, coach's choice. |
+| Late invoices | Reminder cadence fully **coach-set**, never auto-suspending a client without the coach clicking something. |
+| Refund/cancellation policy | Coach-defined and editable, shown to the client before signing; we provide a starting template. |
+
+### Money flow — two paths, both compliant (this is the part worth reading carefully)
+
+The ask was: coaches with their own payment setup collect directly; coaches **without** a license or existing account should still be able to get paid through us. Doing the second part *informally* — collecting client payments into our own account and manually transferring them out — is exactly the kind of setup that can trigger money-transmitter licensing requirements in a lot of jurisdictions, which is precisely what the original "we never touch the money" rule existed to avoid. The compliant way to get the same outcome, verified directly:
+
+- **Path A — coach has their own Stripe account:** money flows client → coach's Stripe → coach's bank, exactly as before. We never touch it. Flat subscription fee only, no commission.
+- **Path B — coach has no payment account/license of their own:** built on **Stripe Connect**, the product literally designed for this — Stripe itself handles identity verification (KYC) and holds/moves the funds properly, we never do. Stripe Connect also has a built-in **"application fee"** mechanism, which is exactly the commission feature asked for in the pricing question — **an admin-configured, case-by-case commission on Path B only**, decided deliberately per coach rather than a blanket rule. Path A's no-commission promise stays intact; Path B is where the flexibility lives, and it's Stripe carrying the regulatory weight of holding third-party funds, not us.
+
+Both paths use one engine (Stripe/Stripe Connect), so there's no second payment system to build or maintain — just two configured modes of the same one.
+
+### AI assist
+
+Plain-language explanation of any clause on hover ("this means…"), explicitly labeled "not legal advice."
 
 ## Module 6 — Client Delivery · *Phase 1 — THE WEDGE*
 
