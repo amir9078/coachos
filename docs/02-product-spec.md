@@ -250,17 +250,27 @@ The original plan deliberately ruled out a free-form workflow builder, for a rea
 
 **New AI use case to flag:** if a future "AI recommends your best-matched coach" feature is added, that's a recommender/matching system — minimal-risk under the EU AI Act (not an Annex III employment-evaluation use), but it's a new AI surface not covered by the original doc 01 §5 assessment and should get its own quick review before shipping.
 
-## Module 10 — Daily Briefing · *Phase 3, public-facing too*
+## Module 10 — Daily Briefing · *Phase 3, public-facing too* · decided in docs/08 §Journey 5
 
 **Job:** the coach opens CoachOS and is already caught up — on their field, on the world, and on one new thing worth knowing — before they've had coffee.
 
-| Capability | How it works |
+| Capability | Decision |
 |---|---|
-| News by category | Curated headlines filtered to the coach's niche pack (Executive → leadership/business; Career → job market/workplace trends; Life &amp; Wellness → psychology/wellness research; Mentoring → L&amp;D/talent trends), each with an AI one-line takeaway and a link to the original source |
-| World catchup | A short, neutral summary of the day's top general headlines — 2–3 minutes, not niche-specific |
-| 5-minute daily learn | One bite-sized professional-development piece a day — a coaching technique, a research finding, a concept — **summarized from a real, cited source, never invented from nothing** |
+| Launch categories | Confirmed: executive, career, life/wellness, business-of-coaching. |
+| News by category | Curated top headlines per niche, each with an AI one-line takeaway and a link to the original source. |
+| World catchup | Short, neutral summary of the day's top general headlines. |
+| 5-minute daily learn | **Broadened** — rotates across coaching technique, business skills, AI-for-coaches, and more generally whatever's hot in business/industry news that week, not a fixed narrow 3-lane rotation. Always summarized from a real, cited source. |
+| Daily volume | Confirmed — 5 top niche headlines + 3 world items + 1 learn. |
+| Delivery | In-app, email, and the public website — **the coach chooses which of these they receive**, not all by default. |
+| Publish time | One generation per day, ready by 6am Gulf time. |
+| "Share this insight" | Confirmed for later — turns a briefing item into a Marketing Studio draft (timing follows Marketing Studio's own rollout, doc 02 Module 3). |
+| Sponsor slots | Door kept open for later, nothing built yet. |
+| Editorial ownership | **Still open — needs a name or role from you**, not something to default. |
+| Language | Follows the full multi-language push (Module 1/M12-Q5) — **and specifically inherits the account's own language setting**: if a coach changes their app language, the Briefing switches with it automatically, no separate language toggle just for this module. |
 
-**Where it lives:** a card on the dashboard for logged-in coaches, **and** a public page on the marketing site (`/briefing`) that anyone can read without an account — doubling as a content/SEO channel that feeds the same organic-acquisition thesis as the Directory (Module 9).
+**Public-site lifecycle, new:** on the public website, the Briefing works as a **lead magnet** (feeds Module 1's lead-magnet list) — each day's edition stays live and readable for **7 days, then is removed from public view**. This is specifically about the *public* page's lifecycle; the coach-facing, logged-in history is a separate concern and isn't implied to be wiped by this rule.
+
+**Where it lives:** a card on the dashboard for logged-in coaches, **and** a public page on the marketing site (`/briefing`) that anyone can read without an account — doubling as a content/SEO channel that feeds the same organic-acquisition thesis as the Directory (Module 9, currently deferred).
 
 **The cost discipline that makes this cheap:** the briefing is generated **once per category, per day** — not once per coach. A few hundred coaches split across 4–5 niche categories means a handful of AI summarization calls a day for the whole platform, not one per coach. This is a shared, cached daily artifact, the same way a newspaper prints one edition for everyone in a region rather than one per subscriber.
 

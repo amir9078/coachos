@@ -168,16 +168,17 @@
 - **M3-Q11.** ✔ Confirmed — **plus a major expansion**: Email Connections now supports Gmail, Microsoft 365, or any custom-domain email via SMTP/IMAP, multiple named connections per coach, and full Brevo-style campaign analytics (sent/delivered/bounced/opened with open count/clicked) built on Listmonk's native tracking — the same metrics layer that feeds Module 2's Lead Activity Log.
 
 **Daily Briefing, the second content source (M10):**
-- **M10-Q1.** Launch categories — executive, career, life/wellness, business-of-coaching? *(those four)*
-- **M10-Q2.** The 5-minute learn: rotate across coaching technique / business skills / AI-for-coaches, or pick one lane? *(rotate)*
-- **M10-Q3.** Daily volume — 5 niche headlines + 3 world items + 1 learn? *(yes)*
-- **M10-Q4.** Delivery: in-app + optional email? *(both)*
-- **M10-Q5.** Public site: full and free, or teaser + signup? *(full and free — it's an acquisition channel)*
-- **M10-Q6.** Publish anchor: ready by 6am Gulf time? *(yes)*
-- **M10-Q7.** "Share this insight" → creates a Marketing Studio draft in the coach's voice — the literal bridge of this journey? *(yes, Phase 4)*
-- **M10-Q8.** Keep the door open for sponsor slots later (Morning Brew model)? *(door open, nothing built)*
-- **M10-Q9.** Who on your team owns the daily glance-and-correct via the Claude/MCP tool? (no default — name a person/role)
-- **M10-Q10.** English only at launch? *(yes)*
+**ANSWERED (see docs/02 Module 10 for the full write-up):**
+- **M10-Q1.** ✔ Confirmed, those four.
+- **M10-Q2.** ✔ **Broadened** — rotates across coaching technique, business skills, AI-for-coaches, and generally whatever's hot in business/industry news, not a fixed 3-lane rotation.
+- **M10-Q3.** ✔ Confirmed.
+- **M10-Q4.** ✔ **Expanded** — in-app, email, and the public website, with the **coach choosing** which they receive rather than getting all by default.
+- **M10-Q5.** ✔ Confirmed full and free, **plus a new lifecycle rule**: each day's public edition stays live for 7 days then is removed from public view (works explicitly as a Module 1 lead magnet). The coach-facing history is a separate concern, not implied to be wiped by this.
+- **M10-Q6.** ✔ Confirmed.
+- **M10-Q7.** ✔ Confirmed, timing follows Marketing Studio's own rollout.
+- **M10-Q8.** ✔ Confirmed.
+- **M10-Q9.** **Still open** — needs a name or role from you, no default possible.
+- **M10-Q10.** ✔ Reversed — falls under the full multi-language push (M12-Q5), and specifically **follows the account's own app-language setting** automatically, no separate toggle.
 
 ---
 
