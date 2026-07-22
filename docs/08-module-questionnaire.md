@@ -203,24 +203,32 @@
 
 ---
 
-## Journey 7 — Coaches find each other and refer business
+## Journey 7 — Coaches (and now the public) find each other, and coaches refer business
 
 **Connects:** Coach Community (M11) → back into Journey 2's Pipeline, via a referral hand-off.
-**Functionality:** coaches post, connect, and — the flagship connection — hand off a lead that isn't their niche directly into a colleague's pipeline, tracked.
-**End goal:** the community isn't just social, it's a second, coach-to-coach acquisition channel layered on top of the industry's existing word-of-mouth culture.
+**Functionality:** anyone can post/connect; coaches specifically get a verified badge and — the flagship connection — can hand off a lead that isn't their niche directly into a colleague's pipeline, tracked.
+**End goal:** the community isn't just social, it's a second, coach-to-coach acquisition channel layered on top of the industry's existing word-of-mouth culture — now running inside a genuinely public network rather than a closed one.
 **Result the coach sees:** a lead that doesn't fit their niche doesn't get lost — it becomes revenue for someone else in the network, and goodwill back to them.
 
-- **M11-Q1.** **Confirm the standing assumption: coach-to-coach only, clients never enter the community.** *(yes)*
-- **M11-Q2.** Real names + verified-coach status required to post? *(yes — professional network, not a forum)*
-- **M11-Q3.** Post types v1: text, image, link only? *(yes)*
-- **M11-Q4.** One global feed v1 with niche tags; dedicated spaces v2? *(yes)*
-- **M11-Q5.** Our team moderates day one, I draft the guidelines? *(yes)*
-- **M11-Q6.** Connections: request/accept (LinkedIn-style), not follow-style? *(request/accept)*
-- **M11-Q7.** How do we stop referrals turning into a spam wall — a dedicated "referrals" post type, cold-pitch DMs reportable? *(yes, both)*
-- **M11-Q8.** Events/webinars inside the community — v2+? *(v2+)*
-- **M11-Q9.** Gamification (points, badges) — or keep it calm and professional? *(calm, none)*
-- **M11-Q10.** Build the referral hand-off — the literal bridge into Journey 2 — as the Community v2 flagship feature? *(yes — it turns the community into revenue for coaches)*
-- **M11-Q11.** v2 messaging: coach-to-coach DM only, tied to the referral flow, no client messaging here? *(yes)*
+**M11-Q1 — REVERSED, confirmed directly (not defaulted), see docs/02 Module 11 for the full write-up:** this is now a **fully open, LinkedIn-style public network** — anyone, coach or not, can create a profile and participate, not the closed coach-to-coach network originally assumed. This is a materially bigger undertaking (real content moderation at scale, spam/fake-account prevention, broader legal exposure under things like the EU Digital Services Act) — flagged explicitly in doc 04's cost table, not treated as a small scope tweak.
+
+**The resolution — a two-tier structure:**
+- **Verified Coach profiles** — approved through our own review process (same spirit as the Directory's manual verification), get a visible badge.
+- **General/public profiles** — anyone, self-serve signup, no badge.
+- **Public pages (profiles, posts) are readable by anyone, on the website and the app, without logging in** — confirmed explicitly.
+- **Interacting** (connecting, posting, commenting) **requires being logged into CoachOS** — reading is open, participating is account-gated.
+
+**ANSWERED, reframed against the new scope:**
+- **M11-Q2.** ✔ Reframed — real names still encouraged as policy, but "verified-coach status" is now the **badge tier** above, not a gate on who can participate at all (anyone can post).
+- **M11-Q3.** Default confirmed — text, image, link at launch.
+- **M11-Q4.** Default confirmed — one global feed with niche tags, spaces later.
+- **M11-Q5.** ✔ Confirmed, **though moderation now needs to scale well beyond manual review** — see docs/02's trust & safety section.
+- **M11-Q6.** ✔ Confirmed, request/accept — **and happens inside the logged-in app specifically**, not from the public-facing pages.
+- **M11-Q7.** Default confirmed.
+- **M11-Q8.** Default confirmed — v2+.
+- **M11-Q9.** Default confirmed — calm, no gamification.
+- **M11-Q10.** Default confirmed — the referral hand-off is still the Community v2 flagship.
+- **M11-Q11.** Default confirmed.
 
 ---
 

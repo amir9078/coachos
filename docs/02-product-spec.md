@@ -276,29 +276,53 @@ The original plan deliberately ruled out a free-form workflow builder, for a rea
 
 **Sourcing rule, not just a nice-to-have:** every headline and every "5-minute learn" links back to its real source. AI's job here is to summarize and select, never to generate a fact from scratch — the same discipline the plan already applies to its own market research (doc 01 §6's "rejected claims" table exists because of exactly this kind of mistake).
 
-## Module 11 — Coach Community · *Phase 4, gated on real supply*
+## Module 11 — Coach Community · *Phase 4, gated on real supply* · **scope reversed and re-decided in docs/08 §Journey 7**
 
-**Job:** coaches and mentors connect with each other, share what they're learning, and build the reputation that makes "coaches refer coaches" (README §2, the human-service layer) an actual product feature instead of something we do by hand.
+**Job:** a real, LinkedIn-style public network — not the closed, coach-only peer network originally assumed. The standing assumption ("coach-to-coach only, not client-facing") was explicitly flagged and then explicitly overturned: **this is now open to anyone — coaches and the general public both** — confirmed directly, not defaulted.
 
-**Scope assumption, stated explicitly:** this is a **peer network — coach to coach, mentor to mentor** — not a client-facing feature. It's the built version of the "Community & referrals" line already in the plan. If the intent was clients connecting with each other too, that's a different (and much bigger, trust-and-safety-heavier) build — flag it and this spec changes.
+### The two-tier structure this scope change requires
+
+Opening participation to anyone changes what "trust" means here, so the design now has two distinct tiers:
+
+| | **Verified Coach profile** | **General/public profile** |
+|---|---|---|
+| Who | Coaches, **approved through our own review process** (same spirit as the Directory's existing manual verification, doc 02 Module 9) | Anyone — coach or not, self-serve signup |
+| Badge | Yes, a visible "Verified Coach" badge | None |
+| Where it shows | Surfaced more prominently, credibility signal | Standard profile |
+
+This is the resolution to "verified-coach status" — it's no longer a **gate on who can participate** (since anyone now can), it's a **badge tier** that distinguishes approved coaches from the general public, the same way LinkedIn itself has ordinary members alongside verified/notable profiles.
+
+### Access model — public read, account-gated interaction
+
+- **Public pages** (profiles, posts) are **readable by anyone, on both the website and the app, without logging in** — this is explicit and confirmed, and matters for SEO/reach the same way the Directory's profiles already work.
+- **Interacting** — sending/accepting a connection, posting, commenting, liking — **requires being logged into CoachOS** (a real account). Reading is open; participating is account-gated.
 
 | Capability | v1 or v2 | How it works |
 |---|---|---|
-| Connect | v1 | LinkedIn-style: send a connection request, the other coach accepts — mutual, not a one-way follow |
-| Post | v1 | Text + optional image, visible to your connections (or public, coach's choice per post) |
+| Connect | v1 | LinkedIn-style request/accept, mutual — happens **inside the logged-in app**, not from the public-facing pages |
+| Post | v1 | Text + optional image, visible per the poster's own privacy choice |
 | Like | v1 | One tap, on any post or comment |
 | Comment | v1 | Threaded under a post |
-| Share | v1 | Reposts a connection's post to your own network with credit to the original author |
-| Message | v2 | Direct, async 1:1 messages — like email, no expectation of an instant reply |
-| Chat | v2 | Real-time: typing indicators, online presence, instant delivery — genuinely different infrastructure from Message, see doc 03 |
+| Share | v1 | Reposts to your own network with credit to the original author |
+| Message | v2 | Direct, async 1:1 |
+| Chat | v2 | Real-time — genuinely different infrastructure from Message, see doc 03 |
 
-**Why v1/v2, not one build:** a social feed (posts/likes/comments/shares) is standard database work — read, write, display. Real-time chat is a different engineering problem entirely — presence, live delivery, connection state — and deserves its own scoped build rather than being smuggled in as "basically the same as messaging." Build the feed first, prove coaches actually use it, then build chat.
+**Why v1/v2, not one build:** unchanged reasoning — a social feed is standard database work; real-time chat is a different engineering problem (presence, live delivery, connection state) and deserves its own scoped build. Build the feed first, prove real usage, then build chat.
 
-**The line this module doesn't cross:** no AI posts on a coach's behalf, ever — same approval-first principle as every other module. An AI-assisted post-drafting option (reusing the Marketing composer's voice profile, doc 02 Module 3) is a reasonable v2 add-on, not a v1 requirement.
+**The line this module doesn't cross:** no AI posts on anyone's behalf, ever — same approval-first principle as every other module.
 
-**Trust & safety — not optional for user-generated content:** report and block tools, a content policy coaches agree to, and spam/abuse rate-limiting are v1 requirements, not later polish. Any platform that lets users post, comment, and message each other carries real moderation and liability exposure (relevant to GDPR and, for EU users, the Digital Services Act) — this needs the same kind of deliberate design as the AI-disclosure and data-processor obligations already in doc 01 §5, not an afterthought.
+### Trust & safety — now a materially bigger undertaking, said plainly
 
-**Relationship to the Directory (Module 9):** the Directory is client-facing discovery — a prospect finding a coach. The Community is peer-facing — coaches finding each other. A coach's public Directory profile can surface their Community activity (posts, connections) as social proof, but the two audiences and the two trust models are different; don't conflate them in the build.
+The original spec already treated report/block, a content policy, and abuse rate-limiting as v1 requirements, not polish. **Opening this to the general public, not just verified coaches, raises the real cost and complexity of that work significantly** — this isn't the same undertaking as moderating a small, closed, professionally-accountable community:
+
+- **Moderation has to scale beyond manual review.** A closed coach community is small enough for a human to reasonably review reports. An open public network needs automated content filtering (spam, abuse, prohibited content) as well as human review, from day one, not added later once a problem forces it.
+- **Spam/fake-account prevention becomes a real engineering concern**, not just a policy line — open signup invites bot registration in a way an approval-gated coach community doesn't.
+- **Legal exposure is broader.** Platforms hosting content from the general public (not just a defined professional user base under contract) sit more squarely under things like the EU's Digital Services Act — notice-and-action obligations for illegal content, transparency requirements — even before reaching the stricter tiers aimed at very large platforms. This deserves a real legal review pass before public launch, not an assumption that the existing doc 01 §5 posture already covers it.
+- **The cold-start problem gets harder, not easier.** The original gating logic (hold public launch until there's a real base of engaged coaches) now needs a base of engaged *public* participation too, alongside coaches — a fully open network with nobody in it is arguably a worse first impression than a closed one.
+
+**Recommendation, not yet a decision:** treat this module's cost and timeline as genuinely bigger than the original Phase 4 estimate in doc 04 (updated there too) — it's closer to standing up a real public social product than adding a community feature to an existing SaaS tool, and deserves being scoped and reviewed as such before committing to a launch date.
+
+**Relationship to the Directory (Module 9, currently deferred):** the distinction still holds even with this scope change — the Directory is structured, search-driven discovery (a prospect looking for a coach by filter); the Community is an open social feed. A Verified Coach's Directory profile can surface their Community activity as social proof, but they remain two different surfaces with two different interaction models.
 
 ---
 
