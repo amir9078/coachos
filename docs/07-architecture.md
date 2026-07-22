@@ -23,6 +23,7 @@ flowchart TB
 
     subgraph AI["③ AI layer"]
         ClaudeAPI["Claude API — Haiku 4.5 default<br/>summaries, prep briefs, briefing drafts, post-drafting help"]
+        Mastra["Mastra (Apache 2.0) — Pipeline Agent<br/>multi-step reasoning + approval pause, Leads module"]
         MCPServer["Admin MCP server — local process<br/>gated by team_members.is_content_admin"]
     end
 
@@ -62,6 +63,9 @@ flowchart TB
     AdminClaude --> MCPServer
 
     NextApp --> ClaudeAPI
+    NextApp --> Mastra
+    Mastra --> ClaudeAPI
+    Mastra --> Postgres
     NextApp --> Postgres
     NextApp --> Auth
     NextApp --> Storage
@@ -105,7 +109,7 @@ flowchart TB
 |---|---|---|---|
 | ① | Client surfaces | Four distinct front doors: the coach's own app, the public marketing/content site, the client's read-only portal, and the admin's Claude conversation | doc 05 §5, §4.6 |
 | ② | Application layer | One Next.js app, all API routes, RLS-enforced | doc 05 §3–4 |
-| ③ | AI layer | Claude API for every AI-drafted artifact; the MCP server as a separate, admin-only surface | doc 05 §4.3–4.6 |
+| ③ | AI layer | Claude API for every AI-drafted artifact; Mastra for the Pipeline Agent's multi-step reasoning + approval pause (Leads module); the MCP server as a separate, admin-only surface | doc 05 §4.3–4.6, doc 10 |
 | ④ | Data layer | Postgres + Auth + Storage + Realtime — the exact Supabase software stack, run by us instead of paid for by the MAU/GB (doc 03, doc 04 infra-cost section) | doc 03, doc 04 |
 | ⑤ | Automation layer | Activepieces (MIT) as the one automation engine behind Automations (Module 8), Daily Briefing (Module 10), and the MCP's manual-refresh trigger — replaced n8n after direct license verification | doc 09 §5 |
 | ⑥ | Self-hosted OSS engines | Cal.com, Documenso, Listmonk — integrated, not merged into our codebase (AGPL reasons). The CRM/pipeline is built natively (doc 09 §3) | doc 03, doc 09 |
@@ -120,7 +124,7 @@ Which of the eleven modules touches which part of the system — useful for scop
 
 | Module | Client surface | Touches |
 |---|---|---|
-| 1–2. Leads | Coach App | Native pipeline (own Postgres tables), Claude API (scoring/drafts) |
+| 1–2. Leads | Coach App | Native pipeline (own Postgres tables), Claude API (scoring/drafts), Mastra (Pipeline Agent) |
 | 3. Marketing | Coach App | Listmonk, Claude API, Postgres |
 | 4. Bookings | Coach App | Cal.com, Postgres |
 | 5. Contracts & Payments | Coach App | Documenso, Stripe, Postgres |

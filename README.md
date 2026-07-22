@@ -18,7 +18,7 @@
 | # | Module | What the coach gets | AI or Human? |
 |---|--------|--------------------|--------------|
 | 1 | **Leads — Attract** | Landing page + lead magnet builder, lead capture forms, AI-scored inbound enquiries | Platform (AI) |
-| 2 | **Leads — Manage** | Pipeline board (Enquiry → Discovery call → Proposal → Won), AI follow-up nudges and drafted replies | Platform (AI) |
+| 2 | **Leads — Manage** | Pipeline board (Enquiry → Discovery call → Proposal → Won), AI follow-up nudges and drafted replies, plus a **Pipeline Agent** that reasons across a stalled lead's history before proposing a next step — always pausing for approval ([`docs/10`](docs/10-ai-agent-layer.md)) | Platform (AI agent) |
 | 3 | **Marketing** | AI-drafted posts, newsletters and email sequences in the coach's own voice; content calendar | Platform (AI) + optional human service |
 | 4 | **Bookings** | Scheduling links, calendar sync, automated reminders, no-show recovery | Platform |
 | 5 | **Contracts & Payments** | Coaching-agreement templates, e-signature, invoicing, package/subscription billing | Platform |
@@ -109,7 +109,8 @@ coachos/
 │   ├── 06-features-guide.md       ← plain-language "what coaches can actually do" guide, no jargon
 │   ├── 07-architecture.md        ← the single project architecture diagram — every layer, module-mapped, phase-gated
 │   ├── 08-module-questionnaire.md ← 120+ product decisions per module, with defaults — answered → per-module build prompts
-│   └── 09-engine-comparison.md   ← re-verified open-source research: rivals compared per category, final picks, license proofs
+│   ├── 09-engine-comparison.md   ← re-verified open-source research: rivals compared per category, final picks, license proofs
+│   └── 10-ai-agent-layer.md      ← the Pipeline Agent: agent framework research, license proofs, and a working demo
 ├── features.html                  ← the same guide, as a page — open in any browser
 └── prototype/
     └── index.html                 ← animated clickable prototype (open in any browser)

@@ -79,6 +79,12 @@ These are the chains that make it one product instead of eleven tools. **Confirm
 - **M2-Q11.** Anything that must NEVER be stored on a lead (health details, etc.)? *(Default: we warn coaches not to store sensitive personal data on leads.)*
 - **M2-Q12.** The pipeline is now built natively (doc 09 §3) with Twenty + EspoCRM as the design brief. From tools coaches already use (HoneyBook, Pipedrive, Dubsado, a spreadsheet): is there one pipeline feature they'd genuinely miss that we should make sure to include? *(Default: the design brief covers board view, saved filters, email activity on the lead record, and notes.)*
 
+**Pipeline Agent (added after the agentic-AI instruction — full plan in doc 10):**
+
+- **M2-Q13.** Should the agent run only when the coach clicks "investigate," or also proactively flag leads that need attention (e.g. a daily scan that surfaces 2–3 stalled leads on its own, still never sending without approval)? *(Default: both — on-demand button now, an optional daily proactive scan once trust is established.)*
+- **M2-Q14.** How far should the agent be allowed to look ahead — one next message only, or a short multi-step plan ("message now, if no reply in 4 days suggest X")? *(Default: one next step at a time — simpler to trust, matches every other approval-first feature in the plan.)*
+- **M2-Q15.** Should the agent's reasoning (why it picked this approach) always be visible to the coach, the way it is in the demo? *(Default: yes, always — same rule as Practice Intelligence's M7-Q9.)*
+
 ## Module 3 — Marketing Studio
 
 *Inspired by: Kit (ConvertKit), Flodesk, Jasper, Buffer. Engine underneath: Listmonk (invisible).*

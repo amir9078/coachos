@@ -15,8 +15,9 @@ Module-by-module: what it does, what the AI does, what stays human, and how each
 | Lead scoring | AI reads enquiry text, scores fit + urgency, sorts the pipeline | AI |
 | Pipeline board | Enquiry → Discovery → Proposal → Won/Lost kanban | Platform UI |
 | Follow-up nudges | "Sarah has gone quiet 6 days after her discovery call" + a drafted, personalized follow-up ready to approve-and-send | AI drafts, **human sends** |
+| **Pipeline Agent** | On a stalled lead: reads its full history, checks how similar past leads actually behaved, reasons through what to propose (not a fixed template), drafts the move, then **pauses** — coach sees the reasoning and approves, edits, or dismisses. Built on Mastra (Apache 2.0), running inside our own app. Full research + working demo: [`docs/10-ai-agent-layer.md`](10-ai-agent-layer.md) | AI reasons + drafts, **human decides** |
 
-**Design rule:** AI never sends outbound to a lead autonomously. The coach approves every message — this is both a trust feature and our EU-compliance posture.
+**Design rule:** AI never sends outbound to a lead autonomously — including the agent. The coach approves every message — this is both a trust feature and our EU-compliance posture.
 
 ## Module 3 — Marketing · *Phase 3*
 

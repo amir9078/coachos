@@ -201,6 +201,19 @@
   }
   .nudge b{color:var(--brass)}
 
+  .agent-box{margin-top:1.3rem;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1.1rem 1.2rem}
+  .agent-head{display:flex;gap:.8rem;align-items:flex-start;margin-bottom:1rem}
+  .glyph-sm{font-family:var(--serif);font-size:1.3rem;color:var(--green);background:var(--bone);border:1px solid var(--line);width:2.2rem;height:2.2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+  .agent-head h4{margin:0 0 .2rem;font-size:.98rem}
+  .agent-head p{margin:0;color:var(--ink-soft);font-size:.82rem;max-width:52ch}
+  .beta-tag{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.04em;text-transform:uppercase;color:var(--green);font-weight:400;margin-top:.15rem}
+  .agent-lead{display:flex;align-items:center;justify-content:space-between;gap:1rem;background:var(--bone);border:1px solid var(--line);border-radius:4px;padding:.6rem .8rem;font-size:.85rem;flex-wrap:wrap}
+  .trace{list-style:none;margin:.9rem 0 0;padding:0;font-family:var(--mono);font-size:.76rem;color:var(--ink-soft)}
+  .trace li{position:relative;padding:0 0 .6rem 1.3rem;opacity:0;transform:translateY(4px);transition:opacity .35s,transform .35s}
+  .trace li.show{opacity:1;transform:none}
+  .trace li::before{content:"✓";position:absolute;left:0;top:0;color:var(--green)}
+  .trace li.pending::before{content:"…";color:var(--brass)}
+
   .briefing{border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:1.2rem}
   .briefing-head{background:var(--well);padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft)}
   .briefing-body{display:grid;grid-template-columns:repeat(3,1fr);background:var(--line);gap:1px}
@@ -415,6 +428,20 @@
               <div class="kol"><h4>Won · 1</h4>
                 <div class="kard">Maya R.<small>Executive package · active</small></div>
               </div>
+            </div>
+
+            <div class="agent-box">
+              <div class="agent-head">
+                <span class="glyph-sm">◈</span>
+                <div><h4>Pipeline Agent <span class="beta-tag">reasons across your pipeline, never sends without you</span></h4><p>Reads a lead's full history, checks what actually worked for similar leads before, and proposes one next step — you approve, edit, or dismiss.</p></div>
+              </div>
+              <div class="agent-lead">
+                <div><b>Sarah K.</b> — Discovery call done, quiet 6 days<span class="score" style="background:var(--brass-soft);color:var(--brass);margin-left:.5rem">needs a decision</span></div>
+                <button class="ai-btn" id="agent-run">✦ Investigate &amp; propose next step</button>
+              </div>
+              <ol class="trace" id="agent-trace"></ol>
+              <div class="ai-out" id="agent-out"></div>
+              <button class="ai-btn" id="agent-send" style="display:none;background:var(--green)">Approve &amp; send to Sarah</button>
             </div>
           </div>
 
@@ -662,6 +689,48 @@
   if(sendBtn){
     sendBtn.addEventListener('click',function(){
       sendBtn.textContent='✓ Sent to Maya'; sendBtn.disabled=true;
+    });
+  }
+
+  /* Pipeline Agent demo */
+  var agentBtn = document.getElementById('agent-run');
+  var agentTrace = document.getElementById('agent-trace');
+  var agentOut = document.getElementById('agent-out');
+  var agentSend = document.getElementById('agent-send');
+  var agentSteps = [
+    'Reading Sarah K.’s full pipeline history…',
+    'Discovery call completed 6 days ago — no reply since',
+    'Checking similar past leads at this stage…',
+    '3 of 4 similar leads converted after one warm second-touch',
+    'Drafting a follow-up in Amara’s voice — pausing for your approval'
+  ];
+  var agentDraft = "TO SARAH (for your approval):\n\nHi Sarah — no pressure at all, just wanted to check in after our chat last week. A lot of people find it useful to sit with the first conversation for a few days, so if you're still thinking it over, that's completely normal.\n\nIf you'd like to talk through anything before deciding — the offer, the pace, whatever's on your mind — I'm happy to hop on a quick 15-minute call, no agenda. Otherwise, whenever you're ready, I'm here.\n\nAGENT'S REASONING (visible to you only): scored this as a warm-not-cold lead — similar leads that went quiet after a good discovery call converted 75% of the time with a low-pressure, short-call offer rather than a hard pitch. Recommends waiting 3 more days if no reply before a second attempt.";
+  if(agentBtn){
+    agentBtn.addEventListener('click',function(){
+      agentBtn.disabled = true; agentBtn.textContent = '✦ Working…';
+      agentTrace.innerHTML = '';
+      agentSteps.forEach(function(s){
+        var li = document.createElement('li'); li.textContent = s; agentTrace.appendChild(li);
+      });
+      var lis = agentTrace.querySelectorAll('li');
+      var i = 0;
+      function step(){
+        if(i>0) lis[i-1].classList.remove('pending');
+        if(i<lis.length){
+          lis[i].classList.add('show','pending');
+          i++;
+          setTimeout(step, reduced?0:650);
+        } else {
+          lis[lis.length-1].classList.remove('pending');
+          typeInto(agentOut, agentDraft, 6, function(){ agentSend.style.display='inline-block'; agentBtn.disabled=false; agentBtn.textContent='✦ Investigate & propose next step'; });
+        }
+      }
+      setTimeout(step, reduced?0:300);
+    });
+  }
+  if(agentSend){
+    agentSend.addEventListener('click',function(){
+      agentSend.textContent='✓ Sent to Sarah'; agentSend.disabled=true;
     });
   }
 
