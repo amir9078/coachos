@@ -50,7 +50,7 @@ flowchart TB
 
     subgraph External["⑦ External services — API calls, not hosted by us"]
         Stripe["Stripe — billing"]
-        GmailAPI["Gmail API — coach's own-address sending"]
+        EmailConn["Email Connections — Gmail, Microsoft 365, or any custom-domain SMTP/IMAP<br/>multiple named connections per coach (doc 02 Module 3)"]
         MeetAPIs["Zoom API + Google Meet API<br/>recordings → transcripts pulled in, Phase 2"]
         NewsSources["Wikipedia Current Events Portal<br/>+ verified publisher RSS feeds"]
     end
@@ -78,7 +78,7 @@ flowchart TB
     NextApp --> Listmonk
     NextApp --> LiveKit
     NextApp --> Stripe
-    NextApp --> GmailAPI
+    NextApp --> EmailConn
     NextApp --> MeetAPIs
 
     CoachClaude --> CoachMCP

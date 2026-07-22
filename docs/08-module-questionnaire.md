@@ -167,17 +167,17 @@
 **End goal:** the coach never faces a blank page — for their own marketing, or for reacting to industry news.
 **Result the coach sees:** a content calendar that's mostly pre-filled, from two different source materials, in one consistent voice.
 
-**Marketing Studio (M3):**
-- **M3-Q1.** Channels day one — newsletter only, or + LinkedIn/Instagram post drafts (coach copy-pastes)? *(newsletter + LinkedIn drafts, no auto-posting)*
-- **M3-Q2.** Auto-posting direct to social platforms — ever, and when? *(Phase 4+ evaluation)*
-- **M3-Q3.** Writing samples needed for the voice profile? *(3 minimum)*
-- **M3-Q4.** Content calendar: AI proposes a full month approved once, or week-by-week drafts? *(monthly plan, weekly drafts)*
-- **M3-Q5.** Newsletter frequency? *(bi-weekly)* Subscriber list exportable anytime, confirm it's the coach's property? *(yes, always)*
-- **M3-Q7.** AI drafting from anonymized session themes — explicit opt-in per coach? *(opt-in, off by default — privacy first)*
-- **M3-Q8.** Lead-magnet download auto-subscribes to the newsletter with double opt-in (GDPR-clean)? *(yes)*
-- **M3-Q9.** Our human team gets an "agency seat" for the done-for-you service? *(yes, coach still approves sends)*
-- **M3-Q10.** Headline metric shown to coaches: opens/clicks, or "enquiries this content generated"? *(enquiries generated, front and center)*
-- **M3-Q11.** Bulk newsletters send from our infrastructure in the coach's name (Gmail can't do bulk) — OK? *(yes)*
+**Marketing Studio (M3) — ANSWERED (see docs/02 Module 3 for the full write-up):**
+- **M3-Q1.** ✔ Narrowed at launch: newsletter + bulk email marketing built and automated now. Social posting (LinkedIn/Instagram/X) is drafted + approved in-platform, but publishing stays manual (copy-paste) until direct scheduling ships — see Q2.
+- **M3-Q2.** ✔ Kept as a visible **"Coming soon"** feature in the UI, not hidden or silently deferred.
+- **M3-Q3.** ✔ Superseded by the cross-cutting AI Voice & Rules Center (M2-Q3) — no separate voice profile for Marketing.
+- **M3-Q4.** ✔ Monthly plan, weekly drafts — **plus a human-polish step**: AI proposes → our team refines → coach approves (three steps, not two).
+- **M3-Q5.** ✔ Frequency, schedule, and content all made **coach-editable and customizable**, not fixed to bi-weekly. List ownership/export confirmed.
+- **M3-Q7.** ✔ Confirmed, opt-in, off by default.
+- **M3-Q8.** ✔ Confirmed, double opt-in — explained: a lead-magnet download alone isn't legal marketing consent; the person gets a confirmation email first and is only subscribed once they click confirm.
+- **M3-Q9.** ✔ Confirmed.
+- **M3-Q10.** ✔ Confirmed, enquiries generated.
+- **M3-Q11.** ✔ Confirmed — **plus a major expansion**: Email Connections now supports Gmail, Microsoft 365, or any custom-domain email via SMTP/IMAP, multiple named connections per coach, and full Brevo-style campaign analytics (sent/delivered/bounced/opened with open count/clicked) built on Listmonk's native tracking — the same metrics layer that feeds Module 2's Lead Activity Log.
 
 **Daily Briefing, the second content source (M10):**
 - **M10-Q1.** Launch categories — executive, career, life/wellness, business-of-coaching? *(those four)*

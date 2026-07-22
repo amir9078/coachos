@@ -81,15 +81,27 @@ This is the single place that makes every AI draft across the whole product soun
 
 Full multi-language support for both dashboard UI and AI-drafted communications, architected so **adding a language is a simple selection, not a rebuild** — this is genuinely more achievable than a traditional manual-translation effort, for two reasons: a standard i18n framework (extracting UI text into translatable string files, well-supported in Next.js) handles the interface, and Claude drafts AI content **directly in the target language** rather than needing separate translation (it's natively multilingual). Real remaining work: right-to-left layout (Arabic, Hebrew) needs actual layout support, not just word swaps, and each language still needs a translation + QA pass before it's genuinely reliable — so the rollout is broad-and-progressive (AI-assisted translation makes adding each one cheap), not "every language fully polished on day one."
 
-## Module 3 — Marketing · *Phase 3*
+## Module 3 — Marketing Studio · *Phase 3* · decided in docs/08 §Journey 5
+
+**Scope at launch, deliberately narrowed:** newsletter + bulk email marketing only. Social posting (LinkedIn, Instagram, X) is **drafted, not published** — our team (AI-assisted) drafts the post, it goes into the coach's in-platform approval queue same as everything else, the coach edits and approves it, and today that means the coach copies the approved post out and publishes it themselves. Direct scheduling/publishing to LinkedIn and X is a real, visible **"Coming soon"** feature in the UI (not hidden) — it needs the same kind of platform API approval we already verified for lead capture (doc 03), so it's tracked, not silently dropped.
 
 | Capability | How | AI / Human |
 |---|---|---|
-| Voice profile | Onboarding interview + 3 writing samples → stored style profile | AI-built, once |
-| Content composer | Weekly drafts: 3 posts + 1 newsletter in the coach's voice, from their actual session themes (anonymized) | AI drafts, coach edits |
-| Newsletter &amp; email sequences | Welcome/nurture sequences from templates, personalized by niche — sent and tracked via [Listmonk](https://listmonk.app/) (self-hosted, doc 03), not hand-built | AI drafts + Listmonk sends |
-| Content calendar | Schedule + publish reminders | Platform |
-| **Done-for-you service** | Our human editors polish and manage the coach's content monthly | **Human (our service revenue)** |
+| Voice | Reads from the cross-cutting **AI Voice & Rules Center** (above) — no separate voice profile for Marketing specifically | AI-built, once, shared across the whole product |
+| Content calendar | AI proposes a monthly plan → **our team refines it** → sent to the coach's approval queue (a three-step pipeline, not just AI-draft-then-approve) | AI drafts, **human polishes**, coach approves |
+| Social post drafts | Weekly drafts for LinkedIn/Instagram/X in the coach's voice; approved posts are copy-paste today, scheduled/published automatically once "Coming soon" ships | AI + human drafts, coach approves, coach publishes (for now) |
+| Newsletter & bulk email | Fully built now — sent and tracked via [Listmonk](https://listmonk.app/) (self-hosted, doc 03). **Frequency, schedule, and content are all coach-editable and customizable**, not fixed to one cadence | AI drafts, Listmonk sends |
+| Nurture sequences | New-lead welcome, post-discovery-didn't-close, past-client re-engagement (decided in Journey 2) | AI drafts + Listmonk sends |
+| Lead-magnet auto-subscribe | When someone downloads a lead magnet or takes the evaluation quiz (Module 1), they can be automatically added to that coach's newsletter list — but **double opt-in**: they first get a confirmation email ("please confirm you'd like these emails") and are only actually subscribed once they click confirm. This protects the coach from spam complaints and is a real GDPR requirement, not just good practice — a download alone isn't legally "consent to market to me" without that confirmation step. | Platform |
+| Session-theme drafting | AI can draft content from a coach's own **anonymized** session themes (patterns across sessions, no client identity) — **opt-in, off by default**, given how sensitive session data is | AI drafts, opt-in required |
+| Done-for-you service | Our team gets an "agency seat" inside a coach's account to draft content — the coach still approves every send | **Human (our service revenue)** |
+| Headline metric | "Enquiries this content generated," not opens/clicks — ties content performance straight back to the pipeline | Platform |
+
+### Email Connections & campaign analytics — a real, expanded build
+
+**Sending isn't Gmail-only.** A coach connects one of three options (doc 03 rows 9/9b/9c): Gmail (OAuth), Microsoft 365/Outlook (OAuth), or **any custom-domain email via standard SMTP/IMAP** — the same host/port/username/password setup as configuring any email client, so a coach on their own business domain isn't forced onto Gmail. **Multiple named connections are supported** — e.g. a coach can use one address for direct client emails and a different one for automated reminders, each assignable per module/automation.
+
+**Full campaign analytics, Brevo-style**, surfaced in our own dashboard (not Listmonk's raw interface): sent, delivered, bounced, opened (with **open count**, not just yes/no), clicked, and read — Listmonk already tracks opens/bounces/clicks per campaign natively (doc 03), so this is building our own branded dashboard on top of data the engine already produces, not building tracking from scratch. **This is the same metrics layer that feeds Module 2's Lead Activity Log** for 1:1 email opens — one consistent analytics system, whether it's a bulk newsletter or a single email to one lead.
 
 ## Module 4 — Bookings · *Phase 2*
 
