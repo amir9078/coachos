@@ -25,18 +25,27 @@ All figures below were adversarially fact-checked against primary sources during
 | CoachHub + AIMY | 3,500+ human coaches + AI module | $42.3M debt financing Dec 2024; AIMY launched Feb 2025 |
 | BetterUp | Human+AI hybrid, enterprise | ~$3,000–5,000/user/year (reported) |
 | Rocky.ai | AI-first leadership coaching | ~$10–13/user/month (reported) |
+| Coachello | AI coaches employees directly (roleplays, 24/7 on-demand), plus a human-coach layer for orgs like Microsoft, HEC Paris | Enterprise/corporate only — verified directly, not solo-coach relevant |
 
-### Tools-for-the-coach products (our actual competitors)
-| Product | Reported price | Weakness we exploit |
-|---|---|---|
-| Delenta | ~$29/mo | Generic practice management; AI is a bolt-on checkbox |
-| Paperbell | ~$57/mo | No AI-first workflows |
-| Simply.Coach | ~$29/mo | Same |
-| CoachAccountable | ~$20/mo | Same |
+### Tools-for-the-coach products (our actual competitors) — corrected after direct verification, July 2026
 
-(Pricing reported by vendors/comparison sites; not independently re-verified — treat as directional.)
+**This table was wrong in an important way and has been corrected.** The original version claimed "nobody in the $20–60/mo tier is AI-first around the coach's daily workflow" — checked directly against each vendor's own site (not secondhand blog rankings), that claim does not hold. Several competitors already ship a real AI touchpoint at this price tier.
 
-**The gap:** nobody in the $20–60/mo tier is AI-first around the coach's actual daily workflow (notes → summary → prep → follow-up). Enterprise players won't come down-market for solo coaches; solo-tier incumbents haven't rebuilt around AI.
+| Product | Reported price | What it actually does | AI depth, verified directly |
+|---|---|---|---|
+| Paperbell | ~$57/mo | 1:1 sessions, packages, client portal — the closest match to our Module 6 shape | No AI-first workflows |
+| CoachVantage | Not published | Full all-in-one: CRM, scheduling, programs, **courses**, payments, contracts, coaching-hour logs | "Vanta" AI assists content creation (program descriptions, course structure, marketing copy) — one touchpoint, not workflow-embedded |
+| Coachful | $69/mo | All-in-one; explicitly pitched as replacing Calendly+Zoom+Mailchimp | **Has AI-generated session summaries today** — the same core idea as our Module 6 wedge, already shipping |
+| Plutio | $19/mo | All-in-one: scheduling, proposals/contracts, session tracking, package-credit tracking, client portal | "Super Work AI" claims to draft proposals and chase invoices autonomously — overlaps with our Autopilot ambition |
+| Simply.Coach | ~$29/mo | Client management, business ops, video built in, multi-coach/L&D support | No AI capability mentioned on their own site |
+| Delenta | ~$29/mo | Generic practice management | AI is a bolt-on checkbox |
+| CoachAccountable | ~$20/mo | Generic practice management | Same |
+
+**The honest, corrected differentiation:** it is not "we're the only one with AI" — Coachful and Plutio already disprove that. It's **breadth and depth**: no verified competitor combines a continuously-updating live lead score, an autonomous Pipeline Agent that reasons across a lead's history, meeting-embedded recording+transcription, a 15-parameter Voice & Rules Center applied across every AI draft in the product, a Daily Briefing content product, and Practice Intelligence at-risk flagging — in one platform. Most have one or two AI touchpoints (a summary generator, a content assistant); we're building AI into most of the workflow, not one corner of it. **Two modules none of these five appear to have at all: the Coach & Mentor Directory (a lead-generating marketplace) and the Coach Community (peer network + referral hand-offs)** — these are plausibly our sharper, harder-to-copy differentiators, since a network effect is slower to replicate than an AI feature.
+
+(Pricing reported by vendors' own sites where checked directly July 2026; Delenta/CoachAccountable prices still reported secondhand — treat those two as directional only.)
+
+**Enterprise players (Coachello, Valence, CoachHub+AIMY, BetterUp, Rocky.ai) still won't come down-market for solo coaches** — that part of the original thesis holds. But the solo-tier incumbents are not as AI-naive as first assumed; several have already started bolting on AI features. The gap is narrower than originally stated — we compete on integration depth and the two acquisition-channel modules, not on being the only AI option in the room.
 
 ## 3. Why "all-in-one" — and why it usually fails
 
