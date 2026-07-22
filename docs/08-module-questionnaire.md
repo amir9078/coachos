@@ -35,18 +35,7 @@
 - **M1-Q10.** ✔ Superseded by M12-Q5 below — full multi-language push, not just Arabic.
 - **M1-Q11.** ✔ No fixed number — varies too much by coach niche/profile; track empirically from real pilot data.
 
-**The Directory, as a second lead source (M9):**
-- **M9-Q1.** Who can list — subscribers only, or open/cheap listings as their own revenue line (like Psychology Today's ~$30/mo)? *(subscribers included; open tier Phase 4)*
-- **M9-Q2.** Manual credential verification (ICF certs etc.) + a "Verified" badge? *(yes — the trust moat)*
-- **M9-Q3.** Rank search filters: specialty, price, language, timezone, industry background, session format. (no default)
-- **M9-Q4.** Browse+filter v1, "answer 5 questions, we suggest 3 coaches" AI matching v2? *(yes, that split)*
-- **M9-Q5.** Star ratings, or curated testimonials only (Noomii's model)? *(testimonials only)*
-- **M9-Q6.** If a directory enquiry gets no coach response in 48h, gently suggest similar coaches to the client? *(yes)*
-- **M9-Q7.** Pricing display on a profile — public rates, ranges, or "enquire"? *(per-coach choice)*
-- **M9-Q8.** Standard "Book a free discovery call" CTA on every profile — feeding straight into Journey 3's booking flow? *(yes)*
-- **M9-Q9.** Launch geography — global-English, or Gulf/UAE-first? *(global site, Gulf-first recruiting)*
-- **M9-Q10.** Paid featured placement — extra revenue, or does it corrupt the trust the whole Directory depends on? *(no, v1)*
-- **M9-Q11.** Explicit coach consent at listing time (it's a public SEO page)? *(yes, required)*
+**The Directory, as a second lead source (M9) — DEFERRED, "COMING SOON."** Explicitly paused at the founder's request rather than defaulted through — this module faces the public directly, and deserves real decisions when its time comes, not guesses made now to keep momentum. None of M9-Q1 through Q11 are answered or defaulted; the module sits in the build order (Phase 3, per README §4) but stays unspecified until revisited. When that time comes, come back to the questions as originally written earlier in this doc's history (specialty/price/language/timezone/industry/format filters, verification, ratings vs. testimonials, listing tiers, launch geography, paid placement, consent) — nothing about them has been decided.
 
 **Where the two channels merge:**
 - **M2-Q9.** Same person enquires via both the Directory and a landing page — auto-merge into one pipeline record? *(yes, auto-merge on matching email, coach notified)*

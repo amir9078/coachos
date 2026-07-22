@@ -232,7 +232,9 @@ The original plan deliberately ruled out a free-form workflow builder, for a rea
 
 **AI's role, unchanged:** still suggests recipes from a coach's own repeated behavior ("You've sent this same message 4 times — automate it?") — proposes, never auto-generates send-time content on its own.
 
-## Module 9 — Coach & Mentor Directory (Marketplace) · *Phase 3, gated on coach supply*
+## Module 9 — Coach & Mentor Directory (Marketplace) · *Phase 3, gated on coach supply* · **DEFERRED — "Coming soon," per explicit founder instruction (docs/08)**
+
+**This module is intentionally paused, not decided.** Because it faces the public directly, none of its open questions (docs/08) were pushed through with defaults just to keep momentum — they stay unanswered until deliberately revisited. The spec below is the pre-questionnaire baseline, kept for reference; treat nothing in it as locked in the way every other module's write-up in this doc now is.
 
 **Job:** turn CoachOS from a tool coaches buy into a channel that also finds them clients — the differentiator no incumbent in the $20–60/mo tier offers (see doc 01 §6).
 
