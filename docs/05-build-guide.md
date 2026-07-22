@@ -25,24 +25,29 @@ How a non-technical founder (plus, later, a part-time developer) actually builds
 
 ## 2. The stack (pinned — don't relitigate per feature)
 
+**Status note:** this table covers Phase 1 (Module 6, the wedge) as actually decided across docs 02/07/08/09/10/11. Phase 2+ rows are placeholders, rewritten when we build those modules.
+
 | Layer | Choice | Why |
 |---|---|---|
 | Frontend + backend framework | **Next.js (App Router) + TypeScript** | One codebase for UI and API routes; the ecosystem Claude Code and Cursor know best; deploys to Vercel in minutes |
 | Styling | **Tailwind CSS** + design tokens from the prototype | Fast, consistent; tokens in §5 |
 | Database, auth, storage | **Supabase** (Postgres + Auth + Row-Level Security + Storage) | Hosted, free tier to start, auth built in, RLS gives per-coach data isolation at the database level |
 | AI | **Claude API — Haiku 4.5** for summaries/briefs/drafts (server-side only) | Verified cost ≈ $0.03/coach/mo; upgrade individual calls to Sonnet only if quality demands |
-| Scheduling (Phase 1) | **Cal.com embed** | Don't build a scheduler |
-| Payments (Phase 2) | **Stripe** | Standard |
+| Agent layer | **Mastra** (Apache 2.0) — powers the Pipeline Agent (Module 2, Phase 3) | Not needed for Module 6 itself; noted here since it shares the AI layer (doc 10) |
+| Scheduling (Phase 2) | **Cal.com embed** | Don't build a scheduler |
+| Meetings, recording, transcripts (Phase 1 — moved up, doc 09 §8) | **LiveKit** (Apache 2.0) on one small, separate test VPS, independent of the main app's hosting | Native UDP needed for real call quality — Vercel/Railway can't provide this, so it runs standalone rather than gating the feature on the Phase 3+ infra migration (doc 07 §6). Zoom pull-in is the fallback path for coaches already on Zoom. |
+| Speech-to-text | A commercial STT API at launch (pennies/hour), self-hosted Whisper later if volume justifies it | doc 09 §8 |
+| Payments (Phase 2) | **Stripe** + **Stripe Connect** for coaches without their own account | doc 02 Module 5 |
 | E-sign (Phase 2) | **Documenso** (self-host or API) | See doc 03 |
-| Hosting | **Vercel** | Free tier to start, zero-ops |
-| Email sending | **Resend** (or Supabase SMTP) | Simple transactional email for summaries/reminders |
+| Hosting | **Vercel** (Phase 1) → **Railway** (Phase 2, for Documenso etc.) → **Coolify + VPS** (Phase 3+) | Full phased reasoning in doc 07 §6 |
+| Email sending | **Email Connections** — Gmail, Microsoft 365, or custom-domain SMTP/IMAP, multiple named connections per coach (doc 02 Module 3); **Resend as the zero-setup fallback** until a coach connects their own | Module 6 itself only needs the fallback path — full Email Connections build happens with Module 3 |
 
-**Accounts you need before starting:** GitHub (done), Supabase, Vercel, Anthropic Console (API key), Resend, Cal.com. All free tiers. Keys go into `.env.local` and Vercel's environment settings — never into git.
+**Accounts you need before starting:** GitHub (done), Supabase, Vercel, Anthropic Console (API key), Resend. All free tiers. Keys go into `.env.local` and Vercel's environment settings — never into git. (Cal.com, LiveKit test VPS, and Email Connections accounts come with their respective modules, not needed for Module 6's first build.)
 
 ## 3. Application structure (tell Claude Code to scaffold exactly this)
 
 ```
-coachos-app/                      ← separate PRIVATE repo from this planning repo
+coachos-app/                      ← separate PRIVATE repo from this planning repo (docs/11's confidentiality rules apply here too)
 ├── CLAUDE.md                     ← project rules for Claude Code (template in §7)
 ├── .cursorrules                  ← same rules for Cursor
 ├── .env.local                    ← secrets (git-ignored)
@@ -50,61 +55,93 @@ coachos-app/                      ← separate PRIVATE repo from this planning r
 │   ├── (marketing)/page.tsx      ← public landing page (from prototype design)
 │   ├── (app)/
 │   │   ├── dashboard/            ← "Today" pane
-│   │   ├── clients/              ← list + [id] detail (timeline, notes, summaries)
+│   │   ├── clients/              ← list + [id] detail (timeline, notes, summaries, homework, goals)
+│   │   ├── meetings/[session_id]/← CoachOS Meet room (LiveKit) + recording/transcript status
 │   │   ├── leads/                ← Phase 3
 │   │   ├── marketing/            ← Phase 3
-│   │   ├── bookings/             ← Cal.com embed + session list
+│   │   ├── bookings/             ← Phase 2 (Cal.com embed + session list)
 │   │   ├── contracts/            ← Phase 2
-│   │   └── settings/             ← profile, niche pack, voice profile
-│   ├── portal/[token]/           ← client-facing portal (no login; signed link)
+│   │   └── settings/
+│   │       ├── voice/            ← the AI Voice & Rules Center (doc 02 cross-cutting)
+│   │       ├── data/             ← per-client retention period, export, delete
+│   │       └── delivery/         ← portal on/off, portal branding, delivery mode
+│   ├── portal/[token]/           ← optional client-facing portal (no login; signed link, doc 02 Module 6)
 │   └── api/
-│       ├── ai/summarize/route.ts ← notes → summary (server-side Claude call)
+│       ├── ai/summarize/route.ts ← notes → configurable outputs (server-side Claude call)
 │       ├── ai/prep-brief/route.ts
+│       ├── meetings/[session_id]/route.ts   ← LiveKit room create/join
+│       ├── meetings/[session_id]/recording/route.ts  ← egress webhook → transcript pipeline
 │       └── ai/draft/route.ts     ← Phase 3 (follow-ups, posts)
-├── components/                   ← UI kit: Button, Card, Pill, Timeline, ApprovalQueue…
-├── lib/                          ← supabase client, ai client, email, utils
+├── components/                   ← UI kit: Button, Card, Pill, Timeline, ApprovalQueue, MeetingRoom, HomeworkList…
+├── lib/                          ← supabase client, ai client, email, livekit, utils
 └── supabase/migrations/          ← schema as SQL migrations (versioned)
 ```
 
 ## 4. Backend guide
 
-### 4.1 Data model (Phase 1 core)
+### 4.1 Data model — Module 6, as actually decided (docs 02/08 §Journey 3–4)
 
-Tell Claude Code to create these tables via Supabase migrations:
+Tell Claude Code to create these tables via Supabase migrations. This supersedes the earlier draft — the biggest structural change is `clients` splitting into a **unit** (the engagement) and its **members** (the actual people), to support family/team coaching, not just 1:1.
 
 | Table | Key fields | Notes |
 |---|---|---|
-| `coaches` | id (=auth user), name, niche_pack, voice_profile jsonb, timezone | One row per signed-up coach |
-| `clients` | id, coach_id, name, email, status, portal_token | The coach's clients |
-| `engagements` | id, client_id, package_name, sessions_total, sessions_used, start/end | e.g. "Executive package · 12 sessions" |
-| `goals` | id, client_id, title, status (active/stalled/done), last_progress_at | Powers timeline + at-risk logic |
-| `sessions` | id, client_id, scheduled_at, status, cal_booking_id | Synced from Cal.com webhook |
-| `session_notes` | id, session_id, raw_notes text, created_at | The coach's rough input |
-| `summaries` | id, session_id, client_facing text, coach_facing text, action_items jsonb, status (draft/approved/sent), sent_at | **status is the approval-first gate** |
-| `audit_log` | id, coach_id, action, entity, at | Who sent what when — trust feature |
+| `coaches` | id (=auth user), name, niche_pack, timezone, portal_enabled bool, delivery_mode (`email_only`\|`email_and_portal`), retention_period_months int (null = indefinite) | One row per signed-up coach. Voice now lives in its own table below, not a single jsonb column. |
+| `voice_profiles` | coach_id (unique), about_me text, writing_samples jsonb, parameters jsonb (the 15 tunable values from doc 02's AI Voice & Rules Center), rules jsonb (per-content-type overrides) | Powers every AI draft in the whole product, not just this module — built here first since summaries are the first consumer |
+| `client_units` | id, coach_id, unit_type (`individual`\|`family`\|`team`), display_name, status | The engagement-level record. 1:1 is `unit_type='individual'` with exactly one member below — same shape, not a special case. |
+| `client_members` | id, client_unit_id, name, email, phone, portal_token, is_primary_contact bool | One row per actual person. One row for 1:1; multiple for family/team. **Each member gets their own portal_token** (assumption — confirm before build if a family should instead share one token). |
+| `engagements` | id, client_unit_id, package_name, sessions_total, sessions_used, start/end | e.g. "Executive package · 12 sessions" |
+| `goals` | id, client_unit_id, title, status (active/stalled/done), last_progress_at, **editable_by_client bool default false** | The permission toggle from doc 02 — coach-only by default, coach can grant client edit access |
+| `homework_tasks` | id, client_unit_id, title, status (open/done), source_session_id, due_before_session_id, reminder_sent_at | New table — built from Phase 1, not deferred |
+| `sessions` | id, client_unit_id, scheduled_at, status, cal_booking_id (Phase 2), **meeting_provider** (`livekit`\|`zoom`\|`upload`\|`none`), **recording_url**, **recording_consent_notified_at**, **transcript_text**, **transcript_status** (`pending`\|`ready`\|`failed`\|`none`) | Recording/transcript fields are new — built in from day one, not bolted on |
+| `session_notes` | id, session_id, raw_notes text, created_at | The coach's rough input (typed, or the transcript once ready) |
+| `summaries` | id, session_id, **outputs_enabled jsonb** (which of the 4 the coach wants: client_email, coach_note, action_items, next_agenda), client_facing text, coach_facing text, action_items jsonb, next_agenda text, status (draft/approved/sent), **delivery_mode_used** (email/portal/both), sent_at | `outputs_enabled` makes the four outputs coach-configurable, per doc 02; `status` stays the approval-first gate |
+| `client_data_events` | id, client_unit_id, event_type (`retention_notice_sent`\|`deleted`\|`exported`), at | The pre-deletion notice trail doc 02 requires — separate from `audit_log` since these are client-rights events specifically, easy to query for compliance |
+| `audit_log` | id, coach_id, action, entity, at | Who sent what when — trust feature, unchanged |
 
-Phase 2 adds: `contracts`, `invoices`, `coach_email_accounts` (encrypted OAuth tokens, RLS-scoped, one per coach). Phase 3 adds: `leads`, `pipeline_stages`, `content_drafts`, `email_sequences`, `automation_recipes`, `automation_runs` (audit trail — every automated send logged like any other), `coach_profiles` (public directory fields — the one table where a coach explicitly opts a subset of data into public visibility), `directory_enquiries` (routes into `leads`), two tables for Daily Briefing — `briefing_days` (one row per **category** per **day**, not per coach: `category`, `date`, `world_catchup_text`, `world_catchup_source_url`, `learn_title`, `learn_summary`, `learn_source_url`, `learn_image_url`) and `briefing_headlines` (many rows per `briefing_days` row: `headline`, `summary`, `source_url`, `image_url`, `position`, `created_by` — `created_by` is either `'system'` for the automated RSS pull or an admin's ID for anything pushed manually via the MCP tool) — and `team_members` (`id`, `email`, `name`, `is_content_admin` boolean default `false`), the access-control table the admin MCP server checks before any tool call (§4.6).
+**Phase 2+ tables** (`contracts`, `invoices`, `stripe_connect_accounts`, `coach_email_accounts`, `leads`, `pipeline_stages`, custom fields, `proposals`, Autopilot/Community/Directory/Briefing tables) are sketched further down in this doc but **stale relative to this session's decisions** — each gets its own rewrite pass when we build that module, same as this section just got for Module 6.
 
 ### 4.2 Security rules (give these to Claude Code verbatim)
 
-- **Row-Level Security ON for every table**: a coach can only ever read/write rows where `coach_id = auth.uid()` (directly or via joins). Test this explicitly with two test accounts.
+- **Row-Level Security ON for every table**: a coach can only ever read/write rows where `coach_id = auth.uid()` (directly, or via `client_unit_id → client_units.coach_id` for the tables that key off the unit). Test this explicitly with two test accounts.
 - **All Claude API calls happen in server routes** (`app/api/ai/*`). The API key exists only in server env. Nothing AI-related runs in the browser.
-- **Client portal uses unguessable signed tokens**, read-only, showing only `approved`+`sent` artifacts.
+- **Client portal is optional per coach** (`coaches.portal_enabled`) and uses unguessable signed tokens per `client_member`, read-only, showing only `approved`+`sent` artifacts, homework, and goals (respecting `editable_by_client` for whether checkboxes/edits are writable).
 - **Nothing sends without approval**: emails to clients fire only on an explicit approve action that flips `summaries.status` → `approved` and logs to `audit_log`.
+- **Recording consent**: the moment a session starts recording, log a visible notification to the client and stamp `sessions.recording_consent_notified_at` — this is the actual compliance record, not just a UI toast that could go unlogged.
+- **Data retention**: a scheduled job checks `coaches.retention_period_months` against each `client_unit`'s last activity; before deleting anything, write a `client_data_events` row (`retention_notice_sent`) and notify the client, then only actually delete after that notice — never delete silently.
 - AI outputs are labeled "AI-drafted, coach-approved" (EU AI Act limited-risk disclosure).
 - No client data in AI prompts beyond what the feature needs; never send the whole client table to the model.
 
 ### 4.3 The AI endpoints (Phase 1)
 
-**`POST /api/ai/summarize`** — input: `session_id`. Server loads raw notes + client name + goals; calls Claude Haiku with a prompt like:
+**`POST /api/ai/summarize`** — input: `session_id`. Server loads raw notes (typed or transcript) + client name + goals + the coach's `voice_profiles` row + `summaries.outputs_enabled` for that coach; calls Claude Haiku with a prompt like:
 
-> You are the assistant of a professional {niche} coach. From the coach's rough session notes, produce (1) a warm, professional client-facing summary email (max 180 words, coach's voice profile: {voice_profile}), (2) a private coach-facing note (key risks, goal-status changes), (3) 1–4 action items as JSON. Never invent facts not in the notes. Output JSON: {client_facing, coach_facing, action_items[]}.
+> You are the assistant of a professional {niche} coach. Voice: {voice_profile parameters + about_me + rules}. From the coach's session notes, produce only the outputs enabled: {client-facing summary email if enabled} (max 180 words), {private coach-facing note if enabled}, {1–4 action items as JSON if enabled}, {one-line next-session agenda if enabled}. Never invent facts not in the notes. Output JSON matching only the enabled fields.
 
-Saves result to `summaries` with `status='draft'`. **The model never emails anyone** — the approve button does.
+Saves result to `summaries` with `status='draft'`. **The model never emails or posts to the portal** — the approve action does, and it respects `coaches.delivery_mode` (email only, or email + portal link).
 
-**`POST /api/ai/prep-brief`** — input: `client_id`. Loads last 3 summaries + goals; returns a 120-word brief: commitments made, blockers, stalled goals. Displayed 30 min before session (and on demand).
+**`POST /api/ai/prep-brief`** — input: `client_unit_id`. Loads last 3 summaries + goals + open homework; returns a 120-word brief: commitments made, blockers, stalled goals. Displayed 30 min before session (and on demand). Built from Phase 1, not deferred.
+
+**Homework endpoints** — `POST /api/homework` (create, from a session or standalone), `PATCH /api/homework/[id]` (coach edits, or client checks off via the portal if `portal_enabled`), reminder job checks `due_before_session_id` and nudges if still open close to the next session.
+
+**Goals endpoints** — `PATCH /api/goals/[id]` checks `editable_by_client` before allowing a portal-authenticated (token-based) write; coach's own session always allowed.
 
 Cost guard: log tokens per call into `audit_log`; alert at $20/mo (it should never get there — verified math in doc 04).
+
+### 4.3b Meetings — CoachOS Meet, recording, and transcripts (Phase 1, moved up — doc 09 §8)
+
+**Infrastructure:** LiveKit (Apache 2.0), self-hosted on one small, separate test VPS — plain Docker Compose, independent of the main app's Vercel/Railway hosting (doc 07 §6). This is deliberately not the full Phase 3+ Coolify migration; it's a narrow, cheap exception made specifically because native UDP (which Railway can't provide) matters for real call quality.
+
+**`POST /api/meetings/[session_id]/create`** — generates a LiveKit room + a join token for the coach and each `client_member` on that session. The join experience is a plain link — click, browser opens the room, no app download, matching the "as easy as Google Meet" target.
+
+**Recording flow:** LiveKit Egress records the room to storage → webhook hits `POST /api/meetings/[session_id]/recording` → stamps `sessions.recording_url`, sets `transcript_status='pending'` → sends the file to the speech-to-text service → on completion, writes `sessions.transcript_text`, sets `transcript_status='ready'`, and the transcript becomes available as input to `session_notes`/`/api/ai/summarize` exactly like typed notes would be.
+
+**Consent, not optional:** the moment recording starts, the client-facing meeting UI shows a visible, unmissable notice, and the backend stamps `recording_consent_notified_at` (§4.2) — this has to happen before or at recording start, not logged after the fact.
+
+**Zoom fallback path (also Phase 1):** for coaches already on Zoom, a connect-once OAuth flow pulls the Cloud Recording + VTT transcript automatically after each call via Zoom's API — same downstream pipeline (transcript → `session_notes` → summarize), different upstream source. Google Meet's API can be pulled from too, with the caveat (verified, doc 09 §8) that it requires the coach's own Workspace plan to support it and recording must be started manually in-meeting.
+
+### 4.4–4.7 — STALE, pre-questionnaire draft (not Module 6's concern; rewritten when we build each of these)
+
+Everything from here to the end of §4 predates this session's questionnaire pass and contradicts several decisions already locked in — most importantly: **Gmail is now one of three Email Connections options** (doc 02 Module 3), **the automation engine is Activepieces, not n8n** (doc 09 §5), **Autopilot gets a real constrained workflow builder now** (reversed from "never," doc 08 M8-Q4), and **Community is a fully open public network with a two-tier profile system**, not the closed coach-only peer network described below (doc 08 §Journey 7). Kept here only as a rough placeholder of *what exists*, not *how it's built* — do not hand this to Claude Code as-is for any module past 6.
 
 ### 4.4 Gmail, Automations & Directory endpoints (Phase 2–3)
 
@@ -181,43 +218,54 @@ Radius 2–4px (sharp, not bubbly) · shadows soft and warm · generous whitespa
 
 Rule for Claude Code: *"Match `prototype/index.html` in the planning repo for look and feel; it is the design source of truth."*
 
-### 5.2 Screens to build (Phase 1) and their components
+### 5.2 Screens to build (Phase 1, Module 6) and their components
 
 | Screen | Contains | Key components |
 |---|---|---|
-| Dashboard ("Today") | Greeting, KPI tiles, **Approval Queue** (drafts with Approve/Edit buttons), today's sessions, **Daily Briefing card** (category news, world catchup, 5-min learn) | `KpiTile`, `ApprovalQueue`, `SessionRow`, `BriefingCard` |
-| Public briefing (`/briefing`) | Same content as the dashboard's Briefing card, no login required — a content/SEO surface | `BriefingCard` (reused) |
-| Community feed (`/community`) | Post composer, connections' posts with like/comment/share, a "People you may know" strip; report/block on every post and comment | `PostComposer`, `PostCard`, `ConnectionCard`, `ReportButton` |
-| Messages (`/messages`, Phase 5) | Conversation list + thread view, typing/presence indicators | `ConversationList`, `MessageThread` |
-| Clients list | Search, cards with engagement progress, at-risk badge | `ClientCard`, `RiskBadge` |
-| Client detail | Goals + progress timeline, sessions list, notes box, **"✦ Summarize with AI"**, draft view with Approve & send | `Timeline`, `NotesEditor`, `AiDraftPanel` |
-| Bookings | Cal.com embed, upcoming list with reminder status | `CalEmbed`, `SessionRow` |
-| Settings | Profile, niche pack picker, voice-profile setup (3 writing samples + short interview form) | `NichePicker`, `VoiceProfileForm` |
-| Client portal (public) | Approved summaries, action items, next session, book link — mobile-first | `PortalCard` |
+| Dashboard ("Today") | Greeting, KPI tiles, **Approval Queue** (drafts with Approve/Edit buttons), today's sessions, prep briefs due | `KpiTile`, `ApprovalQueue`, `SessionRow` |
+| Clients list | Search, cards with engagement progress, at-risk badge; a client can be an **individual, family, or team unit** | `ClientCard`, `RiskBadge`, `UnitTypeTag` |
+| Client detail | Goals (with an edit-access toggle per goal) + progress timeline, sessions list, notes box, **"✦ Summarize with AI"** with per-output toggles, draft view with Approve & send, **homework list** with add/check-off, member list (for family/team units) | `Timeline`, `NotesEditor`, `AiDraftPanel`, `HomeworkList`, `MemberList` |
+| Meeting room (`/meetings/[session_id]`) | CoachOS Meet — join link, in-call recording indicator, post-call transcript status | `MeetingRoom`, `RecordingBadge` |
+| Settings → Voice | The AI Voice & Rules Center: About Me, writing samples, the 15 parameters as sliders/toggles, per-content-type rule overrides | `VoiceProfileForm`, `ParameterSlider`, `RuleOverrideList` |
+| Settings → Delivery | Portal on/off, portal branding, delivery mode (email only / email + portal) | `DeliverySettingsForm` |
+| Settings → Data | Per-client retention period, manual export, manual delete (with the pre-deletion notice flow visible) | `RetentionSettingsForm`, `ExportButton` |
+| Client portal (public, optional) | Approved summaries, action items, homework (checkable if the coach allows), goals (editable if `editable_by_client`), session history — coach-brandable, only shown if `coaches.portal_enabled` | `PortalCard`, `HomeworkCheckItem` |
 
-**UX laws** (put in CLAUDE.md): approval-first everywhere; every AI output editable before approve; empty states teach ("No sessions yet — share your booking link"); mobile-responsive from day one; loading states for AI calls (typing shimmer, like the prototype).
+**UX laws** (put in CLAUDE.md): approval-first everywhere; every AI output editable before approve; empty states teach ("No sessions yet — record your first one"); mobile-responsive from day one; loading states for AI calls and transcript processing (typing shimmer / processing spinner, like the prototype).
 
 ## 6. Functionality-by-functionality build order (with the brief to give Claude Code)
 
-Build in this exact order. Each has a **done-when** — do not move on until it passes.
+Build in this exact order. Each has a **done-when** — do not move on until it passes. **This is Module 6's actual build order, updated from the earlier draft** — recording/transcripts and homework both moved up to the first release; family/team units are in the schema from F1, not retrofitted later.
 
 | # | Functionality | Give Claude Code this brief | Done when |
 |---|---|---|---|
 | F0 | Scaffold | "Create a Next.js App Router + TypeScript + Tailwind + Supabase project with auth (email magic link), the folder structure and design tokens from docs/05 §3+§5, and a CLAUDE.md from §7." | You can sign up, sign in, see an empty dashboard |
-| F1 | Clients CRUD | "Coaches can add/edit/archive clients with engagements and goals per the §4.1 schema, RLS on." | Two test coach accounts can't see each other's clients |
-| F2 | Session notes → AI summary | "Build §4.3 summarize endpoint + client-detail notes flow: paste notes → Summarize → editable draft (client-facing, coach-facing, action items)." | Real notes in, sensible editable draft out; nothing sent |
-| F3 | Approval queue + send | "Dashboard approval queue; Approve sends the client-facing summary by email (Resend), flips status, logs to audit_log." | Approved summary lands in a real inbox; unapproved never sends |
-| F4 | Progress timeline | "Client detail shows goals with status and a session-by-session timeline fed by approved summaries' action items." | Timeline reads like the prototype's Maya example |
-| F5 | Prep brief | "Prep-brief endpoint + 'Prep me' button on client detail and today's sessions." | Brief correctly reflects the last sessions' commitments |
-| F6 | Bookings | "Embed Cal.com, sync bookings to `sessions` via webhook, list upcoming with status." | Booking made in Cal.com appears in-app |
-| F7 | Client portal | "Read-only portal at /portal/[token]: approved summaries, actions, next session, book link." | Portal link works logged-out on a phone; shows only approved content |
-| F8 | Niche packs v1 | "Niche picker in settings loads the pack's templates/presets (from doc 02) into summaries' tone and portal copy." | Switching pack visibly changes tone/templates |
-| F9 | Polish + landing | "Marketing landing page reusing the prototype hero + demo look; app-wide empty/loading/error states." | A stranger understands the product in 30 seconds |
-| — | **Security gate** | Independent review (budgeted in doc 04) + Claude Code self-audit: "Audit auth, RLS, portal tokens, API routes for the §4.2 rules." | Findings fixed **before any real client data** |
+| F1 | Client units + members CRUD | "Coaches can add/edit/archive client_units (individual/family/team) with client_members, engagements, and goals per §4.1, RLS on. Goals get an editable_by_client toggle." | Two test coach accounts can't see each other's clients; a family unit with 3 members works the same as an individual with 1 |
+| F2 | Voice Center | "Build Settings → Voice: About Me, writing samples, the 15 parameters, rule overrides — save to voice_profiles." | A coach can set up their voice once and see it reflected in a test AI draft |
+| F3 | Session notes → AI summary | "Build §4.3 summarize endpoint + client-detail notes flow: paste notes → Summarize → editable draft, respecting per-coach outputs_enabled and the voice_profiles row." | Real notes in, sensible editable draft out in the coach's configured voice; nothing sent |
+| F4 | Approval queue + send | "Dashboard approval queue; Approve sends per coaches.delivery_mode (email via Resend, and/or portal), flips status, logs to audit_log." | Approved summary reaches the client by whichever mode is configured; unapproved never sends |
+| F5 | Homework | "Add/edit homework_tasks from client detail and from a session; client can check off via the portal if enabled; reminder job nudges if still open near the next session." | A task created after a session shows up and can be checked off |
+| F6 | Meetings — CoachOS Meet + recording + transcript | "Stand up the LiveKit test VPS (§4.3b); build /meetings/[session_id] join flow, Egress recording, transcript pipeline feeding into session_notes. Add the Zoom OAuth fallback path." | A real test call records, produces a transcript, and that transcript can be summarized like typed notes |
+| F7 | Progress timeline | "Client detail shows goals with status and a session-by-session timeline fed by approved summaries' action items." | Timeline reads like the prototype's Maya example |
+| F8 | Prep brief | "Prep-brief endpoint + 'Prep me' button on client detail and today's sessions, including open homework." | Brief correctly reflects the last sessions' commitments and open tasks |
+| F9 | Client portal (optional) | "Build /portal/[token] per client_member, gated on coaches.portal_enabled: approved summaries, actions, homework, goals (respecting editable_by_client), next session." | Portal link works logged-out on a phone; shows only approved content; respects the on/off setting |
+| F10 | Data rights | "Settings → Data: retention period per coach, a scheduled job that writes a retention_notice_sent event and notifies the client before any delete, manual export/delete on demand." | A test deletion actually notifies first, then deletes, and is logged |
+| F11 | Polish + landing | "Marketing landing page reusing the prototype hero + demo look; app-wide empty/loading/error states." | A stranger understands the product in 30 seconds |
+| — | **Security gate** | Independent review (budgeted in doc 04) + Claude Code self-audit: "Audit auth, RLS, portal tokens, recording consent logging, API routes for the §4.2 rules." | Findings fixed **before any real client data** |
 
-Then pilots (doc 04 §4). **Phase 2 (F10–F14):** contracts via Documenso, Stripe billing, invoice chasing, **Gmail OAuth connect (F13 — start Google's verification review the same week, not after building)**, security re-review. **Phase 3 (F15–F20):** leads pipeline + AI scoring, follow-up drafts into the approval queue, marketing composer with voice profile, landing-page builder, **Automations v1 (F17 — 3–5 recipes, n8n-backed, toggle-only UI)**, **Coach & Mentor Directory (F18 — profile + search + enquiry routing, built but not opened to public traffic until the coach-supply gate in doc 04 clears)**, **Daily Briefing (F19 — the scheduled per-category digest job, the dashboard card, and the public `/briefing` page; every item must carry a real source link or get skipped, per §4.5)**, **Admin MCP server (F20 — the seven content-management tools in §4.6, local stdio transport, dedicated service-role credential, never given to coaches)**.
+Then pilots (doc 04 §4).
 
-**Phase 4 (F21–F24):** practice dashboard + at-risk AI, then **Coach Community v1 (F23 — connections, posts, likes, comments, shares; report/block tooling built alongside, not bolted on after — §4.7)**. **Phase 5 (F25+):** **Message + Chat (F25 — Supabase Realtime, presence, real-time delivery — a distinct build from the v1 feed, per doc 02 Module 11's own reasoning for why these are separate phases)**, then corporate/L&D evaluation from leverage.
+### Phase 2+ — stale, rewritten module by module as we get there
+
+Everything below reflects the *original* pre-questionnaire plan and is known to be out of date against docs 02/08/09/10/11's actual decisions (Bookings' scope, Agreements' dual-path Stripe Connect model, Marketing Studio's narrowed launch scope and Email Connections, Autopilot's Activepieces engine and reversed workflow-builder decision, the Directory's deferral, Community's full open-network reversal, the Pipeline Agent, and per-coach API/MCP from doc 11 aren't reflected here yet). Treat the phase/module list itself as still roughly right; treat every technical detail under it as a placeholder until we do that module's own build-prompt pass, the same way §4.1–§4.3b and §5.2/§6 just got done for Module 6.
+
+**Phase 2 (Bookings, Agreements & Billing, Email Connections):** Cal.com integration, Stripe + Stripe Connect dual-path billing, Documenso e-sign, Email Connections (Gmail/Microsoft 365/SMTP), security re-review.
+
+**Phase 3 (Leads/Pipeline, Marketing Studio, Autopilot, Daily Briefing):** native pipeline with Lead IDs/custom fields/activity log, the Pipeline Agent (Mastra), Odoo-style Proposals, Marketing Studio's newsletter-first scope, Autopilot on Activepieces with the constrained coach-facing workflow builder, Daily Briefing's per-category digest + admin MCP server, per-coach API + coach-facing MCP (doc 11).
+
+**Phase 3, deferred:** Coach & Mentor Directory — paused per explicit instruction (doc 08), not built until revisited.
+
+**Phase 4+ (Practice Intelligence, Coach Community):** dashboards-with-filters everywhere (doc 02's cross-cutting rule), at-risk signals, and the Community's full open-public-network build (two-tier Verified Coach/general profiles, trust & safety at public-platform scale, per doc 02 Module 11) — a materially bigger undertaking than the original closed-community sketch below, per doc 04's updated cost note.
 
 ## 7. CLAUDE.md / .cursorrules template (paste into the app repo)
 
@@ -249,9 +297,11 @@ Hard rules:
 
 ## 9. What NOT to build (standing guardrails)
 
+**Note:** two of these lines were overturned by this session's questionnaire pass and are corrected below rather than left stale, since a guardrail that's silently wrong is worse than no guardrail at all.
+
 - No chat-with-AI-coach feature for clients (that's Build 1 — see the dossier).
 - No custom scheduler, editor, or e-sign implementation — integrate (doc 03).
-- No multi-language, no mobile apps, no API-for-third-parties until Phase 4.
-- No feature that sends anything autonomously. Ever.
-- No Community posting live to real coaches without report/block tooling already built — user-generated content without moderation tooling is not a v1 that ships, it's a liability (doc 02, Module 11).
-- No real-time Chat before the v1 feed proves coaches actually connect and post — don't build the harder infrastructure first on a guess.
+- ~~No multi-language, no mobile apps~~ — **reversed:** full multi-language is now a cross-cutting requirement from early on (doc 02, M12-Q5), and mobile is responsive-web + installable PWA, not gated to Phase 4 (M12-Q4). Per-coach API/MCP (doc 11) is real but scoped per module, not a Phase 4 gate either.
+- No feature that sends anything to a client without going through the approval-first floor — this still holds even where Autopilot/the workflow builder (doc 02 Module 8) let a coach build their own automation: the builder changes who designs it, never whether a human approved what's about to send.
+- ~~No Community posting live to real coaches without report/block tooling already built~~ — **the bar is now higher, not lower:** Community is a fully open public network (doc 02 Module 11, reversed from a closed peer community), so this needs automated content moderation at scale plus report/block, and a real legal review pass (EU Digital Services Act exposure) before public launch — not just report/block tooling.
+- No real-time Chat before the v1 feed proves real engagement — don't build the harder infrastructure first on a guess.
