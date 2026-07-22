@@ -103,9 +103,27 @@ Full multi-language support for both dashboard UI and AI-drafted communications,
 
 **Full campaign analytics, Brevo-style**, surfaced in our own dashboard (not Listmonk's raw interface): sent, delivered, bounced, opened (with **open count**, not just yes/no), clicked, and read — Listmonk already tracks opens/bounces/clicks per campaign natively (doc 03), so this is building our own branded dashboard on top of data the engine already produces, not building tracking from scratch. **This is the same metrics layer that feeds Module 2's Lead Activity Log** for 1:1 email opens — one consistent analytics system, whether it's a bulk newsletter or a single email to one lead.
 
-## Module 4 — Bookings · *Phase 2*
+## Module 4 — Bookings · *Phase 2* · decided in docs/08 §Journey 3
 
-Scheduling links, two-way calendar sync, buffer rules, reminder sequences (email/SMS), no-show recovery ("rebook" one-click). **Build:** integrate Cal.com (see doc 03) — we do not hand-build a scheduler.
+**Build:** integrate Cal.com (doc 03), fully white-labeled — the client never sees Cal.com's own name or UI.
+
+| Capability | Decision |
+|---|---|
+| Package-aware booking | **Not built into booking at launch** — deliberately deferred, to be configured later rather than shipped now. |
+| Calendar sync | Google + Outlook/Microsoft 365 both at launch, **plus room to connect other calendar providers later** (the same "multiple named connections" pattern as Module 3's Email Connections) and a real **in-app personal calendar view** inside CoachOS itself, not just a sync target. Two-way, near-instant sync; dates/times always shown in each viewer's own system timezone; a sent invite blocks the slot on both the coach's and the client's calendar. |
+| Meeting experience | Prioritized to be **as easy to join as Google Meet** (one click, no app download) and **as feature-rich as Zoom** (recording, transcript, written summary) — see "CoachOS Meet" below. |
+| Pay-to-book | Optional, attached per event type — same pattern as Calendly's paid event types (Module 5 handles the actual charge). |
+| Reminders | Email is the must-have at launch (WhatsApp stays a Phase 3 investigation) — sent on a **configurable rule set** (e.g. 24h before, 1h before), the same rules-engine pattern as Autopilot (Module 8), not a hardcoded interval. |
+| No-shows | Auto-flag + one-click rebook invite; optional no-show fee, off by default. |
+| Buffers | 15-minute buffer between sessions, no daily cap. |
+| Group sessions | **Built at launch**, not deferred — capped at 2–3 people per group session. |
+| Client reschedule window | Fully **customizable per coach**, not a fixed 24 hours. |
+| The booking→timeline→prep-brief→reminder chain | Confirmed automatic end to end, **and customizable** — a coach can adjust or disable individual steps, consistent with the interconnection-editability rule already established (doc 08 M12-Q16): the parts that would break the product if turned off stay locked, the rest is a coach's choice. |
+| Branding | Zero third-party branding anywhere the client sees the booking page — hard requirement, unchanged. |
+
+### "CoachOS Meet" — brought forward to day one for testing (supersedes the original Phase 3+ gate)
+
+Recording, transcripts, and a written summary are core to the product, not a later nice-to-have — so rather than waiting for Phase 3's full self-hosted infrastructure, LiveKit gets stood up **now** on one small, dedicated, independent test server (doc 07 §6), purely so the real meeting/recording/transcript experience can be built and tried immediately. It folds into the full infrastructure migration later rather than being thrown away. The target experience: a simple join link like Google Meet's, recording and transcription like Zoom's, all inside CoachOS's own screens.
 
 ## Module 5 — Contracts & Payments · *Phase 2*
 

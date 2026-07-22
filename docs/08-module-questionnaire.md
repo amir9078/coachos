@@ -106,22 +106,22 @@
 **End goal:** the coach never has to manually log that a session happened, what was discussed, or what's next — the booking-to-summary pipe does it.
 **Result the coach sees:** open the app 30 minutes before a session and the prep brief is already there; the session ends and a draft summary is already waiting for approval.
 
-**Booking mechanics (M4):**
-- **M4-Q1.** Package-aware booking — checks and shows remaining session credits? *(yes)*
-- **M4-Q2.** Calendar sync: Google only, or + Outlook/Microsoft 365? *(both)*
-- **M4-Q3.** Video links auto-created: Google Meet, Zoom, or both? *(Meet v1, Zoom Phase 3)*
-- **M4-Q4.** Pay-to-book single sessions (charged at booking, via M5)? *(optional per session type)*
-- **M4-Q5.** WhatsApp reminders (huge in the Gulf) — priority or later? *(email v1; WhatsApp investigated Phase 3)*
-- **M4-Q6.** No-show handling: auto-flag + one-click rebook + optional fee? *(flag + rebook; fees off)*
-- **M4-Q7.** Buffer/daily-cap defaults? *(15-min buffer, no cap)*
-- **M4-Q8.** Group sessions/workshops — v1 or later? *(later, Phase 4)*
-- **M4-Q9.** Client self-reschedule window? *(24h)*
-- **M4-Q10.** Confirm the full chain: booking confirmed → session on client timeline → prep brief scheduled → reminder sent, fully automatic? *(yes)*
-- **M4-Q11.** Booking page 100% CoachOS-branded, zero third-party name visible anywhere? *(yes — hard requirement)*
+**Booking mechanics (M4) — ANSWERED (see docs/02 Module 4 for the full write-up):**
+- **M4-Q1.** ✔ Not built at launch — deliberately deferred, to configure later.
+- **M4-Q2.** ✔ Both, **plus** room to connect other calendar providers later (same pattern as Email Connections), an in-app personal calendar view, instant two-way sync, viewer-local timezone display, and invites blocking the slot on both sides.
+- **M4-Q3.** ✔ Superseded by M4-Q13 below — in-platform video ("CoachOS Meet") prioritized over choosing between Meet/Zoom links.
+- **M4-Q4.** ✔ Confirmed, Calendly-style optional per-event-type payment.
+- **M4-Q5.** ✔ Email confirmed as the must-have, sent on a **configurable rule set** (same rules-engine pattern as Autopilot), not a hardcoded interval. WhatsApp stays a later investigation.
+- **M4-Q6.** ✔ Confirmed.
+- **M4-Q7.** ✔ Confirmed.
+- **M4-Q8.** ✔ Reversed — **built at launch**, capped at 2–3 people per group session.
+- **M4-Q9.** ✔ Made fully customizable per coach, not fixed at 24h.
+- **M4-Q10.** ✔ Confirmed automatic, **plus made customizable** — coach can adjust/disable individual steps in the chain (structural pieces stay locked per doc 08 M12-Q16).
+- **M4-Q11.** ✔ Confirmed, hard requirement.
 
-**The meeting itself — recording and transcription (doc 09 §8):**
-- **M4-Q12.** What do your target coaches actually run sessions on today — Zoom, Meet, Teams, phone? Rank them; this decides which integration we build first. *(Zoom first — the only one where recording + transcript both pull in automatically)*
-- **M4-Q13.** In-platform video ("CoachOS Meet," Phase 3+) — must-have, nice-to-have, or skip if Zoom already works? *(nice-to-have, Phase 3 decision gate)*
+**The meeting itself — recording and transcription (doc 09 §8) — ANSWERED:**
+- **M4-Q12.** ✔ Prioritized as an in-platform, join-link experience (like Meet) with Zoom-level recording/transcription/summary richness — not a choice between external Zoom vs. Meet links.
+- **M4-Q13.** ✔ **Reversed — needed from the beginning, at least to test it**, not deferred to Phase 3+. Resolved the Phase 3+ hosting gate by standing up LiveKit on one small, separate test VPS now (doc 07 §6), independent of the main app's hosting phase — folds into the full Coolify migration later rather than being thrown away.
 
 **Where the session lands — notes to summary to timeline (M6):**
 - **M6-Q1.** Should the upload-any-recording→transcript path move into Phase 1 itself, as part of the wedge? *(Phase 1.5, right after typed notes work)*
