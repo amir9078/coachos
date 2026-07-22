@@ -207,18 +207,30 @@ Every module gets its own dashboard-style view of its key data, with **filter op
 
 **Security:** OAuth tokens are encrypted at rest, scoped per-coach (RLS), and revocable from Settings in one click.
 
-## Module 8 — Automations · *Phase 3*
+## Module 8 — Autopilot (Automations) · *Phase 3* · decided in docs/08 §Journey 4
 
 **Job:** stop the coach re-typing the same follow-up for the fortieth time — without breaking the platform's core trust rule (nothing sends without a human having approved the actual words).
 
-| Capability | How it works |
-|---|---|
-| Automation recipes | A short list of pre-built triggers → actions the coach turns on and lightly customizes (delay, one variable) — **not** a general-purpose workflow builder |
-| Example recipes | "Lead silent 6 days → send this exact follow-up template" · "Session marked complete → schedule the next prep brief" · "Invoice 3 days overdue → send this reminder" |
-| Engine | Built on **n8n** (already in the stack as our internal glue, doc 03) — we curate the recipes; the coach never sees n8n's own UI |
-| AI's role | Suggests a recipe from the coach's own repeated behavior ("You've sent this same message 4 times — automate it?") — AI proposes, never auto-generates the send-time content |
+**Engine, corrected:** built on **Activepieces** (MIT-licensed, doc 03/09 — this replaced n8n after we verified n8n's license doesn't cover powering a paid customer feature). The coach never sees Activepieces' own UI.
 
-**The rule that keeps this safe:** an automation only ever sends a **template the coach has already approved once**, not freshly AI-generated text created at trigger time. This preserves the platform's approval-first principle (doc 02 cross-cutting requirements, doc 01 §5) — the coach saw and approved the words; the automation just handles *when*, not *what*.
+| Capability | Decision |
+|---|---|
+| Recipes at launch | **All seven** built from the start, not just the original five — silent-lead follow-up, overdue-invoice reminder, no-show recovery, pre-session prep brief, post-session notes nudge, testimonial ask, past-client re-engagement. Recipes can also trigger off **custom fields** a coach has created (Module 2) — not just the standard fields — so a wellness coach's custom "last check-in mood" field, say, can be a trigger condition too. |
+| Approval strictness | **Per-recipe, coach-configurable at setup** — when a coach turns a recipe on, they choose whether it's "approve the wording once, then run automatically" or "ask me every single time," rather than the system deciding that for them. |
+| Frequency cap | Coach-set, not fixed at 2/week. |
+| Failure handling | In-app alert + email + auto-retry (3 times), **plus a dedicated error page** — a persistent, browsable list of everything that's failed, not just a one-time toast that can be missed. |
+| Vacation/pause mode | **Per-workflow**, not one all-or-nothing switch — the coach selects which specific automations to pause, not everything at once (a "pause all" convenience option can still sit alongside this). |
+| Quiet hours | **Fully coach-configurable** — the coach sets exactly which hours/timezone each automation is allowed to send in, rather than a fixed 8am–8pm default. |
+| Cross-module reach | All the interconnection chains from doc 08 §0.3 ship together, and this stays the standing principle for the whole product — Autopilot is deliberately the "nervous system" tying every module's timers together, not siloed per module. |
+| Custom automations by our team | Confirmed as a paid service — built in the underlying engine, appears to the coach as "my custom recipe." |
+
+### The workflow-builder question — a reversal worth being explicit about
+
+The original plan deliberately ruled out a free-form workflow builder, for a real reason: recipe-only keeps the product simple for a non-technical coach, and reduces the risk of a coach accidentally building something that misfires and messages a real client. **This is now reversed** — coaches get to build their own automations, across every module, as many as they want.
+
+**The way this stays safe rather than becoming a confusing, error-prone builder:** it's a **simple, constrained builder**, not an open-ended one like Zapier or n8n's own visual canvas. A coach picks from a defined list of triggers (a field changes, a stage changes, a date arrives, a custom field updates) and a defined list of actions (send a drafted message, add a tag, move a stage, wait X days, notify the coach) — building blocks, not arbitrary logic or code. And critically, **the approval-first floor stays absolute underneath it**: whatever a coach builds, any action that reaches a client still routes through the approval setting from the row above (once, or every time) — the builder changes *who designs the automation*, never *whether a human can see what's about to be sent*.
+
+**AI's role, unchanged:** still suggests recipes from a coach's own repeated behavior ("You've sent this same message 4 times — automate it?") — proposes, never auto-generates send-time content on its own.
 
 ## Module 9 — Coach & Mentor Directory (Marketplace) · *Phase 3, gated on coach supply*
 

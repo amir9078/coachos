@@ -146,16 +146,16 @@
 - **M6-Q10.** ✔ **Expanded** — 1:1 stays the core shape, but a "client" can also be a **family or team unit** (multiple people, one shared engagement) — genuinely different from and simpler than an ongoing multi-person cohort *program*, which stays deferred.
 - **M6-Q11.** **Still open** — genuinely worth real thought given this is the wedge module; no default applied, revisit whenever ready.
 
-**Autopilot, the nervous system running the timers (M8):**
-- **M8-Q1.** First five recipes — pick from: silent-lead follow-up, overdue-invoice reminder, no-show recovery, pre-session prep brief, post-session notes nudge, testimonial ask, past-client re-engagement (90 days)? *(first five listed)*
-- **M8-Q2.** Any recipe too sensitive for one-time approval, needing per-send approval instead? *(only invoice reminders auto-run after one-time approval; you veto specifics)*
-- **M8-Q3.** Max messages/week to the same client across all automations? *(2)*
-- **M8-Q4.** Confirm: timing + wording editable, but never a free-form workflow builder? *(correct, never)*
-- **M8-Q5.** "What CoachOS did for you this week" activity log on the dashboard? *(yes)*
-- **M8-Q6.** If an automation fails (e.g. Gmail disconnected), notify how? *(in-app + email, auto-retry 3x)*
-- **M8-Q7.** One-switch vacation mode pausing everything? *(yes)*
-- **M8-Q9.** Custom automations built by our team for a coach, as a paid service? *(yes — service revenue)*
-- **M8-Q10.** Quiet hours — no client-facing sends outside 8am–8pm client-local? *(yes)*
+**Autopilot, the nervous system running the timers (M8) — ANSWERED (see docs/02 Module 8 for the full write-up):**
+- **M8-Q1.** ✔ **All seven** recipes at launch, not just five — plus recipes can trigger off coach-created custom fields, not just standard ones.
+- **M8-Q2.** ✔ Made **per-recipe, coach-configurable at setup** — the coach chooses one-time-approval-then-auto vs. approve-every-send, for each recipe individually.
+- **M8-Q3.** ✔ Made coach-configurable, not fixed at 2.
+- **M8-Q4.** ✔ **Reversed — a real but constrained workflow builder is being built.** Not open-ended like Zapier/n8n: defined triggers + defined actions only (no arbitrary logic/code), and the approval-first floor stays absolute underneath whatever a coach builds. Full reasoning in docs/02.
+- **M8-Q5.** Confirmed.
+- **M8-Q6.** ✔ Confirmed, **plus a dedicated error page** — a persistent, browsable list of failures, not just a one-time alert.
+- **M8-Q7.** ✔ Reversed — **per-workflow** pause selection, not one all-or-nothing switch.
+- **M8-Q9.** Confirmed.
+- **M8-Q10.** ✔ Made **fully coach-configurable** — the coach sets the allowed hours/timezone per automation, not a fixed 8am–8pm.
 
 ---
 
