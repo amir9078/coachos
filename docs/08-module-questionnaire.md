@@ -133,7 +133,7 @@
 - **M6-Q7.** ✔ **10 active clients** per typical pilot coach.
 - **M6-Q9.** ✔ Confirmed, **plus made configurable** — retention period is a setting the coach chooses at onboarding, and the affected client gets notified before any actual deletion happens.
 - **M6-Q10.** ✔ **Expanded** — 1:1 stays the core shape, but a "client" can also be a **family or team unit** (multiple people, one shared engagement) — genuinely different from and simpler than an ongoing multi-person cohort *program*, which stays deferred.
-- **M6-Q11.** **Still open** — genuinely worth real thought given this is the wedge module; no default applied, revisit whenever ready.
+- **M6-Q11.** ✔ All three (notes→summary, prep brief, portal) get full design polish, none deprioritized — build order still follows technical dependency (summary → prep brief → portal), not a priority ranking.
 
 **Autopilot, the nervous system running the timers (M8) — ANSWERED (see docs/02 Module 8 for the full write-up):**
 - **M8-Q1.** ✔ **All seven** recipes at launch, not just five — plus recipes can trigger off coach-created custom fields, not just standard ones.
@@ -177,7 +177,7 @@
 - **M10-Q6.** ✔ Confirmed.
 - **M10-Q7.** ✔ Confirmed, timing follows Marketing Studio's own rollout.
 - **M10-Q8.** ✔ Confirmed.
-- **M10-Q9.** **Still open** — needs a name or role from you, no default possible.
+- **M10-Q9.** ✔ The main admin account (the founder) — everything runs through that single account holding the `is_content_admin` flag, at least for now.
 - **M10-Q10.** ✔ Reversed — falls under the full multi-language push (M12-Q5), and specifically **follows the account's own app-language setting** automatically, no separate toggle.
 
 ---

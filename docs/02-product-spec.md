@@ -169,7 +169,7 @@ The daily-use core, and the first thing we build.
 | Data rights | Retention period is **a setting the coach configures** when they onboard (not a fixed rule we impose) — auto-delete after a chosen period, or keep indefinitely. Before any actual deletion happens (retention expiring, or a manual request), **the affected client gets notified first** — a courtesy/safety step before anything is permanently removed. Full export always available. |
 | Coaching unit — 1:1, and family/team | **1:1 stays the core shape**, but a "client" can also be a **family or team unit** (e.g. a couple, a family of 4, a leadership team) — multiple people sharing one engagement, attending sessions together, and viewing shared portal material as one unit. This is genuinely different from — and simpler to build than — an ongoing **cohort program** (a structured multi-week course for many unrelated individuals), which stays a separate, later, not-yet-built feature. |
 
-**Still open — no default, worth real thought:** in a live demo, which single flow makes a coach say "I need this right now" — the notes→summary flow, the prep brief, or the client portal? Whichever it is gets the deepest polish first. Come back to this whenever you're ready — everything else above is locked in.
+**M6-Q11 — ANSWERED:** all three flows (notes→summary, prep brief, client portal) get full design polish — none deprioritized in favor of another. **Build order still follows technical dependency, not priority:** notes→summary has to exist before there's any real data for the prep brief or portal to show, so that's built first, then prep brief, then portal — but all three are held to the same "this needs to sell the product in a live demo" bar.
 
 **Why first:** highest-frequency use (every session), clearest AI value, generates the data that powers Modules 2, 3 and 7 later, and creates switching costs from week one.
 
@@ -265,7 +265,7 @@ The original plan deliberately ruled out a free-form workflow builder, for a rea
 | Publish time | One generation per day, ready by 6am Gulf time. |
 | "Share this insight" | Confirmed for later — turns a briefing item into a Marketing Studio draft (timing follows Marketing Studio's own rollout, doc 02 Module 3). |
 | Sponsor slots | Door kept open for later, nothing built yet. |
-| Editorial ownership | **Still open — needs a name or role from you**, not something to default. |
+| Editorial ownership | **Answered — the main admin account (the founder) does the daily glance-and-correct**, at least for now. Everything runs through that one account holding the `is_content_admin` flag (doc 05 §4.6) — the flag system stays flexible to add other team members later, but today it's a single-owner responsibility. |
 | Language | Follows the full multi-language push (Module 1/M12-Q5) — **and specifically inherits the account's own language setting**: if a coach changes their app language, the Briefing switches with it automatically, no separate language toggle just for this module. |
 
 **Public-site lifecycle, new:** on the public website, the Briefing works as a **lead magnet** (feeds Module 1's lead-magnet list) — each day's edition stays live and readable for **7 days, then is removed from public view**. This is specifically about the *public* page's lifecycle; the coach-facing, logged-in history is a separate concern and isn't implied to be wiped by this rule.
