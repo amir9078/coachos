@@ -28,17 +28,54 @@ Module-by-module: what it does, what the AI does, what stays human, and how each
 - **Pages per coach/offer:** deferred, decide later.
 - **Success number:** deliberately no fixed target — varies too much by coach niche/profile to guess; track empirically once pilot data exists.
 
-### Module 2 — Manage (Pipeline)
+### Module 2 — Manage (Pipeline) · decided in docs/08 §Journey 2
 
 | Capability | How it works | AI / Human |
 |---|---|---|
-| Lead capture & enrichment | Form → CRM record (with the Lead ID above); AI enriches from public info (role, company) | AI |
-| Lead scoring | Live, tracking-based score (see above), sorts the pipeline | AI |
-| Pipeline board | Enquiry → Discovery → Proposal → Won/Lost kanban | Platform UI |
+| Lead capture & enrichment | Form → CRM record (with the Lead ID from Module 1); AI enriches from public info (role, company) | AI |
+| Lead scoring | Live, tracking-based score (Module 1), sorts the pipeline, **coach always sees why** | AI |
+| Pipeline board | Enquiry → Discovery → Proposal → Won/Lost kanban — **fully customizable stages**: add, remove, reorder, rename, from day one | Platform UI |
 | Follow-up nudges | "Sarah has gone quiet 6 days after her discovery call" + a drafted, personalized follow-up ready to approve-and-send | AI drafts, **human sends** |
-| **Pipeline Agent** | On a stalled lead: reads its full history, checks how similar past leads actually behaved, reasons through what to propose (not a fixed template), drafts the move, then **pauses** — coach sees the reasoning and approves, edits, or dismisses. Built on Mastra (Apache 2.0), running inside our own app. Full research + working demo: [`docs/10-ai-agent-layer.md`](10-ai-agent-layer.md) | AI reasons + drafts, **human decides** |
+| **Pipeline Agent** | On a stalled lead: reads its full history, checks how similar past leads actually behaved, reasons through what to propose, drafts the move, then **pauses** for approval. **Proactive daily scanning ships together with on-click investigation from day one** (not phased). The coach can set how far ahead it's allowed to plan — **one next step only, or a short multi-step plan** — as a per-coach setting, not a fixed system default. Built on Mastra (Apache 2.0). Full research + working demo: [`docs/10-ai-agent-layer.md`](10-ai-agent-layer.md) | AI reasons + drafts, **human decides** |
+| **Proposals**, Odoo-quotation-style | A Proposal (package + pricing) is created directly from a lead card, same as Odoo's opportunity→quotation link — the lead card shows a live proposal count/status (Draft/Sent/Viewed/Accepted/Declined), same object the coach edits, never a re-typed copy. **Accepting a proposal is what triggers Won** — auto-advances the pipeline stage and pre-fills the Agreement in Module 5 from the proposal's package/pricing, so nothing gets re-entered. | Platform, AI-assisted drafting |
+| **Lead activity log** | A dedicated, **collapsed-by-default** section on every lead record — every stage change, every email sent (and whether it was opened, and how many times), every newsletter send/open, every call booked, every note. Organized chronologically, hidden from the main pipeline view so it never clutters the board, but always one click away. | Platform |
+| **Communications manager** | A per-lead/per-client panel showing every active sequence or list they're enrolled in (nurture sequence, newsletter, automation recipe) with a **stop/pause control on each one** — the coach's single place to see and control what's being sent to someone, and shut any of it off. | Platform |
+| **Custom fields** | Beyond the standard lead fields, coaches can **add their own custom fields** for whatever their specific practice needs (e.g. a wellness coach tracking health context, a career coach tracking current employer). *Compliance note, not a blocker:* any custom field capturing health or other "special category" data should prompt extra consent language and gets the same encryption-at-rest treatment as session notes — flagged here so it's built in from the start, not bolted on later. | Platform |
+| **Notes & export** | Rich notes on any lead, downloadable as **Word, Excel, or PDF** — a coach's own record, portable out of CoachOS anytime. | Platform |
 
 **Design rule:** AI never sends outbound to a lead autonomously — including the agent. The coach approves every message — this is both a trust feature and our EU-compliance posture.
+
+**Assistant/VA pipeline access:** confirmed for **day one**, not deferred (supersedes the earlier default) — a coach can add a team member with pipeline access from launch.
+
+**Lead-rule assignment (bridges to Module 8 — Autopilot):** which nurture sequence or follow-up cadence a lead enters based on its score/source/stage is a **rule**, not a one-off — this is exactly what Autopilot (Module 8) is for. Module 2 exposes the levers (score, source, stage) and Module 8 is where the actual "if this, then that" recipe lives, so the same rule engine handles both — no separate rules system duplicated in the Pipeline itself.
+
+**UI principle for this module, and really every module going forward:** as customizable as the table above sounds, the pipeline board itself stays clean and uncluttered — proposals, activity logs, communications management, and custom fields are all **one click away in an organized side panel, never sitting on the main kanban view by default.** Power and simplicity aren't a tradeoff here; they're solved by what's visible by default vs. what's a click deeper.
+
+### Cross-cutting: the AI Voice & Rules Center (decided in docs/08 M2-Q3, applies to every AI draft, not just Leads)
+
+Rather than a single "voice profile" living inside Marketing (Module 3) alone, this becomes its own settings area that **every AI-drafted message in the whole product reads from** — pipeline follow-ups, marketing posts, session summaries, everything.
+
+- **An "About Me" section** — the coach's own bio, philosophy, and story, written once, used as background context for every draft (this can also seed the parameters below with sensible starting values, so the coach doesn't have to configure all of them manually from a blank slate).
+- **Written samples** — the 3+ samples from Module 3's onboarding, reused here as the other input.
+- **15 tunable parameters**, each editable anytime, not just set once at onboarding:
+  1. Tone (warm & personal ↔ professional & polished)
+  2. Formality (casual ↔ formal)
+  3. Directness (gentle & exploratory ↔ blunt & to-the-point)
+  4. Sentence style (short & punchy ↔ flowing & detailed)
+  5. Warmth of expression (reserved ↔ effusive)
+  6. Humor (none ↔ frequent)
+  7. Storytelling frequency (rarely ↔ often uses anecdotes)
+  8. Use of questions (mostly statements ↔ frequently asks reflective questions)
+  9. Greeting style (e.g. "Hi [name]," vs. "Dear [name]," vs. none)
+  10. Sign-off style (e.g. "Warmly," "Best," "Talk soon,")
+  11. Vocabulary/jargon level (plain language ↔ industry terms)
+  12. Signature phrases (a coach's own recurring expressions, listed by them)
+  13. Voice/pronoun preference ("I" vs. "we", first-person vs. coach-as-guide phrasing)
+  14. Regional/cultural phrasing (matches the multi-language work below)
+  15. Response length default (concise ↔ detailed) — settable separately for email vs. social content
+- **Rules can override the defaults per situation** — e.g. "session summaries always stay formal regardless of my general tone setting," "marketing posts can use more humor than client emails."
+
+This is the single place that makes every AI draft across the whole product sound like one coach, not a template — and it's exactly what the Pipeline Agent (above), Marketing Studio, and Client Delivery's summaries all pull from.
 
 ### Cross-cutting: language support (decided in docs/08 M12-Q5, applies to every module, not just Leads)
 

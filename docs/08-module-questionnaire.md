@@ -60,23 +60,25 @@
 **End goal:** zero manual re-entry between "someone said yes" and "the coaching relationship formally starts."
 **Result the coach sees:** a lead that moves from Enquiry to a signed, invoiced, onboarded client without ever re-typing the same information twice.
 
-**Pipeline mechanics (M2):**
-- **M2-Q1.** Pipeline stages: fixed default (Enquiry → Discovery → Proposal → Won/Lost), or customizable? *(default + 2 custom)*
-- **M2-Q2.** Silent-lead nudge after how many days quiet? *(6 days)*
-- **M2-Q3.** Coach's voice for AI drafts: trained once at onboarding, or continuously from sent emails? *(once, re-tunable anytime)*
-- **M2-Q4.** Proposals (packages + pricing sent to a lead): drafted here, or handled in Agreements (M5)? *(drafted here, signed in M5 — this is the literal handoff point of this journey)*
-- **M2-Q5.** Lost leads: auto-offer to move to the newsletter nurture list (Journey 5), with consent? *(yes)*
-- **M2-Q6.** Booking a discovery call auto-advances the pipeline stage (a Journey 3 event feeding back into Journey 2)? *(yes)*
-- **M2-Q7.** Coach always sees *why* the AI scored a lead hot/cold? *(yes, always explain)*
-- **M2-Q8.** Assistant/VA pipeline access — v1 or later? *(later, Phase 3)*
-- **M2-Q10.** Import existing pipeline data (spreadsheet, HoneyBook) at launch? *(CSV + our onboarding service)*
-- **M2-Q11.** Anything that must never be stored on a lead (health details etc.)? *(we warn against sensitive data)*
-- **M2-Q12.** One pipeline feature from HoneyBook/Pipedrive/Dubsado a coach would genuinely miss? *(design brief covers board view, saved filters, email activity, notes)*
+**Pipeline mechanics (M2) — ANSWERED (see docs/02 Module 2 for the full write-up):**
+- **M2-Q1.** ✔ Fully customizable from day one — add, remove, reorder, and rename any stage.
+- **M2-Q2.** ✔ 6 days (default confirmed).
+- **M2-Q3.** ✔ Expanded significantly into a cross-cutting **AI Voice & Rules Center** (docs/02): an "About Me" section + writing samples + 15 tunable parameters + overridable rules per content type — powers every AI draft in the product, not just Pipeline follow-ups.
+- **M2-Q4.** ✔ Drafted here, signed in M5 — built **Odoo-quotation-style**: a Proposal object linked to the lead card with its own live status (Draft/Sent/Viewed/Accepted/Declined), and accepting it is the actual Won trigger, pre-filling the Agreement.
+- **M2-Q5.** ✔ Default confirmed (auto-offer to nurture list with consent), **plus a new "Communications manager"** panel — per-lead/client view of every active sequence with a stop/pause control on each.
+- **M2-Q6.** ✔ Confirmed — **plus a new Lead Activity Log**: a collapsed-by-default, organized section on every lead showing every stage change, email sent/opened (with open count), newsletter send/open, call booked, and note.
+- **M2-Q7.** ✔ Confirmed, always explain. Scoring rules (which sequence a lead enters based on score/source/stage) live in Autopilot (Module 8) — Module 2 exposes the levers, Module 8 runs the actual rule.
+- **M2-Q8.** ✔ **Day one**, not later (supersedes the original default).
+- **M2-Q10.** Default confirmed (CSV + onboarding service).
+- **M2-Q11.** ✔ Reversed — coaches CAN store whatever custom fields their business needs via a **customizable fields section**; any field capturing health/special-category data gets extra consent language + encryption, flagged but not blocked.
+- **M2-Q12.** ✔ Confirmed the design brief, **plus Word/Excel/PDF export** on notes and records.
 
-**The Pipeline Agent, reasoning across this journey (doc 10):**
-- **M2-Q13.** Agent runs only on-click, or also proactive daily scans that surface stalled leads on their own? *(both, eventually — on-click now, proactive once trust is earned)*
-- **M2-Q14.** How far ahead can the agent plan — one next step only, or a short multi-step plan? *(one step at a time)*
-- **M2-Q15.** Agent's reasoning always visible to the coach? *(yes, always)*
+**The Pipeline Agent, reasoning across this journey (doc 10) — ANSWERED:**
+- **M2-Q13.** ✔ Both ship together from day one — proactive daily scanning is not gated behind "trust established."
+- **M2-Q14.** ✔ Made a **per-coach setting**, not a fixed default — the coach chooses one-step-only or a short multi-step plan.
+- **M2-Q15.** ✔ Confirmed, always visible.
+
+**Standing UI principle from this module (applies everywhere going forward):** the more customizable a module gets, the more its power features belong in an organized side panel, one click away — never cluttering the primary view by default.
 
 **The handoff into Agreements & Billing (M5):**
 - **M5-Q1.** **Which market's coaches first — UAE, UK, US, EU?** This single decision sets the legal template, VAT logic, and payment methods for every agreement this journey produces. (no default — the biggest open decision in the whole plan)
