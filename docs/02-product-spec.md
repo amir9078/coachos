@@ -8,16 +8,41 @@ Module-by-module: what it does, what the AI does, what stays human, and how each
 
 **Job:** a coach never loses a lead to a forgotten follow-up again.
 
+### Module 1 — Attract (decided in docs/08 §Journey 1)
+
+- **Landing pages:** built on our own domain to start; custom domains once naming is finalized. **Built by our own team, not a self-serve AI page builder** — this is a done-with-you/done-for-you service (matches the existing human-service layer in README §2), which also simplifies the Phase 1 build (no page-builder UI needed yet). A self-serve builder can be revisited once volume justifies it.
+- **Lead magnets:** a scored self-assessment/evaluation quiz, newsletter signup, blog content, Daily Briefing content (reusing Module 10), and a short certification-style mini-course — **simple content (PDF/video/email sequence), no LMS platform, but ending in a scored test** built on the same quiz mechanism as the evaluation form. A more game-like interactive mechanic (points/levels, not just a scored quiz) is noted as a future idea — not scoped or built yet, revisit once the simpler magnets are proven.
+- **Capture form:** Name, Email, Phone — **email is the unique key** (this is what M2's duplicate-merge logic keys on). Every lead gets a sequential, per-coach **Lead ID** (0001, 0002…) — an internal permanent ID for system integrity, plus a coach-editable, customizable **display number/format** so nothing breaks if a coach renames or reorders their own numbering.
+- **Lead scoring — a live workflow, not a one-time read:** the AI scores a lead at capture *and keeps updating that score* from ongoing website-behavior tracking (return visits, content engagement, quiz completion) — the same tracking data also powers ad attribution below. Needs a lightweight events/sessions table and a cookie-consent banner (GDPR/UAE data protection) — a real but bounded addition to Phase 3 scope.
+- **Ad tracking — Meta + Google pixels from day one** (moved up from the original "later" default, at the founder's explicit request) — installed alongside the landing pages themselves since they share the same underlying tracking infrastructure as the scoring above.
+- **Social lead channels — WhatsApp, Instagram, Facebook, LinkedIn**, each behind that platform's own approval process (verified directly, not assumed):
+
+  | Channel | Access process | Real timeline | Build priority |
+  |---|---|---|---|
+  | WhatsApp Business API | Meta Business verification (legal docs) | 2–5 business days (up to 14) | **Build first** — standard, achievable |
+  | Facebook / Instagram Lead Ads | Meta App Review (`leads_retrieval` permission, extra scrutiny — lead data is personal) | Similar to the Gmail review already in doc 04 | **Build first**, alongside WhatsApp |
+  | LinkedIn Lead Gen Forms | Formal LinkedIn Partner Program approval — company + business email verification | **Weeks to months**, LinkedIn is selective | **Apply early, don't block the roadmap on it** — tracked as a timeline risk in doc 04 |
+
+  Lead enrichment (auto-filling role/company from public info) stays as originally specced, applying to leads from every channel.
+- **Testimonials:** rather than a separate ask, folded into the post-call flow — after a call, an AI drafts **a call summary + a feedback/testimonial request together**; the coach reviews and sends both as one approval. A positive response becomes a testimonial candidate for the landing page. (This is the same approval-queue pattern as Module 6's session summaries — see Journey 3 in doc 08.)
+- **Pages per coach/offer:** deferred, decide later.
+- **Success number:** deliberately no fixed target — varies too much by coach niche/profile to guess; track empirically once pilot data exists.
+
+### Module 2 — Manage (Pipeline)
+
 | Capability | How it works | AI / Human |
 |---|---|---|
-| Landing page + lead magnet | Template-based page builder; coach picks template, AI drafts copy in their voice from a 10-minute voice-note interview | AI drafts, coach approves |
-| Lead capture & enrichment | Form → CRM record; AI enriches from public info (role, company) | AI |
-| Lead scoring | AI reads enquiry text, scores fit + urgency, sorts the pipeline | AI |
+| Lead capture & enrichment | Form → CRM record (with the Lead ID above); AI enriches from public info (role, company) | AI |
+| Lead scoring | Live, tracking-based score (see above), sorts the pipeline | AI |
 | Pipeline board | Enquiry → Discovery → Proposal → Won/Lost kanban | Platform UI |
 | Follow-up nudges | "Sarah has gone quiet 6 days after her discovery call" + a drafted, personalized follow-up ready to approve-and-send | AI drafts, **human sends** |
 | **Pipeline Agent** | On a stalled lead: reads its full history, checks how similar past leads actually behaved, reasons through what to propose (not a fixed template), drafts the move, then **pauses** — coach sees the reasoning and approves, edits, or dismisses. Built on Mastra (Apache 2.0), running inside our own app. Full research + working demo: [`docs/10-ai-agent-layer.md`](10-ai-agent-layer.md) | AI reasons + drafts, **human decides** |
 
 **Design rule:** AI never sends outbound to a lead autonomously — including the agent. The coach approves every message — this is both a trust feature and our EU-compliance posture.
+
+### Cross-cutting: language support (decided in docs/08 M12-Q5, applies to every module, not just Leads)
+
+Full multi-language support for both dashboard UI and AI-drafted communications, architected so **adding a language is a simple selection, not a rebuild** — this is genuinely more achievable than a traditional manual-translation effort, for two reasons: a standard i18n framework (extracting UI text into translatable string files, well-supported in Next.js) handles the interface, and Claude drafts AI content **directly in the target language** rather than needing separate translation (it's natively multilingual). Real remaining work: right-to-left layout (Arabic, Hebrew) needs actual layout support, not just word swaps, and each language still needs a translation + QA pass before it's genuinely reliable — so the rollout is broad-and-progressive (AI-assisted translation makes adding each one cheap), not "every language fully polished on day one."
 
 ## Module 3 — Marketing · *Phase 3*
 

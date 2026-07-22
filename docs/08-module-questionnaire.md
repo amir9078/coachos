@@ -22,18 +22,18 @@
 **End goal:** two acquisition channels that both land in the exact same place, scored the same way, with the coach never doing double-entry.
 **Result the coach sees:** one pipeline, regardless of whether a lead came from their own marketing or from being discovered.
 
-**Landing pages & lead capture (M1):**
-- **M1-Q1.** Coach's landing page: hosted on our domain (`coachos…/coach-name`) v1, custom domains later? *(our domain v1)*
-- **M1-Q2.** Which two lead magnets at launch — PDF guide, quiz, free discovery call, email mini-course? *(PDF guide + free discovery call)*
-- **M1-Q3.** AI interviews the coach to build the whole page, or coach picks a template + AI writes the text? *(templates + AI text)*
-- **M1-Q4.** Capture form: minimal, or up to 3 qualifying questions? *(coach picks up to 3 from our bank)*
-- **M1-Q5.** What makes a lead "hot" for a coach — budget signals, seniority, urgency, niche fit? (no default — shapes the scoring the Pipeline Agent uses in Journey 2)
-- **M1-Q6.** Paid-ads tracking pixels — launch or later? *(later)*
-- **M1-Q7.** One landing page per coach, or one per offer/package? *(up to 3, one per offer)*
-- **M1-Q8.** Non-landing-page lead channels day one — manual add, forwarded emails, LinkedIn? *(manual add + CSV import)*
-- **M1-Q9.** Testimonials: self-entered, or portal-collected from real clients (Journey 3 territory)? *(self-entered v1)*
-- **M1-Q10.** Arabic landing pages — when? *(English v1)*
-- **M1-Q11.** Target leads/month before we call this module "working"? (no default)
+**Landing pages & lead capture (M1) — ANSWERED (see docs/02 Module 1 for the full write-up):**
+- **M1-Q1.** ✔ Own domain, once naming is finalized.
+- **M1-Q2.** ✔ Expanded beyond the original two: a scored evaluation quiz, newsletter, blog content, Daily Briefing content, and a short certification mini-course ending in a test (simple content, no LMS platform). A more game-like interactive mechanic was raised but stays unscoped — future idea, not built yet.
+- **M1-Q3.** ✔ Built by our own team (done-with-you/done-for-you service), not a self-serve AI page builder — simplifies Phase 1, revisit self-serve later once volume justifies it.
+- **M1-Q4.** ✔ Name, Email, Phone — email is the unique key. Every lead gets a permanent internal Lead ID (0001, 0002…) plus a coach-editable display number/format.
+- **M1-Q5.** ✔ Not a one-time score — a **live workflow**: score updates continuously from website-behavior tracking (return visits, content engagement, quiz completion), same tracking infra also powers ad attribution (Q6). Needs an events/sessions table + cookie-consent banner.
+- **M1-Q6.** ✔ Meta + Google ad-pixel tracking **from day one** (moved up from "later").
+- **M1-Q7.** Deferred — decide later.
+- **M1-Q8.** ✔ Expanded significantly: WhatsApp, Instagram, Facebook, and LinkedIn lead capture, each behind its own platform approval (verified directly — see docs/02 Module 1 and docs/03 rows 17–19 for the access-requirement table). WhatsApp + Facebook/Instagram build first (achievable in days); LinkedIn applied for early but never blocks the roadmap (LinkedIn's own process runs "weeks to months," tracked as a risk in doc 04). Lead enrichment confirmed for all channels.
+- **M1-Q9.** ✔ Folded into the post-call flow: AI drafts a call summary + feedback/testimonial request together, coach approves and sends as one action; positive responses become testimonial candidates.
+- **M1-Q10.** ✔ Superseded by M12-Q5 below — full multi-language push, not just Arabic.
+- **M1-Q11.** ✔ No fixed number — varies too much by coach niche/profile; track empirically from real pilot data.
 
 **The Directory, as a second lead source (M9):**
 - **M9-Q1.** Who can list — subscribers only, or open/cheap listings as their own revenue line (like Psychology Today's ~$30/mo)? *(subscribers included; open tier Phase 4)*
@@ -254,7 +254,7 @@ These aren't interconnections themselves — they're the settings that determine
 - **M12-Q2.** Packaging: every plan gets all modules with different limits, or tiers by module set? Price anchors still $29–59? *(module-tiered as sketched)*
 - **M12-Q3.** **First market — UAE/Gulf, UK, US, or global-English?** Gates Journey 2's legal templates, Journey 3's WhatsApp priority, and Journey 8's sync order. (no default — the single most consequential open question)
 - **M12-Q4.** Mobile: responsive web + installable PWA, or native app-store apps? *(responsive + PWA)*
-- **M12-Q5.** Arabic — which phase? (no default)
+- **M12-Q5.** ✔ **ANSWERED (supersedes M1-Q10):** push for full multi-language support — dashboard UI + AI-drafted communications, for both coach and client — not just Arabic. Architected so adding a language is a simple selection, not a rebuild: a standard i18n framework handles UI strings, and Claude drafts AI content directly in the target language rather than needing separate translation. Real remaining work is RTL layout (Arabic, Hebrew) and a translation+QA pass per language — so rollout is broad-and-progressive via AI-assisted translation, not "every language fully polished on day one." Full detail in docs/02's cross-cutting language section.
 - **M12-Q6.** Data hosting region — EU (safe for GDPR, fine for UAE)? *(yes)*
 - **M12-Q7.** White-label hardness — any acceptable exception to zero third-party branding (e.g. a tiny footer credit)? *(zero exceptions)*
 - **M12-Q8.** Support model at launch — who staffs it: you, a hire, the done-for-you team? *(founder + docs at pilot stage)*

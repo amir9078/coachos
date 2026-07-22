@@ -36,6 +36,7 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 |---|---|---|
 | Gmail API usage | $0 | Free within Google's standard quotas at this scale |
 | Google app-verification review | $0–~$5,000 (only if a CASA security assessment is required) | **Timeline risk, not just cost:** can take several weeks; start the application in Phase 2, month 4, not after the module is built |
+| LinkedIn Marketing API partner approval (Module 1, LinkedIn lead capture) | $0 | **Timeline risk, verified directly:** LinkedIn's own docs say "weeks to months," and they're selective about approving new marketing-tech partners. Apply as early as Phase 3 planning starts, in parallel with everything else — WhatsApp and Facebook/Instagram lead capture (both achievable in days, see doc 03) ship regardless of LinkedIn's decision timeline. |
 | n8n (Automations engine) | $0 | Already self-hosted for internal glue; new templates only |
 | Directory search (Supabase full-text) | $0 | No new infra for v1; Meilisearch only if relevance demands it later |
 
