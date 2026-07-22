@@ -173,6 +173,15 @@
   .tl li::before{content:"";position:absolute;left:-5px;top:.95em;width:8px;height:8px;border-radius:50%;background:var(--brass)}
   .tl li b{color:var(--ink)}
   .notes-box{width:100%;min-height:110px;background:var(--bone);border:1px solid var(--line);border-radius:4px;padding:.8rem;font-family:var(--sans);font-size:.86rem;color:var(--ink);resize:vertical}
+  .meet-badge{display:flex;align-items:center;gap:.6rem;background:var(--green-soft);border:1px solid rgba(46,107,79,.3);border-radius:4px;padding:.5rem .8rem;font-size:.8rem;color:var(--green);margin-bottom:.8rem}
+  .out-toggles{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:.6rem}
+  .out-toggles label{display:flex;align-items:center;gap:.35rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.03em;text-transform:uppercase;color:var(--ink-soft);background:var(--bone);border:1px solid var(--line);border-radius:2px;padding:.25rem .55rem;cursor:default}
+  .out-toggles input{accent-color:var(--green)}
+  .hw-list{list-style:none;margin:.6rem 0 0;padding:0}
+  .hw-list li{display:flex;align-items:flex-start;gap:.55rem;font-size:.83rem;color:var(--ink-soft);padding:.3rem 0}
+  .hw-list li.done{text-decoration:line-through;opacity:.55}
+  .hw-list input{margin-top:.2rem;accent-color:var(--green)}
+  .unit-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;background:var(--brass-soft);color:var(--brass);border-radius:2px;padding:.15rem .5rem;margin-left:.5rem;vertical-align:middle}
   .ai-btn{
     margin-top:.7rem;background:var(--brass);color:var(--bone);border:none;border-radius:2px;
     font-family:var(--sans);font-size:.88rem;padding:.6rem 1.1rem;cursor:pointer;transition:transform .15s, box-shadow .15s;
@@ -384,20 +393,32 @@
           </div>
 
           <div class="pane" id="pane-clients">
-            <h3 class="pane-title">Maya R. — Founder, Series A</h3>
-            <p class="pane-sub">Engagement: Executive package · session 7 of 12</p>
+            <h3 class="pane-title">Maya R. — Founder, Series A<span class="unit-tag">Individual</span></h3>
+            <p class="pane-sub">Engagement: Executive package · session 7 of 12 · portal: on · delivery: email + portal</p>
             <div class="client-grid">
               <div>
                 <span class="kicker">Progress timeline</span>
                 <ul class="tl">
-                  <li><b>Goal 1 · Delegation</b> — strong progress, ownership map done</li>
+                  <li><b>Goal 1 · Delegation</b> — strong progress, ownership map done <span style="font-family:var(--mono);font-size:.62rem;color:var(--green)">· client-editable</span></li>
                   <li><b>Goal 2 · Board comms</b> — narrative reframed, confidence up</li>
                   <li><b>Goal 3 · Co-founder tension</b> — <b style="color:var(--rust)">stalled 3 weeks</b></li>
                   <li>Session 6 — committed to a direct conversation by Friday</li>
                 </ul>
+                <span class="kicker" style="display:block;margin-top:1.1rem">Homework — since last session</span>
+                <ul class="hw-list">
+                  <li class="done"><input type="checkbox" checked disabled><span>Draft the board narrative (1 page)</span></li>
+                  <li><input type="checkbox" disabled><span>Delegation handoff to eng lead</span></li>
+                </ul>
               </div>
               <div>
-                <span class="kicker">Session 7 notes → summary</span>
+                <div class="meet-badge"><span>◉</span><div><b>Session 7 · via CoachOS Meet</b> — recorded, transcript ready · client notified when recording started</div></div>
+                <span class="kicker">Notes → summary (outputs you've enabled)</span>
+                <div class="out-toggles">
+                  <label><input type="checkbox" checked disabled>Client email</label>
+                  <label><input type="checkbox" checked disabled>Coach note</label>
+                  <label><input type="checkbox" checked disabled>Action items</label>
+                  <label><input type="checkbox" disabled>Next agenda</label>
+                </div>
                 <textarea class="notes-box" id="notes">maya opened w/ the co-founder convo - it happened! went better than feared. agreed to split product/gtm ownership. still anxious about board meeting on 28th. we role-played the hard question re: runway. homework: draft the board narrative + one delegation handoff to eng lead.</textarea>
                 <button class="ai-btn" id="summarize">✦ Summarize with AI</button>
                 <div class="ai-out" id="ai-out"></div>
