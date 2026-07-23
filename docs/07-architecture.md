@@ -24,7 +24,7 @@ flowchart TB
 
     subgraph AI["③ AI layer"]
         ClaudeAPI["Claude API — Haiku 4.5 default<br/>summaries, prep briefs, briefing drafts, post-drafting help"]
-        Mastra["Mastra (Apache 2.0) — Pipeline Agent<br/>multi-step reasoning + approval pause, Leads module"]
+        Mastra["Mastra (Apache 2.0) — Practice Agent<br/>multi-step reasoning + approval pause, reads across Leads/Delivery/Bookings/Billing/Autopilot (doc 10 §6)"]
         MCPServer["Admin MCP server — local process<br/>gated by team_members.is_content_admin"]
         CoachMCP["Coach-facing MCP (doc 11)<br/>per-coach API key, own data only, never bypasses send-approval"]
         OpsMCP["Ops MCP (doc 11)<br/>logs, rollback, feature flags, service restart — never raw code edits"]
@@ -117,7 +117,7 @@ flowchart TB
 |---|---|---|---|
 | ① | Client surfaces | Four distinct front doors: the coach's own app, the public marketing/content site, the client's read-only portal, and the admin's Claude conversation | doc 05 §5, §4.6 |
 | ② | Application layer | One Next.js app, all API routes, RLS-enforced | doc 05 §3–4 |
-| ③ | AI layer | Claude API for every AI-drafted artifact; Mastra for the Pipeline Agent's multi-step reasoning + approval pause (Leads module); the admin MCP, coach-facing MCP, and Ops MCP as three separate, differently-scoped surfaces | doc 05 §4.3–4.6, doc 10, doc 11 |
+| ③ | AI layer | Claude API for every AI-drafted artifact; Mastra for the Practice Agent's multi-step reasoning + approval pause — generalized from the original Leads-only Pipeline Agent to read across Leads, Client Delivery, Bookings, Billing, and Autopilot state (doc 10 §6); the admin MCP, coach-facing MCP, and Ops MCP as three separate, differently-scoped surfaces | doc 05 §4.3–4.6, doc 10, doc 11 |
 | ④ | Data layer | Postgres + Auth + Storage + Realtime — the exact Supabase software stack, run by us instead of paid for by the MAU/GB (doc 03, doc 04 infra-cost section) | doc 03, doc 04 |
 | ⑤ | Automation layer | Activepieces (MIT) as the one automation engine behind Automations (Module 8), Daily Briefing (Module 10), and the MCP's manual-refresh trigger — replaced n8n after direct license verification | doc 09 §5 |
 | ⑥ | Self-hosted OSS engines | Cal.com, Documenso, Listmonk — integrated, not merged into our codebase (AGPL reasons). The CRM/pipeline is built natively (doc 09 §3) | doc 03, doc 09 |
@@ -161,19 +161,21 @@ Three things never cross a line, and this diagram is where that's easiest to see
 - No mobile app, no third-party API surface, no multi-language — explicit non-goals (doc 05 §9).
 - No AI-that-coaches-the-client anywhere in ③ — Claude API only ever drafts for a human to approve.
 
-## 6. Phase 1–2 runs a simpler version of this — three real hosting stages, not two
+## 6. Phase 1–2 runs a simpler version of this — Railway from day one, not staged behind Vercel
 
-Everything in §1 is the Phase 3+ target. Before that, doc 04's own "don't build for scale you don't have" discipline applies to infrastructure too — but there are three stages, not two, because Vercel genuinely cannot run the self-hosted engines (⑥) at all (it's serverless-only — no persistent containers, no Docker). Something has to fill that gap between "just Vercel" and "fully self-hosted via Coolify." **Verified directly (Railway's own pricing page + template marketplace + LiveKit's own deployment docs):**
+Everything in §1 is the Phase 3+ target. Before that, doc 04's own "don't build for scale you don't have" discipline applies to infrastructure too. **Decided (founder call, overriding the original Vercel-first staging): run on Railway from Phase 1, not Vercel** — since Cal.com is being self-hosted from day one too (see below), the app needs a container-capable host immediately rather than migrating off Vercel once Phase 2's self-hosted engines arrive. Skipping that migration step is worth the earlier, real (usage-metered) cost. **Verified directly (Railway's own pricing page + template marketplace + LiveKit's own deployment docs):**
 
 | | Phase 1 (the wedge) | Phase 2 (money loop) | Phase 3+ (this diagram) |
 |---|---|---|---|
-| App hosting | Vercel | **Railway** — container-based, so it can actually run Documenso etc. (Vercel can't) | Coolify + VPS |
+| App hosting | **Railway** — container-based from day one, so self-hosted engines are never blocked | Railway | Coolify + VPS |
 | Data layer | Supabase.com hosted (free/Pro) | Supabase.com hosted, or self-hosted on Railway | Supabase stack, self-hosted via Coolify |
-| Cal.com | Cal.com's own hosted product — no self-hosting needed yet | Same, or self-host on Railway (verified one-click template) | Self-hosted via Coolify |
-| Documenso | *(not needed yet — Phase 2 module)* | **Self-hosted on Railway** (verified one-click template — this is the gap Vercel can't fill) | Self-hosted via Coolify |
+| Cal.com | **Self-hosted on Railway from day one** (verified one-click template) — no commercial license; see the AGPL note below before customizing its code | Self-hosted on Railway | Self-hosted via Coolify |
+| Documenso | *(not needed yet — Phase 2 module)* | Self-hosted on Railway (verified one-click template) | Self-hosted via Coolify |
 | Listmonk / Activepieces | *(not needed yet — Phase 3 modules)* | *(not needed yet)* | Self-hosted via Coolify |
 
-**Why Railway is the right Phase 2 answer, not the long-term one:** it's genuinely more capable than Vercel (supports WebSockets, background workers, long-running processes — real gaps Vercel has), and every engine we need has a verified one-click template. But its pricing is **usage-metered** (~$20/vCPU/month + $10/GB RAM/month + egress + storage — a single small service already runs ~$30/month in compute alone) — the same growing-cost shape we already rejected once with Supabase's overage pricing. Running 6+ services on it long-term reintroduces that problem. And **LiveKit (meetings, doc 09 §8) needs native UDP for proper WebRTC quality — Railway doesn't support UDP and falls back to a TCP-only proxy, a real degradation for live video.** So: Railway bridges Phase 2, Coolify+VPS remains the Phase 3+ target for both cost predictability and LiveKit's video quality.
+**Why Railway is the right Phase 1–2 answer, not the long-term one:** it's genuinely more capable than Vercel (supports WebSockets, background workers, long-running processes — real gaps Vercel has), and every engine we need has a verified one-click template. But its pricing is **usage-metered** (~$20/vCPU/month + $10/GB RAM/month + egress + storage — a single small service already runs ~$30/month in compute alone) — the same growing-cost shape we already rejected once with Supabase's overage pricing. Running 6+ services on it long-term reintroduces that problem. And **LiveKit (meetings, doc 09 §8) needs native UDP for proper WebRTC quality — Railway doesn't support UDP and falls back to a TCP-only proxy, a real degradation for live video.** So: Railway carries Phase 1–2, Coolify+VPS remains the Phase 3+ target for both cost predictability and LiveKit's video quality.
+
+**Cal.com and AGPLv3 — resolved: modify freely, knowingly accepting the compliance risk.** Cal.com will be fully customized/forked and run entirely on CoachOS's own infrastructure (Railway → Coolify, no connection back to Cal.com's own hosted service), with the modified code kept private rather than published. AGPLv3 requires publishing the source of a modified version to anyone who can interact with it over a network — this decision does not follow that requirement, and does not purchase the commercial license that would remove it either. **This was a deliberate, informed choice**, made after the disclosure obligation was explained directly (not an oversight): the founder explicitly said "I want to modify the code completely, and keep it only with me... if I would face any legal consequences, I would take care of it." Recorded here precisely for that reason — if legal counsel ever reviews this decision, this is the actual reasoning and risk accepted, not a cleaned-up version of it. This does not change the plan for Documenso or Listmonk (both also AGPLv3, doc 03) — the original "run unmodified, or publish modifications" discipline still applies to those unless the founder makes the same explicit call for them too.
 
 **Exception, decided in docs/08 §Journey 3 (M4-Q13): CoachOS Meet gets tested from day one, not deferred to Phase 3.** Since LiveKit's UDP need is the only reason it was gated to Phase 3+, the fix is narrow, not a full re-plan: stand up **one small, separate, dedicated VPS** — a plain Docker Compose LiveKit instance, a few dollars a month — completely independent from the main app's Vercel/Railway hosting. This lets recording, transcription, and the join-link experience get built and tested immediately, without pulling the whole infrastructure migration forward. When Phase 3's Coolify migration happens, this test box folds into it rather than being thrown away.
 

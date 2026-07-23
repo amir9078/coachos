@@ -18,11 +18,12 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 | Item | Cost |
 |---|---|
 | Claude Code subscription (build tool) | existing plan |
-| Hosting + DB (Supabase/Vercel free→starter tiers) | $0–40/mo |
-| Domain, email | ~$25/yr + $6/mo |
+| App hosting (**Railway from day one**, not Vercel — decided so Cal.com can self-host immediately too, doc 07 §6) | ~$30–70/mo (usage-metered; a single small service already runs ~$30/mo in compute alone, per Railway's own pricing) |
+| Database (Supabase, free→Pro tier) | $0–25/mo |
+| Domain, email | ~$15/yr (Tasjeel) + $1–8/mo (Zoho Mail or Google Workspace) |
 | **Independent security review (non-negotiable)** | $300–800 one-time |
 | Legal: DPA template + contract templates review | $500–1,500 one-time |
-| **Total cash to first paying customer** | **≈ $1,000–2,500** |
+| **Total cash to first paying customer** | **≈ $1,100–2,700** |
 
 ### Runtime AI cost (verified unit math)
 - Per coach per month: ~8 AI calls × (2,000 in + 300 out tokens) on Claude Haiku 4.5 ($1/$5 per MTok) ≈ **$0.03/coach/month**

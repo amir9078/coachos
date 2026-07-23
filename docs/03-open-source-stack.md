@@ -11,7 +11,7 @@ The request behind this doc: *"pull free GitHub repos, merge them, make it a ful
 
 | # | Engine | Repo | License | What we use it for | Phase | Integration mode |
 |---|---|---|---|---|---|---|
-| 1 | **Cal.com** | github.com/calcom/cal.com | AGPLv3 (+ paid commercial license option) | Bookings module: scheduling links, calendar sync, reminders | 2 | Self-host + embed; or their hosted API if self-hosting is premature |
+| 1 | **Cal.com** | github.com/calcom/cal.com | AGPLv3 (+ paid commercial license option — not purchased) | Bookings module: scheduling links, calendar sync, reminders | 1 | **Forked and fully customized**, run entirely on our own infrastructure (Railway → Coolify), no connection to Cal.com's hosted service. Founder decision, made knowingly: modifications are kept private rather than published as AGPLv3 would require, and the commercial license was not purchased either — see doc 07 §6 for the exact reasoning and the explicit risk acceptance on record. |
 | 2 | **Documenso** | github.com/documenso/documenso | AGPLv3 | Contracts module: e-signatures | 2 | Self-host + API |
 | 3 | ~~Twenty~~ **→ built natively** | *(dropped — see [`docs/09`](09-engine-comparison.md) §3)* | Ours (proprietary) | CRM/pipeline for Leads — native Postgres tables + our UI, with Twenty and EspoCRM as the design brief. One less service, ~4 GB less RAM, fully white-label | 3 | Native build |
 | 4 | **[Listmonk](https://listmonk.app/)** | github.com/knadh/listmonk | AGPLv3 | Newsletter sending, subscriber lists, nurture sequences (Module 3) | 3 | Self-host + API — single Go binary + Postgres, no separate infra to run |
@@ -97,12 +97,12 @@ Only the things no repo gives us — which is exactly where our moat is:
 
 ## Phase-1 reality check
 
-Phase 1 (the wedge) needs only: **Next.js + Supabase + Claude API + a Cal.com embed**. Everything else arrives in later phases. Do not stand up five services on day one — each self-hosted service is an operational liability until revenue justifies it. Until Phase 2, prefer the hosted/free tiers of these projects over self-hosting.
+Phase 1 (the wedge) needs: **Next.js + Supabase + Claude API + a self-hosted, forked Cal.com** (founder decision, doc 07 §6 — not the lightweight embed originally planned here). Everything else arrives in later phases. Do not stand up more services than that on day one — each self-hosted service is an operational liability until revenue justifies it. Until Phase 2, prefer the hosted/free tiers of the *remaining* projects (Documenso, Listmonk, Activepieces) over self-hosting — Cal.com is the deliberate, explicit exception.
 
 ## License obligations checklist (before Phase 2 ships)
 
-- [ ] Confirm each AGPL service runs unmodified (or publish our modifications for that service)
+- [x] Cal.com: **resolved differently than originally planned** — self-hosted, fully modified, kept private, commercial license not purchased. A knowing, explicit exception to the rule below, not an oversight — see doc 07 §6 for the founder's own reasoning and risk acceptance.
+- [ ] Confirm Documenso and Listmonk each run unmodified (or publish modifications for that service) — the original rule still applies to these two unless the founder makes the same explicit call for them that was made for Cal.com
 - [ ] Keep our proprietary app code in a separate repository from any AGPL code
-- [ ] n8n: verify our usage fits the Sustainable Use license (internal automation = yes; reselling n8n as a feature = requires their license)
-- [ ] Cal.com: decide self-host (AGPL obligations) vs. commercial license vs. hosted API — decision gate at Phase 2 start
-- [ ] Legal review of the license posture in the same pass as the contracts-template legal review
+- [ ] n8n: *(dropped — see Activepieces, MIT, row 5 above; this item no longer applies)*
+- [ ] Legal review of the license posture in the same pass as the contracts-template legal review — **should specifically cover the Cal.com decision**, given the founder has already flagged willingness to address consequences after the fact rather than before
