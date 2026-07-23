@@ -213,6 +213,20 @@ Every module gets its own dashboard-style view of its key data, with **filter op
 
 **Security:** OAuth tokens are encrypted at rest, scoped per-coach (RLS), and revocable from Settings in one click.
 
+## Cross-cutting — Launch Services (website, domain, business email) · *Phase 3, bundled with Practice+ / Setup* · confirmed real, July 2026
+
+**Not a software module — a human-delivered service, staffed by our team, that happens to use AI heavily to make each build fast and genuinely customized rather than a shared template.** Explicitly confirmed as real (not marketing framing) when the marketing site's audience broadened to include mentors and freelancers who may be starting a practice from scratch, with nothing online yet.
+
+| Capability | How it works | Human / AI |
+|---|---|---|
+| Website build | A real website for the coach/mentor/freelancer's practice, designed and built by our team using AI-assisted tooling to move fast and tailor it to the individual's actual positioning, niche, and voice (reusing the same AI Voice & Rules Center inputs where relevant) — not a generic template | Human-delivered, AI-assisted |
+| Domain setup | We register and configure the domain so it's ready on day one | Human-delivered |
+| Business email setup | A proper business-domain email address, set up and connected for the coach — not a personal Gmail address on invoices | Human-delivered |
+
+**Where this lives commercially:** bundled into the Practice+ services tier (recurring) and/or the one-time Setup fee for brand-new practices (doc 04 §3) — exact allocation between the two is still an open pricing question, not yet finalized. **Cost impact is real and separate from the software's own AI-cost economics** — see doc 04's new Launch Services line for the honest treatment (real per-client labor + domain/email pass-through costs, explicitly not yet estimated with confidence).
+
+**What this is not:** it doesn't change the core platform's module list above, and it doesn't change the AI-cost unit economics in doc 04 §2 — those stay driven by the actual software's Claude API usage. This is a parallel, human-delivered service sold alongside the software, in the same category as the done-for-you marketing service already planned for Practice+.
+
 ## Module 8 — Autopilot (Automations) · *Phase 3* · decided in docs/08 §Journey 4
 
 **Job:** stop the coach re-typing the same follow-up for the fortieth time — without breaking the platform's core trust rule (nothing sends without a human having approved the actual words).

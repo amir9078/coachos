@@ -62,8 +62,16 @@ Each phase has an explicit **gate** — the next phase does not start until the 
 |---|---|---|
 | Solo | $29/mo | Client Delivery + Bookings |
 | Practice | $59/mo | + Contracts, Payments, Leads, Marketing composer |
-| Practice+ (services) | $199–399/mo | + done-for-you marketing, priority onboarding, community |
-| Setup (one-time) | $149–299 | Migration done-with-you |
+| Practice+ (services) | $199–399/mo | + done-for-you marketing, priority onboarding, community, **full launch package (below)** |
+| Setup (one-time) | $149–299 | Migration done-with-you, or the launch package below for coaches/mentors/freelancers starting from nothing |
+
+### Launch Services — confirmed real, human-delivered (decided on request, July 2026)
+
+Not a software feature — a genuine service line, staffed by our team, using AI-assisted tooling to make each build fast and fully customized to the individual (not a shared template): a real website, domain registration, and business email, set up and personally delivered rather than left to the coach/mentor/freelancer to figure out. This is what the public site's "Getting you live" category promises, and it's confirmed as real, not marketing language.
+
+- **Positioning:** bundled into Practice+ (recurring) and/or the one-time Setup fee for brand-new practices with no existing web presence — exact allocation between the two still needs a real pricing pass once the team/tooling for delivering this is chosen.
+- **Cost impact:** real, ongoing labor (even AI-assisted, a human reviews and customizes every build) plus pass-through costs — domain registration (~$12–20/yr/client) and business email hosting (~$6–7/mo/client, e.g. Google Workspace-equivalent). This is materially different from the platform's own $0.03/coach/month AI-cost line above — it's a staffed service, not a software feature, and needs its own cost model before it's priced with confidence. Flagging this explicitly rather than inventing a number: **get a real per-build time/cost estimate before finalizing what this costs at scale.**
+- **What it is not:** it doesn't change the core CoachOS software's unit economics (§2 above) — those stay AI-cost-driven and cheap. This is a separate, human-delivered line sold alongside the software, the same category as the existing done-for-you marketing service already in Practice+.
 
 Rationale: $29–59 matches the incumbent tier coaches already accept (Delenta $29, Paperbell $57) — we win on being AI-first, not on being cheapest. The services tier is where margin lives early: 10 service customers ≈ 100 software customers in revenue.
 
