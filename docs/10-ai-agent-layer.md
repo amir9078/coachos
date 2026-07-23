@@ -93,3 +93,58 @@ Reasoning across six modules' worth of data costs a little more per run than rea
 
 - **doc 02** — Module 7 (Practice Intelligence) gets the Practice Agent as its insight engine; Module 2's Pipeline Agent section gets a note that it's now one entry point into the broader agent, not a separate implementation.
 - **doc 08** — M12-Q19 updated to reflect the deliberate, explicit expansion rather than reading as still-capped.
+
+---
+
+## 8. Customization: per-module rules for the Practice Agent, and what it costs
+
+**What was asked:** give the coach a customization option to set rules for the Practice Agent per module (not one global on/off), plus a real token-usage estimate for the wider cross-module scope from §6.
+
+### The "Practice Agent Rules" panel
+
+A new settings panel, sitting alongside the existing **AI Voice & Rules Center** (doc 02, cross-cutting section) rather than folded into it — that panel governs *tone*, this one governs *reach and behavior*. One row per module the agent can read: Leads/Pipeline, Client Delivery, Bookings, Billing, Marketing, Autopilot state. Per module, three settings:
+
+1. **On/off** — include this module's data in the agent's reasoning at all. Off means the agent literally cannot see that module's data, not just "won't surface it" — the same hard boundary as any other data-access toggle in this product.
+2. **Frequency** — "include in the daily scan" vs. "only when I ask it to check on something" (e.g. from a client's own page). Set independently per module — a coach might want Billing checked daily but Marketing only on request.
+3. **Which insight types are active** — a short, named list per module (e.g. Billing: "flag overdue invoices," "flag packages running low"; Client Delivery: "flag stalled goals," "surface renewal timing"), each individually toggleable. This reuses the exact pattern already established for the Voice & Rules Center's "rules can override the defaults per situation" (doc 02) and for Autopilot's per-chain on/off switchboard (doc 08 M12-Q16/M12-Q18) — same UI language, same plain-language listing ("Flag overdue invoices: ON"), not a technical diagram.
+
+**Default:** every module ON, daily scan ON, all insight types ON — the coach opts out per module/insight rather than opting in, consistent with how every other AI feature in this product ships (default-on, coach-editable) rather than requiring setup before it does anything useful.
+
+**Floor unchanged regardless of any toggle:** approval-first. These settings control what the agent can *see* and *surface* — never what it's allowed to *do* unattended. Turning every module on doesn't grant the agent permission to send, post, or charge anything without the coach approving the exact action first.
+
+### Token usage / cost estimate
+
+Grounded in doc 04's verified Haiku 4.5 unit economics — `~8 AI calls × (2,000 in + 300 out tokens) on Claude Haiku 4.5 ($1/$5 per MTok) ≈ $0.03/coach/month` for the existing single-call features — rather than a fresh guess. The Practice Agent is a materially different shape of workload: multi-step reasoning across up to six modules' worth of data per invocation, not one prompt in / one draft out, so the cost is higher than that baseline. Here's the estimate, and by how much.
+
+**Assumptions** (a typical pilot solo-coach account, all modules on): ~15 active leads, ~10 active clients, ~20 upcoming bookings, ~20 invoices/packages, ~10 recent marketing sends, ~5–10 active Autopilot recipes.
+
+| Source (per full scan, all modules on) | Approx. tokens |
+|---|---|
+| Leads/Pipeline summaries | ~1,200 |
+| Client Delivery (engagement, goals, homework) | ~1,500 |
+| Bookings | ~600 |
+| Billing (invoices, packages) | ~700 |
+| Marketing (recent sends, what worked) | ~500 |
+| Autopilot state | ~400 |
+| **Data subtotal** | **~4,900** |
+
+The agent reasons in steps (read → cross-reference → decide → draft), so a full scan is 3–4 model calls, not one — but with the system prompt and tool definitions prompt-cached (doc 03/agent-design pattern), only the fresh tool-result tokens cost full price on steps 2+. Effective total per full scan: **~10,000–12,000 input tokens, ~1,200–1,500 output tokens** (reasoning notes + drafted insights with their action buttons).
+
+**Cost per full daily scan** (Haiku 4.5, $1/$5 per MTok):
+- Input: 12,000 × $1/1M ≈ **$0.012**
+- Output: 1,500 × $5/1M ≈ **$0.0075**
+- **≈ $0.02 per scan**
+
+**Cost per on-demand check** ("check on this client/lead," single-entity scope, closer to the original Pipeline Agent): ~2,000 input + 400 output ≈ **$0.004 per check**.
+
+**Monthly, per coach** (30 daily scans + a pilot-usage guess of ~15 on-demand checks):
+- Daily scans: 30 × $0.02 ≈ $0.60
+- On-demand checks: 15 × $0.004 ≈ $0.06
+- **≈ $0.65–$0.70/coach/month**
+
+**In context:** that's roughly **20x** doc 04's $0.03/coach/month baseline for the older single-call AI features — expected, since this reads six modules and runs a multi-step loop instead of one prompt/one draft. It's still under 2% of the $59/mo Practice-tier price point (doc 04's margin math), so it doesn't change the >95%-gross-margin picture. Two levers bring it down further, in order of impact:
+
+1. **The build-time lever already flagged (§6):** re-check only what's materially changed since the last run (an invoice went overdue, a package crossed a threshold) instead of re-reading every module fresh every day. For a stable practice with few daily changes, this alone could cut the daily-scan cost by more than half.
+2. **The rules panel above, directly:** a coach who turns off Marketing and Autopilot from the agent's scope cuts the per-scan data volume by roughly a fifth to a quarter, and a coach who sets most modules to "on-demand only" instead of "daily scan" replaces the $0.60/month daily-scan cost with occasional $0.004 checks.
+
+**Model choice:** stays Haiku 4.5, consistent with the rest of the product's cost-first defaults. If cross-module correlation (the "invoice overdue *and* session tomorrow" kind of reasoning) turns out to need materially better judgment than Haiku delivers once this is actually built and tested, Sonnet 5 is the fallback (~3x Haiku's per-token price — still ~$2/coach/month at this volume) — worth a real side-by-side eval against actual output quality once built, not a switch to make from this estimate alone.
